@@ -7,7 +7,7 @@ ssh_key: "~/.ssh/your-private-key"
 # Global application variables
 app_name: "your-app-name"
 app_dir: "/path/to/your-app-name"
-app_port: 5000
+app_port: <port_number>
 docker_network: "your_docker_network"
 
 # Global network variables

@@ -94,7 +94,7 @@ jobs:
       if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
       uses: docker/build-push-action@v5
       with:
-        context: ./src
+        context: ./src/app
         file: ./src/app/app.Dockerfile
         push: true
         tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/app:${{ steps.app_version.outputs.version }}
@@ -127,7 +127,7 @@ jobs:
       if: steps.version_check.outputs.consistent == 'true' && steps.check_nginx_tag.outputs.exists == 'false'
       uses: docker/build-push-action@v5
       with:
-        context: ./src
+        context: ./src/nginx
         file: ./src/nginx/nginx.Dockerfile
         push: true
         tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ steps.app_version.outputs.version }}
