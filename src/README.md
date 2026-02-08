@@ -30,10 +30,10 @@
 ## Directory Structure
 ```
 local-dev/
-├── docker-compose.yml
-├── nginx.conf
-├── ssl/           # Add certs here if needed
-└── ../app/           # App code from parent directory
+ docker-compose.yml
+ nginx.conf
+ ssl/           # Add certs here if needed
+ ../app/           # App code from parent directory
 ```
 
 ## Testing Endpoints

@@ -45,12 +45,12 @@ def index():
 </head>
 <body>
     <div class="container">
-        <h1>🌌 Guest in the Universe</h1>
+        <h1> Guest in the Universe</h1>
         <p class="subtitle">Exploring the vast cosmos of web development</p>
         
         <div class="stats">
             <div class="stat-card">
-                <div class="number">∞</div>
+                <div class="number"></div>
                 <div class="label">Possibilities</div>
             </div>
             <div class="stat-card">
