@@ -1,6 +1,6 @@
 # Guest in the Universe - Ansible Deployment
 
-Deploy Nginx container to Ubuntu/Debian system with Docker.
+Deploy Guest in the Universe application to server
 
 ## Setup
 
@@ -39,9 +39,6 @@ Deploy Nginx container to Ubuntu/Debian system with Docker.
    ```bash
    # Ansible automatically uses global variables from vars.yml
 
-   # nginx-only.yml will only deploy nginx
-   ansible-playbook -i inventory/hosts.yml playbooks/nginx-only.yml
-
    # deploy.yml will deploy app
    ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml
    ```
@@ -57,31 +54,3 @@ Deploy Nginx container to Ubuntu/Debian system with Docker.
 - **Never commit** `vars.yml` or `inventory/hosts.yml`
 - Use provided `.example` files as templates
 - `.gitignore` prevents accidental commits
-
-## Structure
-
-```
-guestintheuniverse_ansible/
-├── inventory/
-│   ├── hosts.yml.example
-│   └── hosts.yml (gitignored)
-├── playbooks/nginx-only.yml
-├── roles/
-│   ├── docker/          # Docker installation
-│   ├── users/           # User management
-│   ├── firewall/        # UFW configuration
-│   ├── nginx/           # Nginx configuration setup
-│   └── deploy/          # Docker Compose deployment
-├── vars.yml.example
-├── vars.yml (gitignored)
-├── .gitignore
-└── README.md
-```
-
-## Roles
-
-- **docker**: Docker engine installation
-- **users**: Application user/group management  
-- **firewall**: UFW configuration and port management
-- **nginx**: Creates Nginx configs only
-- **deploy**: Creates docker-compose.yml and runs deployment (contains nginx/deployment variables)

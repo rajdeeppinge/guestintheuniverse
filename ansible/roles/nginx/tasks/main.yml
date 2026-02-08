@@ -9,13 +9,13 @@
 
 - name: Create Nginx Dockerfile
   ansible.builtin.copy:
-    src: ../../local-dev/nginx/nginx.Dockerfile
+    src: ../../src/nginx/nginx.Dockerfile
     dest: "{{ app_dir }}/nginx/nginx.Dockerfile"
     owner: "{{ app_user }}"
     group: "{{ app_group }}"
     mode: '0644'
 
-- name: Create production Nginx configuration
+- name: Create Nginx configuration
   ansible.builtin.template:
     src: nginx.conf.j2
     dest: "{{ app_dir }}/nginx/nginx.conf"
