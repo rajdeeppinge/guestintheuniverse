@@ -30,3 +30,11 @@
     owner: "{{ app_user }}"
     group: "{{ app_group }}"
     mode: '0644'
+
+- name: Create docker-compose.yml for app
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ app_dir }}/docker-compose.yml"
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0644'

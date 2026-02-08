@@ -9,25 +9,13 @@
 
 - name: Deploy application with Docker Compose
   ansible.builtin.command:
-    cmd: docker compose up -d --build
+    cmd: docker compose up -d
     chdir: "{{ app_dir }}"
   register: deployment_result
 
 - name: Wait for containers to be ready
   ansible.builtin.pause:
     seconds: '{{ deployment_wait_time | default(30) }}'
-
-- name: Validate Nginx configuration
-  ansible.builtin.command:
-    cmd: docker run --rm --network {{ app_name }}_network -v "{{ app_dir }}/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro" -v "{{ ssl_cert_path }}:/etc/ssl/certs:ro" {{ nginx_image | default('nginx:alpine') }} nginx -t
-  register: nginx_validation_ssl
-  changed_when: false
-  ignore_errors: true
-
-- name: Show Nginx validation results
-  ansible.builtin.debug:
-    msg: "Nginx config validation: {{ nginx_validation_ssl.stderr_lines if nginx_validation_ssl.rc != 0 else nginx_validation_ssl.stdout_lines }}"
-  when: nginx_validation_ssl is defined
 
 - name: Verify deployment
   ansible.builtin.command:

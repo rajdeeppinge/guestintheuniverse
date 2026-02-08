@@ -4,6 +4,9 @@
   become: yes
   vars_files:
     - ../vars.yml
+  vars:
+    app_image_tag: "{{ app_image_tag | default(lookup('file', '../APP_VERSION')) }}"
+    nginx_image_tag: "{{ nginx_image_tag | default(lookup('file', '../APP_VERSION')) }}"
   
   roles:
     - docker

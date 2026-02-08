@@ -17,3 +17,10 @@ https_port: 443
 
 # SSL certificate path on server
 ssl_cert_path: "/path/to/your/certs"
+
+# Container registry images
+container_registry: "your-registry-url"
+repo_account: "your-username"
+repo_name: "your-repo-name"
+app_image_name: "{{ registry }}/{{ repo_account }}/{{ repo_name }}/your-app-name"
+nginx_image_name: "{{ registry }}/{{ repo_account }}/{{ repo_name }}/your-nginx-name"
