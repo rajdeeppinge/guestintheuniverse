@@ -123,116 +123,70 @@ jobs:
     - name: Validate images
       if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
       run: |
-        echo "Starting combined validation of container images..."
+        echo "Starting validation using docker-compose..."
         
-        # Create a temporary network for validation
-        NETWORK_NAME="validation_network_${{ steps.app_version.outputs.version }}"
-        docker network create $NETWORK_NAME
+        # Navigate to validation compose file
+        cd "${{ github.workspace }}/src"
         
         # Function to cleanup and exit
         cleanup_and_exit() {
-          echo "Cleaning up containers and network..."
-          if [ ! -z "$APP_CONTAINER_NAME" ]; then
-            docker logs $APP_CONTAINER_NAME 2>&1 | tail -20
-            docker stop $APP_CONTAINER_NAME
-            docker rm $APP_CONTAINER_NAME
-          fi
-          if [ ! -z "$NGINX_CONTAINER_NAME" ]; then
-            docker logs $NGINX_CONTAINER_NAME 2>&1 | tail -20
-            docker stop $NGINX_CONTAINER_NAME
-            docker rm $NGINX_CONTAINER_NAME
-          fi
-          docker network rm $NETWORK_NAME || true
+          echo "Cleaning up validation environment..."
+          docker-compose -f docker-compose.validation.yml down -v --remove-orphans
           exit $1
         }
-        
-        # Check if curl is available
+
+                # Check if curl is available
         if ! command -v curl &> /dev/null; then
           echo "Error: curl is not installed on this system"
           cleanup_and_exit 1
         fi
-
-        # Start app container for validation
-        echo "Starting app container for validation..."
-        APP_CONTAINER_NAME="app_validation_${{ steps.app_version.outputs.version }}"
-        docker run -d --name $APP_CONTAINER_NAME --network $NETWORK_NAME \
-          -p 5000:5000 \
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/app:${{ steps.app_version.outputs.version }}
         
-        # Wait for app to start
-        echo "Waiting for app to start..."
-        sleep 10
+        # Start services
+        echo "Starting validation services..."
+        docker-compose -f docker-compose.validation.yml up -d
         
-        # Test app health endpoint from host
-        echo "Testing app health endpoint..."
-        HEALTH_CHECK=$(curl -f -s http://localhost:5000/health || echo "FAILED")
+        # Wait for services to be ready
+        echo "Waiting for services to start..."
+        sleep 15
+        
+        # Test app health endpoint through nginx
+        echo "Testing app health endpoint through nginx..."
+        HEALTH_CHECK=$(curl -f -s http://localhost:8080/health || echo "FAILED")
         
         if [ "$HEALTH_CHECK" = "FAILED" ]; then
-          echo "App health check failed!"
+          echo "App health check failed through nginx!"
+          docker-compose -f docker-compose.validation.yml logs app
           cleanup_and_exit 1
         else
-          echo "App health check passed: $HEALTH_CHECK"
+          echo "App health check passed through nginx: $HEALTH_CHECK"
         fi
         
-        # Test app root endpoint from host
-        echo "Testing app root endpoint..."
-        ROOT_CHECK=$(curl -f -s -o /dev/null -w "%{http_code}" http://localhost:5000/ || echo "000")
+        # Test app root endpoint through nginx
+        echo "Testing app root endpoint through nginx..."
+        ROOT_CHECK=$(curl -f -s -o /dev/null -w "%{http_code}" http://localhost:8080/ || echo "000")
         
         if [ "$ROOT_CHECK" != "200" ]; then
-          echo "App root endpoint check failed! HTTP code: $ROOT_CHECK"
+          echo "App root endpoint check failed through nginx! HTTP code: $ROOT_CHECK"
+          docker-compose -f docker-compose.validation.yml logs app
           cleanup_and_exit 1
         else
-          echo "App root endpoint check passed! HTTP code: $ROOT_CHECK"
+          echo "App root endpoint check passed through nginx! HTTP code: $ROOT_CHECK"
         fi
-        
-        # Test nginx configuration with app container
-        echo "Testing nginx configuration with app upstream..."
-        VALIDATION_OUTPUT=$(docker run --rm --network $NETWORK_NAME \
-          -v "${{ github.workspace }}/src/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro" \
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ steps.app_version.outputs.version }} \
-          nginx -t 2>&1)
-        
-        VALIDATION_EXIT_CODE=$?
-        
-        if [ $VALIDATION_EXIT_CODE -eq 0 ]; then
-          echo "Nginx configuration validation passed!"
-          echo "$VALIDATION_OUTPUT" | grep -E "(successful|syntax is ok)"
-        else
-          echo "Nginx configuration validation failed!"
-          echo "$VALIDATION_OUTPUT"
-          cleanup_and_exit 1
-        fi
-        
-        # Test nginx can actually proxy to app
-        echo "Testing nginx proxy functionality..."
-        NGINX_CONTAINER_NAME="nginx_test_${{ steps.app_version.outputs.version }}"
-        docker run -d --name $NGINX_CONTAINER_NAME --network $NETWORK_NAME \
-          -p 8080:80 \
-          -v "${{ github.workspace }}/src/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro" \
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ steps.app_version.outputs.version }}
-        
-        # Wait for nginx to start
-        sleep 5
         
         # Test nginx health endpoint
+        echo "Testing nginx health endpoint..."
         NGINX_HEALTH=$(curl -f -s http://localhost:8080/health || echo "FAILED")
         if [ "$NGINX_HEALTH" = "FAILED" ]; then
           echo "Nginx health endpoint failed!"
+          docker-compose -f docker-compose.validation.yml logs nginx
           cleanup_and_exit 1
         else
           echo "Nginx health endpoint passed!"
         fi
         
-        # Cleanup nginx test container
-        docker stop $NGINX_CONTAINER_NAME
-        docker rm $NGINX_CONTAINER_NAME
-        
-        # Cleanup app container and network
-        docker stop $APP_CONTAINER_NAME
-        docker rm $APP_CONTAINER_NAME
-        docker network rm $NETWORK_NAME
-        
-        echo "Combined validation completed successfully!"
+        # Cleanup
+        echo "Validation completed successfully!"
+        cleanup_and_exit 0
       shell: bash
 
     - name: Push images
