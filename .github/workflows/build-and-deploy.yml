@@ -265,6 +265,7 @@ jobs:
         host_key_checking = False
         inventory = ./ansible/inventory
         retry_files_enabled = False
+        roles_path = ./ansible/roles
         EOF
 
     - name: Create inventory file
@@ -272,25 +273,27 @@ jobs:
         cat > ansible/inventory/production.yml << EOF
         ---
         all:
-          hosts:
-            ${{ secrets.SERVER0_HOST }}:
-              ansible_user: ${{ secrets.SERVER0_SSH_USER }}
-              ansible_ssh_private_key_file: /tmp/ssh_key
-              ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+          children:
+            webservers:
+              hosts:
+                ${{ secrets.HOST }}:
+                  ansible_user: ${{ secrets.USER }}
+                  ansible_ssh_private_key_file: /tmp/ssh_key
+                  ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
         EOF
 
     - name: Create SSH key file
       run: |
-        echo '${{ secrets.SERVER0_SSH_PRIVATE_KEY }}' > /tmp/ssh_key
+        echo '${{ secrets.SSH_KEY }}' > /tmp/ssh_key
         chmod 600 /tmp/ssh_key
 
     - name: Create vars file from template
       run: |
-        cat > ansible/vars.yml << EOF
+        cat > vars.yml << EOF
         ---
         # Global connection variables
-        host: "${{ secrets.SERVER0_HOST }}"
-        user: "${{ secrets.SERVER0_SSH_USER }}"
+        host: "${{ secrets.HOST }}"
+        user: "${{ secrets.USER }}"
         ssh_key: "/tmp/ssh_key"
 
         # Global application variables
@@ -322,5 +325,3 @@ jobs:
     - name: Run Ansible deployment
       run: |
         ansible-playbook -i ansible/inventory/production.yml ansible/playbooks/deploy.yml
-      env:
-        ANSIBLE_HOST_KEY_CHECKING: False
