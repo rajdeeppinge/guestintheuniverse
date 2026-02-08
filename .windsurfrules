@@ -1,0 +1,56 @@
+# Development Guidelines
+
+## Project Guidelines
+
+### Content Guidelines
+- Keep README minimal and to the point
+- Don't use non-ASCII characters anywhere
+- Focus on essential information only
+- Use simple, clear language
+
+### Technical Guidelines
+- Use ASCII-only characters in all files
+- Keep workflows minimal for initial testing
+- Migration scripts should be added later, not in initial setup
+- Focus on core functionality first
+
+### File Structure
+- Keep repository structure simple
+- Only create directories when needed
+- Use existing working components as foundation
+- Maintain compatibility with existing local-dev setup
+
+### Commit Guidelines
+- User will handle commits manually
+- Focus on implementation, not git operations
+- Test changes before suggesting commits
+
+### Workflow Guidelines
+1. Start with minimal working setup
+2. Test GitHub Actions workflow
+3. Add complexity incrementally
+4. Keep migration and advanced features for later phases
+
+### Security Guidelines
+- Use GitHub Secrets for sensitive data
+- Never commit secrets to repository
+- Use environment variables for configuration
+- Follow security best practices
+
+### Performance Guidelines
+- Keep response times under 400ms
+- Use Docker for containerization
+- Leverage existing working components
+- Test locally before deployment
+
+## Future Enhancement Guidelines
+- Add Jekyll migration only after basic setup works
+- Implement Supabase integration in later phases
+- Add AI features incrementally
+- Maintain backward compatibility
+
+## Testing Guidelines
+- Test local-dev setup first
+- Verify GitHub Actions workflow
+- Test deployment manually before automation
+- Keep testing simple and focused

@@ -1,13 +1,13 @@
 # Ansible variables (contain secrets)
 vars.yml
-inventory/production.yml
-inventory/staging.yml
+inventory/hosts.yml
 
-# Python
+# Byte-compiled / optimized / dependency files
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
+
+# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -26,33 +26,32 @@ wheels/
 *.egg
 
 # Virtual environments
-venv/
+.env
+.venv
 env/
+venv/
 ENV/
+env.bak/
+venv.bak/
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Local development
-local-dev/ssl/
-local-dev/.env
-
 # Logs
 *.log
+*.temp
 
 # Temporary files
 *.tmp
-*.temp
+*.retry
 
 # Docker
-.dockerignore
-
-# AI development rules / guidelines
-.windsurfrules
+ssl/

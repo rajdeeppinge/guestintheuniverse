@@ -1,89 +1,111 @@
-# Guest in the Universe - Production Blog Stack
+# Guest in the Universe
 
-Production-ready blog platform built with Flask, Docker, and Ansible.
+A blog and web application exploring the vastness of our universe through technology, philosophy, and digital experiences.
+
+## Project Structure
+```
+guestintheuniverse/
+├── src/                   # Source code
+│   ├── app/              # Flask application
+│   ├── nginx/             # Nginx configuration
+│   └── docker-compose.yml  # Development orchestration
+├── ansible/                # Production deployment
+│   ├── playbooks/         # Deployment automation
+│   ├── roles/             # Modular tasks
+│   └── inventory/          # Server definitions
+├── .github/               # CI/CD pipelines
+└── docs/                  # Documentation (APP_VERSION, RELEASE_NOTES.md)
+```
 
 ## Quick Start
 
-### Prerequisites
-- Cloud provider account
-- GitHub repository with Actions enabled
-- Docker and Ansible installed locally
-
-### Setup
-
-1. Clone and configure:
-   ```bash
-   git clone <this-repository>
-   cd guestintheuniverse
-   cp vars.yml.example vars.yml
-   cp inventory/production.yml.example inventory/production.yml
-   ```
-
-2. Update configuration:
-   - Edit `vars.yml` with your server details
-   - Edit `inventory/production.yml` with your server info
-
-3. Local testing:
-   ```bash
-   cd local-dev
-   docker-compose up --build
-   ```
-
-4. Deploy to production:
-   ```bash
-   ansible-playbook -i inventory/production.yml playbooks/deploy.yml
-   ```
-
-## Repository Structure
-
-```
-guestintheuniverse/
-├── ansible/                    # Infrastructure automation
-├── local-dev/                 # Local development setup
-├── .github/workflows/         # CI/CD pipelines
-└── vars.yml                   # Configuration variables
-```
-
-## Technology Stack
-
-- **Frontend**: Flask with Jinja2 templates
-- **Infrastructure**: Cloud provider
-- **Containerization**: Docker with Docker Compose
-- **Automation**: Ansible for deployment
-- **CI/CD**: GitHub Actions with container registry
-
-## Development
-
 ### Local Development
-Use the existing local-dev setup for testing:
 ```bash
-cd local-dev
-docker-compose up --build
+cd src
+docker compose up -d
+```
+Access at: http://localhost:80
+
+### Production Deployment
+```bash
+cd ansible
+cp vars.yml.example vars.yml
+# Update vars.yml with your server details
+ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml
 ```
 
-Access the application at:
-- **App**: http://localhost:5000
-- **Nginx**: http://localhost:80
-- **Health**: http://localhost:5000/health
+##  Architecture
 
-## Features
+- **Frontend**: Flask web application with responsive design
+- **Backend**: Python Flask API with health endpoints
+- **Deployment**: Docker containers with Nginx reverse proxy
+- **Infrastructure**: Ansible automation for server setup
+- **CI/CD**: GitHub Actions with GHCR container registry
 
-### Current Features
-- Basic Flask blog application
-- Docker containerization
-- Nginx reverse proxy
-- Ansible deployment automation
-- GitHub Actions CI/CD
-- SSL/HTTPS support
+##  Container Images
 
-### Future Enhancements
-- Posts migration
-- Database integration
-- AI-enhanced search
-- Advanced admin interface
+### Production Images
+- Use semantic versioning: `v0.0.0`, `v1.0.0`, etc.
 
-## Security
+### Development Images
+- Use semantic versioning with `-dev` suffix: `v0.0.0-dev1`, `v0.0.0-dev2`, etc.
 
-- SSL/TLS encryption
-- Container security best practices
-- Secret management via GitHub Secrets
+
+### Version Files
+- `APP_VERSION`: Tracks current version
+- `RELEASE_NOTES.md`: Contains release history and changes
+
+### Version Guidelines
+- Follow semantic versioning (MAJOR.MINOR.PATCH)
+- Increment PATCH for bug fixes and features
+- Increment MINOR for new features (backward compatible)
+- Increment MAJOR for breaking changes
+
+## Development Workflow
+
+1. **Local Development**: Work in `src/` directory
+2. **Version Management**: Update `APP_VERSION` and `RELEASE_NOTES.md` with new dev version and changes
+3. **Test Changes**: Push to a development branch (e.g., `feature/github-actions`)
+4. **Update Workflow**: Update the branch name in `.github/workflows/build-and-push.yml`
+5. **Build Images**: Push to trigger GitHub Actions workflow for automatic version checking and image creation
+6. **Deploy**: Use Ansible playbooks for server deployment for dev testing
+
+### Testing Status
+- Version consistency checks implemented
+- Image tag collision prevention
+- OCI labels simplified
+- Ready for workflow testing
+
+##  Endpoints
+
+- `/` - Main application interface
+- `/health` - Health check endpoint
+- `/test` - Simple test page
+
+##  Configuration
+
+### Ansible Variables
+See `ansible/vars.yml.example` for production configuration options.
+
+##  Technologies
+
+- **Python 3.11** - Application runtime
+- **Flask 2.3.3** - Web framework
+- **Nginx** - Reverse proxy and static serving
+- **Docker** - Containerization
+- **Ansible** - Infrastructure automation
+- **GitHub Actions** - CI/CD pipeline
+
+##  Security
+
+- HTTPS redirection in production
+- SSL certificate management
+- Container health monitoring
+- Firewall configuration via UFW
+
+##  Monitoring
+
+- Container health checks
+
+---
+
