@@ -105,84 +105,8 @@ jobs:
           org.opencontainers.image.version=${{ steps.app_version.outputs.version }}
           org.opencontainers.image.revision=${{ github.sha }}
 
-    - name: Validate app image
-      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
-      run: |
-        echo "Starting app container for validation..."
-        
-        # Start app container in background
-        CONTAINER_NAME="app_validation_${{ steps.app_version.outputs.version }}"
-        docker run -d --name $CONTAINER_NAME -p 5000:5000 \
-          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/app:${{ steps.app_version.outputs.version }}
-        
-        # Function to cleanup and exit
-        cleanup_and_exit() {
-          echo "Cleaning up container..."
-          docker logs $CONTAINER_NAME 2>&1 | tail -20  # Show last 20 lines of logs
-          docker stop $CONTAINER_NAME
-          docker rm $CONTAINER_NAME
-          exit $1
-        }
-        
-        # Wait for app to start
-        echo "Waiting for app to start..."
-        sleep 10
-        
-        # Test health endpoint
-        echo "Testing health endpoint..."
-        HEALTH_CHECK=$(curl -f -s http://localhost:5000/health || echo "FAILED")
-        
-        if [ "$HEALTH_CHECK" = "FAILED" ]; then
-          echo "Health check failed!"
-          cleanup_and_exit 1
-        else
-          echo "Health check passed: $HEALTH_CHECK"
-        fi
-        
-        # Test root endpoint
-        echo "Testing root endpoint..."
-        ROOT_CHECK=$(curl -f -s -o /dev/null -w "%{http_code}" http://localhost:5000/ || echo "000")
-        
-        if [ "$ROOT_CHECK" != "200" ]; then
-          echo "Root endpoint check failed! HTTP code: $ROOT_CHECK"
-          cleanup_and_exit 1
-        else
-          echo "Root endpoint check passed! HTTP code: $ROOT_CHECK"
-        fi
-        
-        # Cleanup on success
-        docker stop $CONTAINER_NAME
-        docker rm $CONTAINER_NAME
-        echo "App validation completed successfully"
-      shell: bash
-
-    - name: Push app image
-      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
-      run: |
-        docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/app:${{ steps.app_version.outputs.version }}
-      shell: bash
-
-    - name: Check if nginx image tag already exists
-      id: check_nginx_tag
-      run: |
-        IMAGE_TAG="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ steps.app_version.outputs.version }}"
-        echo "Checking if nginx image tag exists: $IMAGE_TAG"
-        
-        # Check if tag exists using GitHub Container Registry API
-        if curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-           "https://api.github.com/repos/${{ github.repository }}/packages/container/guestintheuniverse/versions" | \
-           grep -q "${{ steps.app_version.outputs.version }}"; then
-          echo "Nginx image tag already exists!"
-          echo "exists=true" >> $GITHUB_OUTPUT
-          echo "Please update APP_VERSION and RELEASE_NOTES.md before deploying"
-          exit 1
-        else
-          echo "exists=false" >> $GITHUB_OUTPUT
-        fi
-      shell: bash
-
     - name: Build nginx image
-      if: steps.version_check.outputs.consistent == 'true' && steps.check_nginx_tag.outputs.exists == 'false'
+      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
       uses: docker/build-push-action@v5
       with:
         context: ./src/nginx
@@ -196,17 +120,67 @@ jobs:
           org.opencontainers.image.version=${{ steps.app_version.outputs.version }}
           org.opencontainers.image.revision=${{ github.sha }}
 
-    - name: Validate Nginx configuration
-      if: steps.version_check.outputs.consistent == 'true' && steps.check_nginx_tag.outputs.exists == 'false'
+    - name: Validate images
+      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
       run: |
-        echo "Starting nginx configuration validation..."
+        echo "Starting combined validation of container images..."
         
         # Create a temporary network for validation
-        NETWORK_NAME="nginx_validation_network_${{ steps.app_version.outputs.version }}"
+        NETWORK_NAME="validation_network_${{ steps.app_version.outputs.version }}"
         docker network create $NETWORK_NAME
         
-        # Run Nginx configuration validation
-        echo "Testing nginx configuration syntax..."
+        # Function to cleanup and exit
+        cleanup_and_exit() {
+          echo "Cleaning up containers and network..."
+          if [ ! -z "$APP_CONTAINER_NAME" ]; then
+            docker logs $APP_CONTAINER_NAME 2>&1 | tail -20
+            docker stop $APP_CONTAINER_NAME
+            docker rm $APP_CONTAINER_NAME
+          fi
+          if [ ! -z "$NGINX_CONTAINER_NAME" ]; then
+            docker logs $NGINX_CONTAINER_NAME 2>&1 | tail -20
+            docker stop $NGINX_CONTAINER_NAME
+            docker rm $NGINX_CONTAINER_NAME
+          fi
+          docker network rm $NETWORK_NAME || true
+          exit $1
+        }
+        
+        # Start app container for validation
+        echo "Starting app container for validation..."
+        APP_CONTAINER_NAME="app_validation_${{ steps.app_version.outputs.version }}"
+        docker run -d --name $APP_CONTAINER_NAME --network $NETWORK_NAME \
+          --expose 5000 \
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/app:${{ steps.app_version.outputs.version }}
+        
+        # Wait for app to start
+        echo "Waiting for app to start..."
+        sleep 10
+        
+        # Test app health endpoint
+        echo "Testing app health endpoint..."
+        HEALTH_CHECK=$(docker exec $APP_CONTAINER_NAME curl -f -s http://localhost:5000/health || echo "FAILED")
+        
+        if [ "$HEALTH_CHECK" = "FAILED" ]; then
+          echo "App health check failed!"
+          cleanup_and_exit 1
+        else
+          echo "App health check passed: $HEALTH_CHECK"
+        fi
+        
+        # Test app root endpoint
+        echo "Testing app root endpoint..."
+        ROOT_CHECK=$(docker exec $APP_CONTAINER_NAME curl -f -s -o /dev/null -w "%{http_code}" http://localhost:5000/ || echo "000")
+        
+        if [ "$ROOT_CHECK" != "200" ]; then
+          echo "App root endpoint check failed! HTTP code: $ROOT_CHECK"
+          cleanup_and_exit 1
+        else
+          echo "App root endpoint check passed! HTTP code: $ROOT_CHECK"
+        fi
+        
+        # Test nginx configuration with app container
+        echo "Testing nginx configuration with app upstream..."
         VALIDATION_OUTPUT=$(docker run --rm --network $NETWORK_NAME \
           -v "${{ github.workspace }}/src/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro" \
           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ steps.app_version.outputs.version }} \
@@ -220,17 +194,53 @@ jobs:
         else
           echo "Nginx configuration validation failed!"
           echo "$VALIDATION_OUTPUT"
-          docker network rm $NETWORK_NAME || true
-          exit 1
+          cleanup_and_exit 1
         fi
         
-        # Clean up the validation network
+        # Test nginx can actually proxy to app
+        echo "Testing nginx proxy functionality..."
+        NGINX_CONTAINER_NAME="nginx_test_${{ steps.app_version.outputs.version }}"
+        docker run -d --name $NGINX_CONTAINER_NAME --network $NETWORK_NAME \
+          -p 8080:80 \
+          -v "${{ github.workspace }}/src/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro" \
+          ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ steps.app_version.outputs.version }}
+        
+        # Wait for nginx to start
+        sleep 5
+        
+        # Test nginx health endpoint
+        NGINX_HEALTH=$(curl -f -s http://localhost:8080/health || echo "FAILED")
+        if [ "$NGINX_HEALTH" = "FAILED" ]; then
+          echo "Nginx health endpoint failed!"
+          cleanup_and_exit 1
+        else
+          echo "Nginx health endpoint passed!"
+        fi
+        
+        # Cleanup nginx test container
+        docker stop $NGINX_CONTAINER_NAME
+        docker rm $NGINX_CONTAINER_NAME
+        
+        # Cleanup app container and network
+        docker stop $APP_CONTAINER_NAME
+        docker rm $APP_CONTAINER_NAME
         docker network rm $NETWORK_NAME
-        echo "Nginx validation completed successfully"
+        
+        echo "Combined validation completed successfully!"
       shell: bash
 
-    - name: Push nginx image
-      if: steps.version_check.outputs.consistent == 'true' && steps.check_nginx_tag.outputs.exists == 'false'
+    - name: Push images
+      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
       run: |
+        echo "Pushing images to registry..."
+        
+        # Push app image
+        echo "Pushing app image..."
+        docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/app:${{ steps.app_version.outputs.version }}
+        
+        # Push nginx image
+        echo "Pushing nginx image..."
         docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ steps.app_version.outputs.version }}
+        
+        echo "Images pushed successfully!"
       shell: bash

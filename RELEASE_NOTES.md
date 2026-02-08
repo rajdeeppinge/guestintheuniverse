@@ -4,6 +4,9 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.0.0-dev3
+- Combine validation and push steps for container images to maintain consistent versioning
+
 ### v0.0.0-dev2
 - Added validation for app and nginx images
 - Removed container image build logic from ansible flow
