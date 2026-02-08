@@ -1,0 +1,13 @@
+# Release Notes
+
+This file contains release history and changes for Guest in the Universe.
+
+## Version History
+
+### v0.0.0-dev1
+- Added local development environment
+- Added ansible playbooks for production deployment
+- Added semantic versioning and release notes
+    - Added version tracking with APP_VERSION
+    - Added RELEASE_NOTES.md for tracking changes
+- Added GitHub Actions with GHCR integration
