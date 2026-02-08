@@ -146,20 +146,26 @@ jobs:
           exit $1
         }
         
+        # Check if curl is available
+        if ! command -v curl &> /dev/null; then
+          echo "Error: curl is not installed on this system"
+          cleanup_and_exit 1
+        fi
+
         # Start app container for validation
         echo "Starting app container for validation..."
         APP_CONTAINER_NAME="app_validation_${{ steps.app_version.outputs.version }}"
         docker run -d --name $APP_CONTAINER_NAME --network $NETWORK_NAME \
-          --expose 5000 \
+          -p 5000:5000 \
           ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/app:${{ steps.app_version.outputs.version }}
         
         # Wait for app to start
         echo "Waiting for app to start..."
         sleep 10
         
-        # Test app health endpoint
+        # Test app health endpoint from host
         echo "Testing app health endpoint..."
-        HEALTH_CHECK=$(docker exec $APP_CONTAINER_NAME curl -f -s http://localhost:5000/health || echo "FAILED")
+        HEALTH_CHECK=$(curl -f -s http://localhost:5000/health || echo "FAILED")
         
         if [ "$HEALTH_CHECK" = "FAILED" ]; then
           echo "App health check failed!"
@@ -168,9 +174,9 @@ jobs:
           echo "App health check passed: $HEALTH_CHECK"
         fi
         
-        # Test app root endpoint
+        # Test app root endpoint from host
         echo "Testing app root endpoint..."
-        ROOT_CHECK=$(docker exec $APP_CONTAINER_NAME curl -f -s -o /dev/null -w "%{http_code}" http://localhost:5000/ || echo "000")
+        ROOT_CHECK=$(curl -f -s -o /dev/null -w "%{http_code}" http://localhost:5000/ || echo "000")
         
         if [ "$ROOT_CHECK" != "200" ]; then
           echo "App root endpoint check failed! HTTP code: $ROOT_CHECK"
