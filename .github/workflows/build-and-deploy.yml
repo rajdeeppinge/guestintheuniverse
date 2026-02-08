@@ -53,8 +53,8 @@ jobs:
       run: |
         APP_VERSION=$(cat APP_VERSION)
         
-        # Extract latest version from RELEASE_NOTES.md
-        LATEST_VERSION=$(grep -m1 "### v" RELEASE_NOTES.md | sed 's/### v\([0-9.]*\).*/\1/')
+        # Extract latest version from RELEASE_NOTES.md (with v prefix)
+        LATEST_VERSION=$(grep -m1 "### v" RELEASE_NOTES.md | sed 's/### \(v[0-9.]*\).*/\1/')
         
         echo "APP_VERSION: $APP_VERSION"
         echo "Latest in RELEASE_NOTES.md: $LATEST_VERSION"
@@ -69,6 +69,7 @@ jobs:
         
         echo "Versions are consistent"
         echo "consistent=true" >> $GITHUB_OUTPUT
+      shell: bash
 
     - name: Check if image tag already exists
       id: check_tag
