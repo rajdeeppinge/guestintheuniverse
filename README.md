@@ -2,21 +2,6 @@
 
 A blog and web application exploring the vastness of our universe through technology, philosophy, and digital experiences.
 
-## Project Structure
-```
-guestintheuniverse/
-├── src/                   # Source code
-│   ├── app/              # Flask application
-│   ├── nginx/             # Nginx configuration
-│   └── docker-compose.yml  # Development orchestration
-├── ansible/                # Production deployment
-│   ├── playbooks/         # Deployment automation
-│   ├── roles/             # Modular tasks
-│   └── inventory/          # Server definitions
-├── .github/               # CI/CD pipelines
-└── docs/                  # Documentation (APP_VERSION, RELEASE_NOTES.md)
-```
-
 ## Quick Start
 
 ### Local Development
@@ -64,17 +49,15 @@ ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml
 ## Development Workflow
 
 1. **Local Development**: Work in `src/` directory
-2. **Version Management**: Update `APP_VERSION` and `RELEASE_NOTES.md` with new dev version and changes
+2. **Version Management**: Update `APP_VERSION` and `RELEASE_NOTES.md`
 3. **Test Changes**: Push to a development branch (e.g., `feature/github-actions`)
-4. **Update Workflow**: Update the branch name in `.github/workflows/build-and-push.yml`
-5. **Build Images**: Push to trigger GitHub Actions workflow for automatic version checking and image creation
-6. **Deploy**: Use Ansible playbooks for server deployment for dev testing
+4. **Update Workflow**: Update the branch name in `.github/workflows/build-and-deploy.yml`
+5. **Build Images**: Push to the development branch to trigger GitHub Actions workflow for building and pushing images to GHCR
+6. **Deploy**: Use Ansible playbooks to pull from GHCR
 
-### Testing Status
-- Version consistency checks implemented
-- Image tag collision prevention
-- OCI labels simplified
-- Ready for workflow testing
+### Deployment Flow
+- **CI/CD**: GitHub Actions builds and pushes to GHCR
+- **Production**: Ansible pulls pre-built images from GHCR
 
 ##  Endpoints
 
