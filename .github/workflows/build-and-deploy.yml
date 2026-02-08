@@ -131,19 +131,30 @@ jobs:
         # Function to cleanup and exit
         cleanup_and_exit() {
           echo "Cleaning up validation environment..."
-          docker-compose -f docker-compose.validation.yml down -v --remove-orphans
+          docker compose -f docker-compose.validation.yml down -v --remove-orphans
           exit $1
         }
-
-                # Check if curl is available
+        
+        # Check if curl is available
         if ! command -v curl &> /dev/null; then
           echo "Error: curl is not installed on this system"
           cleanup_and_exit 1
         fi
         
+        # Check if docker compose is available
+        if ! docker compose version &> /dev/null; then
+          echo "Error: docker compose is not available on this system"
+          echo "Available docker commands:"
+          docker --version
+          echo "Docker compose commands:"
+          docker compose version 2>/dev/null || echo "  docker compose: not found"
+          docker-compose --version 2>/dev/null || echo "  docker-compose: not found"
+          cleanup_and_exit 1
+        fi
+        
         # Start services
         echo "Starting validation services..."
-        docker-compose -f docker-compose.validation.yml up -d
+        docker compose -f docker-compose.validation.yml up -d
         
         # Wait for services to be ready
         echo "Waiting for services to start..."
@@ -155,7 +166,7 @@ jobs:
         
         if [ "$HEALTH_CHECK" = "FAILED" ]; then
           echo "App health check failed through nginx!"
-          docker-compose -f docker-compose.validation.yml logs app
+          docker compose -f docker-compose.validation.yml logs app
           cleanup_and_exit 1
         else
           echo "App health check passed through nginx: $HEALTH_CHECK"
@@ -167,7 +178,7 @@ jobs:
         
         if [ "$ROOT_CHECK" != "200" ]; then
           echo "App root endpoint check failed through nginx! HTTP code: $ROOT_CHECK"
-          docker-compose -f docker-compose.validation.yml logs app
+          docker compose -f docker-compose.validation.yml logs app
           cleanup_and_exit 1
         else
           echo "App root endpoint check passed through nginx! HTTP code: $ROOT_CHECK"
@@ -178,7 +189,7 @@ jobs:
         NGINX_HEALTH=$(curl -f -s http://localhost:8080/health || echo "FAILED")
         if [ "$NGINX_HEALTH" = "FAILED" ]; then
           echo "Nginx health endpoint failed!"
-          docker-compose -f docker-compose.validation.yml logs nginx
+          docker compose -f docker-compose.validation.yml logs nginx
           cleanup_and_exit 1
         else
           echo "Nginx health endpoint passed!"
