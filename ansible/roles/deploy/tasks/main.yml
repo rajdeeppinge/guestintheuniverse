@@ -1,11 +1,16 @@
 ---
 - name: Create production docker-compose file
   ansible.builtin.copy:
-    src: "{{ app_dir }}/src/docker-compose.yml"
+    src: "../../../../src/docker-compose.yml"
     dest: "{{ app_dir }}/docker-compose.yml"
     owner: "{{ app_user }}"
     group: "{{ app_group }}"
     mode: '0644'
+
+- name: Login to GitHub Container Registry
+  ansible.builtin.command:
+    cmd: docker login ghcr.io -u {{ github_username }} -p {{ github_token }}
+  no_log: true
 
 - name: Pull app image
   ansible.builtin.command:
@@ -47,6 +52,16 @@
   ansible.builtin.command:
     cmd: docker compose ps
     chdir: "{{ app_dir }}"
+  environment:
+    APP_IMAGE_NAME: "{{ app_image_name }}"
+    APP_IMAGE_TAG: "{{ app_image_tag }}"
+    NGINX_IMAGE_NAME: "{{ nginx_image_name }}"
+    NGINX_IMAGE_TAG: "{{ nginx_image_tag }}"
+    APP_NAME: "{{ app_name }}"
+    APP_PORT: "{{ app_port }}"
+    HTTP_PORT: "{{ http_port }}"
+    HTTPS_PORT: "{{ https_port }}"
+    SSL_CERT_PATH: "{{ ssl_cert_path }}"
   register: deployment_status
 
 - name: Show deployment status

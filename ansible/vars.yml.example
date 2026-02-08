@@ -18,9 +18,14 @@ https_port: 443
 # SSL certificate path on server
 ssl_cert_path: "/path/to/your/certs"
 
-# Container registry images
+# # GitHub Container Registry variables
 container_registry: "your-registry-url"
-repo_account: "your-username"
+repo_owner: "your-username"
 repo_name: "your-repo-name"
-app_image_name: "{{ registry }}/{{ repo_account }}/{{ repo_name }}/your-app-name"
-nginx_image_name: "{{ registry }}/{{ repo_account }}/{{ repo_name }}/your-nginx-name"
+app_image_name: "{{ container_registry }}/{{ repo_owner }}/{{ repo_name }}/your-app-name"
+nginx_image_name: "{{ container_registry }}/{{ repo_owner }}/{{ repo_name }}/your-nginx-name"
+app_version: "v0.0.0-dev3"  # Optional. default is APP_VERSION file
+nginx_version: "v0.0.0-dev3"  # Optional. default is APP_VERSION file
+
+github_username: "{{ lookup('env', 'GITHUB_USERNAME') }}"
+github_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"

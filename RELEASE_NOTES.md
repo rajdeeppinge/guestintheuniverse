@@ -4,6 +4,9 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.0.0-dev4
+- Handle GHCR authentication during server deployment
+
 ### v0.0.0-dev3
 - Combine validation and push steps for container images to maintain consistent versioning
 
