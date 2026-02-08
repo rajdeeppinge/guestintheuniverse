@@ -199,6 +199,16 @@ jobs:
         echo "Validation completed successfully!"
         cleanup_and_exit 0
       shell: bash
+      env:
+        APP_IMAGE_NAME: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/app
+        APP_IMAGE_TAG: ${{ steps.app_version.outputs.version }}
+        NGINX_IMAGE_NAME: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx
+        NGINX_IMAGE_TAG: ${{ steps.app_version.outputs.version }}
+        APP_NAME: guestintheuniverse
+        APP_PORT: "5000"
+        HTTP_PORT: "8080"
+        HTTPS_PORT: "8443"
+        SSL_CERT_PATH: "/tmp/ssl-certs"
 
     - name: Push images
       if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
