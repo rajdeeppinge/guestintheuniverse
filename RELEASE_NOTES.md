@@ -4,6 +4,9 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.0.0-dev7
+- Allow manual workflow to deploy without build
+
 ### v0.0.0-dev6
 - Refactor ansible structure in deploy workflow to match ansible structure in ansible directory
 
