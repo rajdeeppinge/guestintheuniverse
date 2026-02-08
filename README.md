@@ -50,14 +50,30 @@ ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml
 
 1. **Local Development**: Work in `src/` directory
 2. **Version Management**: Update `APP_VERSION` and `RELEASE_NOTES.md`
-3. **Test Changes**: Push to a development branch (e.g., `feature/github-actions`)
-4. **Update Workflow**: Update the branch name in `.github/workflows/build-and-deploy.yml`
-5. **Build Images**: Push to the development branch to trigger GitHub Actions workflow for building and pushing images to GHCR
-6. **Deploy**: Use Ansible playbooks to pull from GHCR
+3. **Test Changes**: Push to `feature/github-actions` branch
+4. **Update workflow**: Update `build-and-deploy.yml` workflow with branch name
+5. **Update secrets**: Update GitHub secrets with new version if needed
+6. **Automated Build**: GitHub Actions builds, validates, and pushes images to GHCR
+7. **Automated Deploy**: GitHub Actions automatically deploys to production via Ansible
+8. **Monitor**: Check deployment status in GitHub Actions
 
-### Deployment Flow
-- **CI/CD**: GitHub Actions builds and pushes to GHCR
-- **Production**: Ansible pulls pre-built images from GHCR
+### Automated CI/CD Pipeline
+- **Build**: GitHub Actions builds app and nginx images
+- **Validate**: Tests containers locally before pushing
+- **Push**: Stores images in GitHub Container Registry (GHCR)
+- **Deploy**: Ansible pulls and deploys images to Oracle VM
+- **Monitor**: Health checks and deployment verification
+
+### Configuration Required
+This project uses both GitHub Secrets and Ansible variables for configuration.
+
+**Setup Instructions:**
+1. See `config.example.yml` for complete configuration template
+2. Add GitHub Secrets in Repository > Settings > Secrets and variables > Actions
+3. Copy Ansible variables to `ansible/vars.yml`
+4. Ensure values are consistent between GitHub Secrets and Ansible
+
+**Security Note:** Never commit actual secrets to the repository. Use the template for reference only.
 
 ##  Endpoints
 
@@ -68,7 +84,7 @@ ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml
 ##  Configuration
 
 ### Ansible Variables
-See `ansible/vars.yml.example` for production configuration options.
+See `config.example.yml` for complete configuration template and setup instructions.
 
 ##  Technologies
 
@@ -76,8 +92,11 @@ See `ansible/vars.yml.example` for production configuration options.
 - **Flask 2.3.3** - Web framework
 - **Nginx** - Reverse proxy and static serving
 - **Docker** - Containerization
+- **Docker Compose** - Multi-container orchestration
 - **Ansible** - Infrastructure automation
 - **GitHub Actions** - CI/CD pipeline
+- **GitHub Container Registry (GHCR)** - Container imagestorage
+- **Oracle Cloud** - Production infrastructure
 
 ##  Security
 

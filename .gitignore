@@ -1,6 +1,12 @@
+# Configuration files (contain secrets)
+config.yml
+config.local.yml
+config.production.yml
+
 # Ansible variables (contain secrets)
-vars.yml
-inventory/hosts.yml
+ansible/vars.yml
+ansible/inventory/hosts.yml
+ansible/inventory/production.yml
 
 # Byte-compiled / optimized / dependency files
 __pycache__/

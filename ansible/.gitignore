@@ -1,6 +1,12 @@
-# Ansible variables (contain secrets)
+# Configuration files (contain secrets)
 vars.yml
+config.yml
+config.local.yml
+config.production.yml
+
+# Ansible inventory files (contain secrets)
 inventory/hosts.yml
+inventory/production.yml
 
 # Ansible retry files
 *.retry

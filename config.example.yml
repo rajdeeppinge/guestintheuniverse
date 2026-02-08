@@ -1,0 +1,102 @@
+# Configuration Template
+# 
+# This file contains all configuration variables needed for the project.
+# Copy and customize as needed:
+# - For GitHub Actions: Use as reference for GitHub Secrets
+# - For Ansible: Copy to ansible/vars.yml
+
+---
+
+## GitHub Secrets Configuration
+**Add these in:** GitHub Repository > Settings > Secrets and variables > Actions
+
+### Host Configuration
+```
+HOST=your-server.domain.com
+USER=your-ssh-username
+SSH_KEY=-----BEGIN OPENSSH PRIVATE KEY-----
+[Your complete private key content here]
+-----END OPENSSH PRIVATE KEY-----
+```
+
+### Application Configuration
+```
+APP_NAME=your-app-name
+APP_DIR=/path/to/your-app-name
+APP_PORT=your-app-port
+DOCKER_NETWORK=your-docker-network
+```
+
+### Network Configuration
+```
+DOMAIN_NAME=your-domain.com
+HTTP_PORT=your-http-port
+HTTPS_PORT=your-https-port
+SSL_CERT_PATH=/path/to/your/certs/on/server
+```
+
+---
+
+## Ansible Variables Configuration
+**Copy this to:** `ansible/vars.yml`
+
+```yaml
+---
+# Global connection variables
+host: "your-server.domain.com"
+user: "your-ssh-username"
+ssh_key: "~/.ssh/your-private-key"
+
+# Global application variables
+app_name: "your-app-name"
+app_dir: "/path/to/your-app-name"
+app_port: <port_number>
+docker_network: "your_docker_network"
+
+# Global network variables
+domain_name: "your-domain.com"
+http_port: 80
+https_port: 443
+
+# SSL certificate path on server
+ssl_cert_path: "/path/to/your/certs"
+
+# GitHub Container Registry variables
+container_registry: "ghcr.io"
+repo_owner: "your-username"
+repo_name: "your-repo-name"
+app_image_name: "{{ container_registry }}/{{ repo_owner }}/{{ repo_name }}/app"
+nginx_image_name: "{{ container_registry }}/{{ repo_owner }}/{{ repo_name }}/nginx"
+app_version: "v0.0.0-dev5"  # Optional. default is APP_VERSION file
+nginx_version: "v0.0.0-dev5"  # Optional. default is APP_VERSION file
+
+# GitHub Container Registry authentication
+github_username: "{{ lookup('env', 'GITHUB_USERNAME') }}"
+github_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"
+```
+
+---
+
+## Setup Instructions
+
+### 1. GitHub Secrets Setup
+1. Go to GitHub Repository > Settings > Secrets and variables > Actions
+2. Add all secrets from the "GitHub Secrets Configuration" section above
+3. Use actual values, not the placeholder examples
+
+### 2. Ansible Setup
+1. Copy the YAML section above to `ansible/vars.yml`
+2. Replace placeholder values with your actual configuration
+3. Ensure values match your GitHub Secrets where applicable
+
+### 3. Important Notes
+- **Never commit actual secrets** to the repository
+- **GITHUB_TOKEN** is automatically provided by GitHub Actions
+- **SSH key** should be the private key, not the public key
+- **Ports** should be numbers without quotes in GitHub Secrets interface
+- **Consistency** - Ensure GitHub Secrets and Ansible vars use matching values
+
+---
+
+## Security Warning
+This file contains example values only. Never commit actual secrets or sensitive configuration to the repository.
