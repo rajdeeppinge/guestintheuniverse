@@ -54,5 +54,5 @@ local-dev/.env
 # Docker
 .dockerignore
 
-# Text and Markdown files
-DEVELOPMENT.md
+# AI development rules / guidelines
+.windsurfrules

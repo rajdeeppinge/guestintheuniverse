@@ -1,0 +1,32 @@
+---
+- name: Create app directory
+  ansible.builtin.file:
+    path: "{{ app_dir }}/app"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0755'
+
+- name: Create simple Flask app
+  ansible.builtin.copy:
+    src: ../../local-dev/app/app.py
+    dest: "{{ app_dir }}/app/app.py"
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0644'
+
+- name: Create requirements.txt
+  ansible.builtin.copy:
+    src: ../../local-dev/app/requirements.txt
+    dest: "{{ app_dir }}/app/requirements.txt"
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0644'
+
+- name: Create Dockerfile for Flask app
+  ansible.builtin.copy:
+    src: ../../local-dev/app/app.Dockerfile
+    dest: "{{ app_dir }}/app/app.Dockerfile"
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0644'

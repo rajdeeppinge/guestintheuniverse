@@ -1,0 +1,19 @@
+---
+# Global connection variables - COPY THIS TO vars.yml and update with your values
+host: "your-server.domain.com"
+user: "your-ssh-username"
+ssh_key: "~/.ssh/your-private-key"
+
+# Global application variables
+app_name: "your-app-name"
+app_dir: "/path/to/your-app-name"
+app_port: 5000
+docker_network: "your_docker_network"
+
+# Global network variables
+domain_name: "your-domain.com"
+http_port: 80
+https_port: 443
+
+# SSL certificate path on server
+ssl_cert_path: "/path/to/your/certs"

@@ -1,0 +1,20 @@
+---
+- name: Ensure UFW firewall is installed
+  ansible.builtin.apt:
+    name: ufw
+    state: present
+
+- name: Start and enable UFW firewall
+  ansible.builtin.systemd:
+    name: ufw
+    state: started
+    enabled: true
+
+- name: Allow HTTP and HTTPS ports through UFW
+  ansible.builtin.ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - "{{ http_port | default('80') }}"
+    - "{{ https_port | default('443') }}"

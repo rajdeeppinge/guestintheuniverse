@@ -1,0 +1,36 @@
+---
+- name: Update system packages
+  ansible.builtin.apt:
+    update_cache: true
+    upgrade: dist
+
+- name: Install Docker dependencies
+  ansible.builtin.apt:
+    name: "{{ docker_packages }}"
+    state: present
+
+- name: Add Docker GPG key
+  ansible.builtin.apt_key:
+    url: "{{ docker_gpg_url }}"
+    state: present
+
+- name: Add Docker repository
+  ansible.builtin.apt_repository:
+    repo: "{{ docker_repo }}"
+    state: present
+
+- name: Install Docker
+  ansible.builtin.apt:
+    name: "{{ docker_engine_packages }}"
+    state: present
+
+- name: Install Docker Compose
+  ansible.builtin.apt:
+    name: docker-compose-plugin
+    state: present
+
+- name: Start and enable Docker service
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+    enabled: true

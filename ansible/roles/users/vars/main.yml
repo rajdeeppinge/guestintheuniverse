@@ -1,0 +1,6 @@
+---
+# User management variables
+app_user: "noviceguru"
+app_group: "universe"
+app_shell: "/usr/sbin/nologin"
+app_create_home: false
