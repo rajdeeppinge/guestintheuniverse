@@ -4,39 +4,25 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
-### v0.0.0-dev10
-- Fix build and deploy workflow
+### v0.0.0
+Initial release with complete CI/CD pipeline and deployment automation.
 
-### v0.0.0-dev9
-- Revert to combined build and deploy workflow due to workflow_call trigger complexity
+**Features:**
+- Automated container image building and validation
+- Combined build and deploy workflow with proper Ansible integration
+- Production-ready deployment from master branch
+- GitHub Container Registry (GHCR) integration
+- Ansible playbooks for production deployment
+- Local development environment setup
+- Semantic versioning and release tracking
 
-### v0.0.0-dev8
-- Split build and deploy combined workflow into two separate workflows
+**Infrastructure:**
+- Docker containerization with app and nginx images
+- Automated deployment via GitHub Actions
+- Secrets management for secure deployment
+- Health checks and validation pipeline
 
-### v0.0.0-dev7
-- Allow manual workflow to deploy without build
-
-### v0.0.0-dev6
-- Refactor ansible structure in deploy workflow to match ansible structure in ansible directory
-
-### v0.0.0-dev5
-- Add fully automated deployment workflow using GitHub actions and secrets management
-
-### v0.0.0-dev4
-- Handle GHCR authentication during server deployment
-
-### v0.0.0-dev3
-- Combine validation and push steps for container images to maintain consistent versioning
-
-### v0.0.0-dev2
-- Add validation for app and nginx images
-- Remove container image build logic from ansible flow
-- Add logic to fetch images from registry for deployment
-
-### v0.0.0-dev1
-- Add local development environment
-- Add ansible playbooks for production deployment
-- Add semantic versioning and release notes
-- Add version tracking with APP_VERSION
-- Add RELEASE_NOTES.md for tracking changes
-- Add GitHub Actions with GHCR integration
+**Development Tools:**
+- Version tracking with APP_VERSION
+- Release notes documentation
+- Local development environment with Docker Compose
