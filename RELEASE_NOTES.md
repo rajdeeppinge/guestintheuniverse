@@ -4,6 +4,9 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.0.0-dev10
+- Fix build and deploy workflow
+
 ### v0.0.0-dev9
 - Revert to combined build and deploy workflow due to workflow_call trigger complexity
 
