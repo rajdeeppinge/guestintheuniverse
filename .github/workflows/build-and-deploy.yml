@@ -258,6 +258,16 @@ jobs:
       run: |
         ansible-galaxy collection install community.docker
 
+    - name: Create ansible.cfg
+      run: |
+        cat > ansible.cfg << EOF
+        [defaults]
+        host_key_checking = False
+        inventory = ./ansible/inventory
+        retry_files_enabled = False
+        roles_path = ./ansible/roles
+        EOF
+
     - name: Create inventory file
       run: |
         cat > ansible/inventory/production.yml << EOF
