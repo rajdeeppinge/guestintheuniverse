@@ -1,0 +1,132 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["Build"]
+    types:
+      - completed
+    branches: [ feature/github-actions ]
+  workflow_dispatch:
+    inputs:
+      app_version:
+        description: 'App version to deploy (e.g., v0.0.0-dev1)'
+        required: true
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Extract latest app version
+      id: app_version
+      run: |
+        if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+          VERSION="${{ github.event.inputs.app_version }}"
+        else
+          VERSION=$(cat APP_VERSION)
+        fi
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Deploying version: $VERSION"
+
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install Ansible
+      run: |
+        python -m pip install --upgrade pip
+        pip install ansible
+
+    - name: Install Ansible collections
+      run: |
+        ansible-galaxy collection install community.docker
+
+    - name: Create ansible.cfg
+      run: |
+        cat > ansible.cfg << EOF
+        [defaults]
+        host_key_checking = False
+        inventory = ./ansible/inventory
+        retry_files_enabled = False
+        roles_path = ./ansible/roles
+        EOF
+
+    - name: Create inventory file
+      run: |
+        cat > ansible/inventory/production.yml << EOF
+        ---
+        all:
+          children:
+            webservers:
+              hosts:
+                ${{ secrets.HOST }}:
+                  ansible_user: ${{ secrets.USER }}
+                  ansible_ssh_private_key_file: /tmp/ssh_key
+                  ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+        EOF
+
+    - name: Create SSH key file
+      run: |
+        echo '${{ secrets.SSH_KEY }}' > /tmp/ssh_key
+        chmod 600 /tmp/ssh_key
+
+    - name: Create vars file from template
+      run: |
+        cat > vars.yml << EOF
+        ---
+        # Global connection variables
+        host: "${{ secrets.HOST }}"
+        user: "${{ secrets.USER }}"
+        ssh_key: "/tmp/ssh_key"
+
+        # Global application variables
+        app_name: "${{ secrets.APP_NAME }}"
+        app_dir: "${{ secrets.APP_DIR }}"
+        app_port: ${{ secrets.APP_PORT }}
+        docker_network: "${{ secrets.DOCKER_NETWORK }}"
+
+        # Global network variables
+        domain_name: "${{ secrets.DOMAIN_NAME }}"
+        http_port: ${{ secrets.HTTP_PORT }}
+        https_port: ${{ secrets.HTTPS_PORT }}
+
+        # SSL certificate path on server
+        ssl_cert_path: "${{ secrets.SSL_CERT_PATH }}"
+
+        # GitHub Container Registry variables
+        container_registry: "${{ env.REGISTRY }}"
+        app_image_name: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/app"
+        nginx_image_name: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx"
+        app_version: "${{ steps.app_version.outputs.version }}"
+        nginx_version: "${{ steps.app_version.outputs.version }}"
+
+        # GitHub Container Registry authentication
+        github_username: "${{ github.actor }}"
+        github_token: "${{ secrets.GITHUB_TOKEN }}"
+        EOF
+
+    - name: Run Ansible deployment
+      run: |
+        ansible-playbook -i ansible/inventory/production.yml ansible/playbooks/deploy.yml
+
+    - name: Deploy summary
+      run: |
+        echo "## Deploy Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Version**: ${{ steps.app_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **App Image**: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/app:${{ steps.app_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Nginx Image**: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx:${{ steps.app_version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Target**: ${{ secrets.HOST }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Status**: ${{ job.status }}" >> $GITHUB_STEP_SUMMARY
