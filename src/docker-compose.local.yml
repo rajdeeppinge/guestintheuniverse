@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      context: ./app
+      dockerfile: app.Dockerfile
+    container_name: guestintheuniverse_app_local
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./app:/app
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1

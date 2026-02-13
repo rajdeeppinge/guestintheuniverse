@@ -2,57 +2,47 @@
 
 ## Quick Start
 
-1. **Create SSL directory** (for testing):
+1. **Copy configuration**:
    ```bash
-   mkdir -p local-dev/ssl
-   # You can skip SSL for local testing or add dummy certs
+   cp config.example.yml config.local.yml
+   # Edit config.local.yml as needed. Skip Nginx and SSL settings for local dev.
    ```
 
 2. **Start local development**:
    ```bash
-   cd /home/shodh/software_engineering/guestintheuniverse_ansible
-   mkdir -p local-dev/ssl
-   docker-compose -f local-dev/docker-compose.yml up --build
+   docker-compose -f docker-compose.local.yml up --build
    ```
 
 3. **Access app**:
    - **App**: http://localhost:5000
-   - **Nginx**: http://localhost:80
-   - **Health**: http://localhost:5000/health
+   - **Health Check**: http://localhost:5000/api/v1/health
+   - **API Stats**: http://localhost:5000/api/v1/stats
+
 
 ## Development Features
 
 - **Live Reload**: Code changes auto-reload Flask
 - **Debug Mode**: Flask debug enabled
 - **Volume Mount**: Local code mounted in container
-- **No SSL**: HTTP only for local testing
+- **Simple Setup**: No SSL or nginx required for local dev
 
-## Directory Structure
-```
-local-dev/
- docker-compose.yml
- nginx.conf
- ssl/           # Add certs here if needed
- ../app/           # App code from parent directory
-```
 
 ## Testing Endpoints
 
-- **Main App**: Beautiful UI with stats
-- **Health Check**: `/health` returns JSON
-- **API Stats**: `/api/stats` shows app info
-- **Nginx Test**: `/test` shows simple message
+- **Main App**: http://localhost:5000
+- **Health Check**: `/api/v1/health` returns JSON
+- **API Stats**: `/api/v1/stats` shows app info
+
 
 ## Production Deployment
 
-When ready for production, use:
-```bash
-ansible-playbook -i inventory/hosts.yml playbooks/app-only.yml
-```
+When ready for production, push to master branch and let GitHub Actions handle the deployment.
+
 
 ## Docker Version Note
 
 If you get Docker Compose version errors, use the legacy command:
 ```bash
 # For older Docker versions
-docker-compose -f local-dev/docker-compose.yml up --build
+docker-compose -f docker-compose.local.yml up --build
+```
