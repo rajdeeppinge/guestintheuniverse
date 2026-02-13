@@ -4,6 +4,9 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.0.0-dev8
+- Split build and deploy combined workflow into two separate workflows
+
 ### v0.0.0-dev7
 - Allow manual workflow to deploy without build
 
