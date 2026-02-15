@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}About - Guest in the Universe{% endblock %}
+
+{% block content %}
+<h2>About Guest in the Universe</h2>
+
+<p>Welcome to Guest in the Universe, a blog dedicated to exploring the vast cosmos of web development and technology.</p>
+
+<p>This platform serves as a space to share insights, tutorials and experiences from my journey through Science and Technology, Finance, History, Sports, Travel and more.</p>
+
+<h3>What You'll Find Here</h3>
+<ul>
+    <li><strong>Science and Technology</strong> - Insights into the latest developments in science and technology</li>
+    <li><strong>Finance</strong> - My experiences in the field of personal finance</li>
+    <li><strong>History</strong> - Tidbits from the history of human civilization and languages</li>
+    <li><strong>Sports</strong> - My interests in Chess, Formula 1 Racing, Football and more</li>
+    <li><strong>Travel</strong> - Travel experiences especially through nature</li>
+</ul>
+
+<p>Whether you're an experienced guest or just starting your journey through this vast universe, there's something here for everyone exploring.</p>
+
+<p><a href="{{ url_for('main.index') }}">← Back to Home</a></p>
+{% endblock %}

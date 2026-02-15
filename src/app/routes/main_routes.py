@@ -1,98 +1,38 @@
-from flask import Blueprint, render_template_string, current_app
-from services.post_service import PostService
+from flask import Blueprint, render_template, current_app, request, send_from_directory
+from datetime import datetime
+import os
 
 main_bp = Blueprint('main', __name__)
 
+@main_bp.route('/images/<path:filename>')
+def serve_image(filename):
+    """Serve static images"""
+    images_dir = "/images"
+    return send_from_directory(images_dir, filename)
+
 @main_bp.route('/')
-def index():
-    # Call API endpoint instead of directly accessing service
-    # Use Flask's test client to make internal API call
+@main_bp.route('/page/<int:page>')
+def index(page=1):
+    # Use API endpoint instead of directly accessing service
     with current_app.test_client() as client:
-        posts_response = client.get('/api/v1/posts')
+        posts_response = client.get(f'/api/v1/posts?page={page}&per_page=5')
         posts_data = posts_response.get_json()
         posts = posts_data.get('posts', [])
+        pagination = posts_data.get('pagination', {})
     
-    # Generate HTML for posts
-    posts_html = ""
-    for post in posts:
-        posts_html += f'''
-        <article class="post-card">
-            <h3><a href="#">{post['title']}</a></h3>
-            <p class="post-date">{post['date']}</p>
-            <p class="post-excerpt">{post['excerpt']}</p>
-        </article>
-        '''
+    return render_template('index.html', posts=posts, pagination=pagination, current_year=datetime.now().year)
+
+@main_bp.route('/post/<filename>')
+def post(filename):
+    # Use API endpoint instead of directly accessing service
+    with current_app.test_client() as client:
+        post_response = client.get(f'/api/v1/posts/{filename}')
+        if post_response.status_code == 404:
+            return "Post not found", 404
+        post_data = post_response.get_json()
     
-    return render_template_string('''
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Guest in the Universe</title>
-    <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            max-width: 1000px; 
-            margin: 0 auto; 
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            min-height: 100vh;
-        }
-        .container {
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        }
-        h1 { color: #ffd700; text-align: center; }
-        .subtitle { text-align: center; opacity: 0.8; margin-bottom: 40px; }
-        .posts-section {
-            margin-top: 30px;
-        }
-        .section-title {
-            color: #ffd700;
-            font-size: 1.5em;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .post-card {
-            background: rgba(255,255,255,0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #ffd700;
-        }
-        .post-card h3 {
-            margin: 0 0 10px 0;
-        }
-        .post-card a {
-            color: #ffd700;
-            text-decoration: none;
-        }
-        .post-card a:hover {
-            text-decoration: underline;
-        }
-        .post-date {
-            opacity: 0.7;
-            font-size: 0.9em;
-            margin: 0 0 10px 0;
-        }
-        .post-excerpt {
-            margin: 0;
-            line-height: 1.5;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Guest in the Universe</h1>
-        <p class="subtitle">Exploring the vast cosmos of web development</p>
-        
-        <div class="posts-section">
-            <h2 class="section-title">Latest Posts</h2>
-            ''' + posts_html + '''
-        </div>
-    </div>
-</body>
-</html>
-    ''')
+    return render_template('post.html', post=post_data, current_year=datetime.now().year)
+
+@main_bp.route('/about')
+def about():
+    return render_template('about.html', current_year=datetime.now().year)

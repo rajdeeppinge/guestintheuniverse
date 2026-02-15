@@ -1,23 +1,14 @@
 services:
-  nginx:
-    image: ${NGINX_IMAGE_NAME}:${NGINX_IMAGE_TAG}
-    container_name: ${APP_NAME}_nginx
-    restart: unless-stopped
-    ports:
-      - "${HTTP_PORT}:80"
-      - "${HTTPS_PORT}:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-      - ${SSL_CERT_PATH}:/etc/ssl/certs:ro
-    depends_on:
-      - app
-
   app:
     image: ${APP_IMAGE_NAME}:${APP_IMAGE_TAG}
     container_name: ${APP_NAME}_app
     restart: unless-stopped
     expose:
       - "${APP_PORT}"
+    volumes:
+      - ./app:/app
+      - ./posts:/posts
+      - ./images:/images
 
 networks:
   default:

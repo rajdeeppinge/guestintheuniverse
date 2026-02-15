@@ -2,7 +2,7 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, feature/app-v0.1.0 ]
   pull_request:
     branches: [ master ]
 
@@ -43,10 +43,9 @@ jobs:
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         tags: |
-          type=ref,event=branch
-          type=ref,event=pr
           type=semver,pattern={{version}}
-          type=raw,value=latest,enable={{is_default_branch}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
 
     - name: Check version consistency
       id: version_check
@@ -54,7 +53,7 @@ jobs:
         APP_VERSION=$(cat APP_VERSION)
         
         # Extract latest version from RELEASE_NOTES.md
-        LATEST_VERSION=$(grep -m1 "### v" RELEASE_NOTES.md | sed 's/### \(v[0-9.]*[^ ]*\).*/\1/')
+        LATEST_VERSION=$(grep -m1 "### v" RELEASE_NOTES.md | sed 's/### \(v[0-9.]*-[^ ]*\).*/\1/')
         
         echo "APP_VERSION: $APP_VERSION"
         echo "Latest in RELEASE_NOTES.md: $LATEST_VERSION"

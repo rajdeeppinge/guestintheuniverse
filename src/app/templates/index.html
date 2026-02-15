@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}Guest in the Universe - Home{% endblock %}
+
+{% block content %}
+<h2>Latest Posts</h2>
+
+{% for post in posts %}
+<article class="post-with-image">
+    {% if post.image %}
+    <div class="post-image">
+        <img src="/images/{{ post.image }}" alt="{{ post.title }}" loading="lazy">
+    </div>
+    {% endif %}
+    
+    <div class="post-content">
+        <h3><a href="{{ url_for('main.post', filename=post.filename) }}">{{ post.title }}</a></h3>
+        <div class="post-meta">
+            Posted on {{ post.date }} by {{ post.author }} | {{ post.read_time }} min read
+        </div>
+        <p>{{ post.excerpt }}</p>
+    </div>
+</article>
+{% endfor %}
+
+{% if not posts %}
+<p>No posts yet. Check back soon!</p>
+{% endif %}
+
+{% if pagination and pagination.pages > 1 %}
+<div class="pagination">
+    {% if pagination.page > 1 %}
+        <a href="{{ url_for('main.index', page=1) }}" class="pagination-btn">« First</a>
+        <a href="{{ url_for('main.index', page=pagination.page - 1) }}" class="pagination-btn">‹ Previous</a>
+    {% endif %}
+    
+    {% set start_page = [1, pagination.page - 1]|max %}
+    {% set end_page = [pagination.pages, pagination.page + 1]|min %}
+    
+    {% if start_page > 1 %}
+        <a href="{{ url_for('main.index', page=1) }}" class="pagination-btn">1</a>
+        {% if start_page > 2 %}
+            <span class="pagination-ellipsis">...</span>
+        {% endif %}
+    {% endif %}
+    
+    {% for page in range(start_page, end_page + 1) %}
+        {% if page == pagination.page %}
+            <span class="pagination-btn current">{{ page }}</span>
+        {% else %}
+            <a href="{{ url_for('main.index', page=page) }}" class="pagination-btn">{{ page }}</a>
+        {% endif %}
+    {% endfor %}
+    
+    {% if end_page < pagination.pages %}
+        {% if end_page < pagination.pages - 1 %}
+            <span class="pagination-ellipsis">...</span>
+        {% endif %}
+        <a href="{{ url_for('main.index', page=pagination.pages) }}" class="pagination-btn">{{ pagination.pages }}</a>
+    {% endif %}
+    
+    {% if pagination.page < pagination.pages %}
+        <a href="{{ url_for('main.index', page=pagination.page + 1) }}" class="pagination-btn">Next ›</a>
+        <a href="{{ url_for('main.index', page=pagination.pages) }}" class="pagination-btn">Last »</a>
+    {% endif %}
+    
+    <span class="pagination-info">
+        Page {{ pagination.page }} of {{ pagination.pages }}
+    </span>
+</div>
+{% endif %}
+
+<style>
+.post-with-image {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+.post-image {
+    flex-shrink: 0;
+    width: 200px;
+}
+
+.post-image img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.post-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.post-content h3 {
+    margin: 0 0 0.5rem 0;
+}
+
+.post-content p {
+    margin: 0.5rem 0 0 0;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.pagination-btn {
+    background: transparent;
+    color: #3498db;
+    padding: 0.25rem 0.5rem;
+    border: none;
+    border-radius: 0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    min-width: auto;
+}
+
+.pagination-btn.current {
+    background: #3498db;
+    color: white;
+    font-weight: bold;
+}
+
+.pagination-btn:hover {
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+}
+
+.pagination-info {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin: 0 1rem;
+}
+
+.pagination-ellipsis {
+    padding: 0.25rem 0.5rem;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    .post-with-image {
+        flex-direction: column;
+    }
+    
+    .post-image {
+        width: 100%;
+    }
+    
+    .post-image img {
+        height: 200px;
+    }
+}
+</style>
+{% endblock %}
