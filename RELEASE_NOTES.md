@@ -4,6 +4,9 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.1.0-dev2
+- Deploy and manage posts and images separately from application code
+
 ### v0.1.0-dev1
 First release with application frontend and backend.
 

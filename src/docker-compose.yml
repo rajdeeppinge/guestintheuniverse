@@ -6,7 +6,6 @@ services:
     expose:
       - "${APP_PORT}"
     volumes:
-      - ./app:/app
       - ./posts:/posts
       - ./images:/images
 
