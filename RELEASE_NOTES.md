@@ -4,11 +4,8 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
-### v0.1.0-dev2
-- Deploy and manage posts and images separately from application code
-
-### v0.1.0-dev1
-First release with application frontend and backend.
+### v0.1.0
+Initial release with application frontend and backend.
 
 **New Features:**
 - Home and About pages and workflows
@@ -16,10 +13,10 @@ First release with application frontend and backend.
 - Pagination: First/Last page navigation with smart page range display. Shows current +/-1 pages with ellipsis to prevent wrapping
 - Added author information to posts and listings
 - Automatic reading time estimation for posts
-- Added contact email in footer
+- Added contact email in the footer
 - Responsive design, simple layout and mobile compatibility
 - Clear association between posts and images
-- Better support for local images
+- Support for local images
 
 ---
 
