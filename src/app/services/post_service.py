@@ -16,6 +16,35 @@ class PostService:
         
         return len([f for f in os.listdir(self.posts_dir) if f.endswith('.md')])
     
+    def format_date(self, date_str):
+        """Format date string to DD month YYYY format"""
+        try:
+            # Try to parse the date string - it could be in various formats
+            # Common formats: YYYY-MM-DD, DD/MM/YYYY, etc.
+            if '-' in date_str:
+                # Try YYYY-MM-DD format first
+                parts = date_str.split('-')
+                if len(parts) == 3 and parts[0].isdigit() and len(parts[0]) == 4:
+                    year, month, day = parts
+                    month_names = ['January', 'February', 'March', 'April', 'May', 'June',
+                                 'July', 'August', 'September', 'October', 'November', 'December']
+                    month_name = month_names[int(month) - 1] if month.isdigit() else month
+                    return f"{int(day)} {month_name} {year}"
+            elif '/' in date_str:
+                # Try DD/MM/YYYY format
+                parts = date_str.split('/')
+                if len(parts) == 3:
+                    day, month, year = parts
+                    month_names = ['January', 'February', 'March', 'April', 'May', 'June',
+                                 'July', 'August', 'September', 'October', 'November', 'December']
+                    month_name = month_names[int(month) - 1] if month.isdigit() else month
+                    return f"{int(day)} {month_name} {year}"
+            
+            # If parsing fails, return original string
+            return date_str
+        except:
+            return date_str
+    
     def calculate_read_time(self, content):
         """Calculate estimated read time in minutes"""
         words_per_minute = 200  # Average reading speed
@@ -89,7 +118,7 @@ class PostService:
             # Parse title, date, and author from frontmatter
             title = "Untitled"
             date = filename[:10]  # Extract date from filename
-            author = "noviceguru"  # Default author
+            author = "NoviceGuru"  # Default author
             
             for line in frontmatter.split('\n'):
                 if line.startswith('title:'):
@@ -103,6 +132,9 @@ class PostService:
             read_time = self.calculate_read_time(body)
             image = self.extract_image_from_content(content)
             
+            # Format the date
+            formatted_date = self.format_date(date)
+            
             # Process inline images BEFORE markdown conversion
             processed_body = self.process_inline_images(body)
             
@@ -111,7 +143,7 @@ class PostService:
             
             return {
                 'title': title,
-                'date': date,
+                'date': formatted_date,
                 'author': author,
                 'content': html_content,
                 'filename': filename,
@@ -142,7 +174,7 @@ class PostService:
                     # Parse title, date, and author from frontmatter
                     title = "Untitled"
                     date = filename[:10]  # Extract date from filename
-                    author = "noviceguru"  # Default author
+                    author = "NoviceGuru"  # Default author
                     
                     for line in frontmatter.split('\n'):
                         if line.startswith('title:'):
@@ -159,9 +191,12 @@ class PostService:
                     read_time = self.calculate_read_time(body)
                     image = self.extract_image_from_content(content)
                     
+                    # Format the date
+                    formatted_date = self.format_date(date)
+                    
                     posts.append({
                         'title': title,
-                        'date': date,
+                        'date': formatted_date,
                         'author': author,
                         'excerpt': excerpt,
                         'filename': filename,

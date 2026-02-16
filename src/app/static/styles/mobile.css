@@ -1,0 +1,91 @@
+/* Mobile drawer */
+.mobile-drawer {
+    position: fixed;
+    top: 0;
+    left: -300px;
+    width: 280px;
+    height: 100vh;
+    background-color: var(--drawer-bg);
+    box-shadow: 2px 0 10px var(--shadow-color);
+    transition: left 0.3s ease;
+    z-index: 1001;
+    overflow-y: auto;
+}
+
+.mobile-drawer.open {
+    left: 0;
+}
+
+.drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.close-drawer {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-color);
+    padding: 0.25rem;
+}
+
+.drawer-nav {
+    padding: 1rem;
+}
+
+.drawer-nav a {
+    display: block;
+    padding: 0.75rem 0;
+    color: var(--text-color);
+    text-decoration: none;
+    border-bottom: 1px solid var(--border-color);
+    transition: color 0.3s ease;
+}
+
+.drawer-nav a:hover {
+    color: var(--link-color);
+}
+
+.drawer-nav a:last-child {
+    border-bottom: none;
+}
+
+/* Mobile Theme Toggle */
+.drawer-theme-toggle {
+    margin-top: 1rem;
+    padding: 0.75rem 0;
+    display: flex;
+    justify-content: center;
+}
+
+.drawer-theme-toggle .theme-switch {
+    display: flex;
+    background: var(--border-color);
+    border-radius: 20px;
+    padding: 2px;
+    gap: 2px;
+    max-width: 120px;
+}
+
+/* Overlay */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--overlay-bg);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.overlay.show {
+    opacity: 1;
+    visibility: visible;
+}

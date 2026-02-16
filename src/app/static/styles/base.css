@@ -1,0 +1,154 @@
+/* CSS Variables for theming */
+:root {
+    --bg-color: #ffffff;
+    --text-color: #333333;
+    --header-bg: #f8f9fa;
+    --border-color: #eeeeee;
+    --link-color: #3498db;
+    --link-hover: #2980b9;
+    --card-bg: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --drawer-bg: #ffffff;
+    --overlay-bg: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] {
+    --bg-color: #1a1a1a;
+    --text-color: #e0e0e0;
+    --header-bg: #2d2d2d;
+    --border-color: #404040;
+    --link-color: #5dade2;
+    --link-hover: #3498db;
+    --card-bg: #2d2d2d;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --drawer-bg: #2d2d2d;
+    --overlay-bg: rgba(0, 0, 0, 0.7);
+}
+
+/* Base styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Content container */
+.content-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 6rem;
+}
+
+/* Typography */
+h1, h2, h3 {
+    color: var(--text-color);
+    background-color: transparent;
+    transition: color 0.3s ease;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Links */
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+/* Content styles */
+main {
+    padding-top: 0;
+}
+
+article {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    transition: border-color 0.3s ease;
+}
+
+.post-meta {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+/* Footer */
+footer {
+    margin-top: 3rem;
+    margin-bottom: 2rem;
+    padding: 2rem 0 0 0;
+    border-top: 1px solid var(--border-color);
+    transition: border-color 0.3s ease;
+    width: 100%;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 6rem;
+}
+
+footer p {
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+/* Flash messages */
+.flash-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .content-container {
+        padding: 0 4rem;
+    }
+    
+    .footer-content {
+        padding: 0 4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .content-container {
+        padding: 0 1rem;
+    }
+    
+    .footer-content {
+        padding: 0 1rem;
+    }
+
+    footer {
+        padding: 2rem 0 0 0;
+        text-align: center;
+    }
+}

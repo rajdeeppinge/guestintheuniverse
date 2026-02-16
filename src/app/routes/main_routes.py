@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, current_app, request, send_from_directory
 from datetime import datetime
 import os
+import markdown
 
 main_bp = Blueprint('main', __name__)
 
@@ -35,4 +36,12 @@ def post(filename):
 
 @main_bp.route('/about')
 def about():
-    return render_template('about.html', current_year=datetime.now().year)
+    # Use API endpoint to get about content
+    with current_app.test_client() as client:
+        about_response = client.get('/api/v1/about')
+        if about_response.status_code == 404:
+            return "About content not found", 404
+        about_data = about_response.get_json()
+        about_content = about_data.get('content', '')
+    
+    return render_template('about.html', about_content=about_content, current_year=datetime.now().year)

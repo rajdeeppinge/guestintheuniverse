@@ -1,0 +1,57 @@
+<header>
+    <div class="header-content">
+        <h1><a href="{{ url_for('main.index') }}">Guest in the Universe</a></h1>
+        
+        <!-- Desktop Navigation -->
+        <div class="desktop-nav">
+            <nav>
+                <a href="{{ url_for('main.index') }}">Home</a>
+                <a href="{{ url_for('main.about') }}">About</a>
+            </nav>
+            <div class="theme-toggle">
+                <div class="theme-switch">
+                    <button class="theme-option-btn" id="theme-light-btn" onclick="setTheme('light')" aria-label="Light theme">
+                        <span>☀️</span>
+                    </button>
+                    <button class="theme-option-btn" id="theme-dark-btn" onclick="setTheme('dark')" aria-label="Dark theme">
+                        <span>🌙</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" onclick="toggleDrawer()" aria-label="Toggle menu">
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </button>
+    </div>
+</header>
+
+<!-- Mobile Drawer -->
+<div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+        <h3>Menu</h3>
+        <button class="close-drawer" onclick="toggleDrawer()" aria-label="Close menu">×</button>
+    </div>
+    <nav class="drawer-nav">
+        <a href="{{ url_for('main.index') }}">Home</a>
+        <a href="{{ url_for('main.about') }}">About</a>
+        <div class="drawer-theme-toggle">
+            <div class="theme-switch">
+                <button class="theme-option-btn" id="drawer-theme-light-btn" onclick="setTheme('light')" aria-label="Light theme">
+                    <span>☀️</span>
+                </button>
+                <button class="theme-option-btn" id="drawer-theme-dark-btn" onclick="setTheme('dark')" aria-label="Dark theme">
+                    <span>🌙</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<!-- Overlay -->
+<div class="overlay" id="overlay" onclick="toggleDrawer()"></div>

@@ -1,0 +1,111 @@
+/* Index page styles */
+.posts-container {
+    min-height: var(--posts-container-height, 800px);
+}
+
+.post-with-image {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    --post-height: 200px; /* Approximate height of one post */
+}
+
+.post-image {
+    flex-shrink: 0;
+    width: 200px;
+}
+
+.post-image img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.post-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.post-content h3 {
+    margin: 0 0 0.5rem 0;
+    background-color: transparent;
+}
+
+.post-content p {
+    margin: 0.5rem 0 0 0;
+}
+
+.author-link {
+    color: var(--link-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.author-link:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+}
+
+.pagination-btn {
+    background: transparent;
+    color: var(--link-color);
+    padding: 0.25rem 0.5rem;
+    border: none;
+    border-radius: 0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    min-width: auto;
+}
+
+.pagination-btn.current {
+    background: var(--link-color);
+    color: white;
+    font-weight: bold;
+}
+
+.pagination-btn:hover {
+    background: var(--link-color);
+    color: white;
+    text-decoration: none;
+}
+
+.pagination-info {
+    color: var(--text-color);
+    opacity: 0.7;
+    font-size: 0.9rem;
+    margin: 0 1rem;
+}
+
+.pagination-ellipsis {
+    padding: 0.25rem 0.5rem;
+    color: var(--text-color);
+    opacity: 0.7;
+    font-size: 0.9rem;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .post-with-image {
+        flex-direction: column;
+    }
+    
+    .post-image {
+        width: 100%;
+    }
+    
+    .post-image img {
+        height: 200px;
+    }
+}

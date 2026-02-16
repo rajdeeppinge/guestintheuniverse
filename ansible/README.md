@@ -1,10 +1,10 @@
 # Guest in the Universe - Ansible Deployment
 
-Deploy Guest in the Universe application to server
+Deploy application to server using Ansible.
 
 ## Setup
 
-1. **Clone and configure**:
+1. **Configure inventory**:
    ```bash
    git clone https://github.com/yourusername/guestintheuniverse_ansible.git
    cd guestintheuniverse_ansible
@@ -13,7 +13,7 @@ Deploy Guest in the Universe application to server
 
 2. **Configure variables**:
    - See `../config.example.yml` for complete configuration template
-   - Copy the YAML section from `../config.example.yml` to `ansible/vars.yml`
+   - Copy the YAML section from `../config.example.yml` to `./vars.yml`
    - Update with your actual server details
 
 3. **Manual TLS/SSL Certificate Setup** (recommended for security):
@@ -34,21 +34,16 @@ Deploy Guest in the Universe application to server
 
 4. **Deploy**:
    ```bash
-   # Ansible automatically uses global variables from vars.yml
-
-   # deploy.yml will deploy app
    ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml
    ```
 
-## Test Deployment
+## Test
 
-- `http://your-domain.com` - Nginx default page
-- `http://your-domain.com/test` - Test message
+- `http://your-domain.com` - Application
 - `http://your-domain.com/health` - Health check
 
 ## Security
 
-- **Never commit** `vars.yml` or `inventory/hosts.yml`
-- Use `../config.example.yml` as the configuration template
-- `.gitignore` prevents accidental commits
-- All sensitive data should be in GitHub Secrets for CI/CD
+- Never commit `vars.yml` or `inventory/hosts.yml`
+- Use `../config.example.yml` as template
+- All secrets should be in GitHub Secrets for CI/CD

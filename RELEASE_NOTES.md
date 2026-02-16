@@ -4,6 +4,34 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.2.0-dev1
+Major UX overhaul with mobile-first design, enhanced navigation system, dark mode, and API-first architecture.
+
+**Key Features:**
+- **Mobile-First Design**: Drawer navigation with hamburger menu and mobile-optimized layouts
+- **Dark Mode System**: Complete light/dark theme with system preference detection
+- **Dual Floating Navigation**: Back to Top/Back to Home buttons with intelligent responsive positioning
+- **API-First Architecture**: Dynamic content loading
+
+**Navigation Improvements:**
+- Smart button placement: Left sidebar (desktop) → Bottom-right (mobile/tablet)
+- Clear icons and tooltips to eliminate navigation confusion
+- Touch-optimized sizing with blog-consistent theming
+- Always-accessible design replacing hidden scroll-based buttons
+
+**Layout & Design:**
+- Header/footer width adjusted to content on variable width displays
+- Responsive padding system for optimal readability
+- Theme selector with horizontal toggle design
+
+**Code Architecture:**
+- Modular CSS/JS structure with proper separation of concerns
+- Reusable HTML partials and externalized styles
+- Dynamic content delivery from markdown files
+- Eliminated hardcoded content from templates
+
+---
+
 ### v0.1.0
 Initial release with application frontend and backend.
 
