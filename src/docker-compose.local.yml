@@ -10,7 +10,6 @@ services:
     volumes:
       - ./app:/app
       - ../posts:/posts
-      - ../images:/images
     environment:
       - FLASK_ENV=development
       - FLASK_DEBUG=1

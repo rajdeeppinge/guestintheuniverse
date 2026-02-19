@@ -7,7 +7,6 @@ services:
       - "${APP_PORT}"
     volumes:
       - ./posts:/posts
-      - ./images:/images
 
   nginx:
     image: ${NGINX_IMAGE_NAME}:${NGINX_IMAGE_TAG}
