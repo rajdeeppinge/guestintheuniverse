@@ -4,7 +4,7 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
-### v0.2.0-dev1
+### v0.2.0
 Major UX overhaul with mobile-first design, enhanced navigation system, dark mode, and API-first architecture.
 
 **Key Features:**
