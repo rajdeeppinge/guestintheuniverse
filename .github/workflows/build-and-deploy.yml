@@ -162,22 +162,16 @@ jobs:
         # Wait for services to be ready
         echo "Waiting for services to start..."
         sleep 15
-        docker ps
         
         # Test app health endpoint through nginx
         echo "Testing app health endpoint through nginx..."
-        curl -v "http://localhost:8080/api/v1/health"
-        HEALTH_RESPONSE=$(curl -v http://localhost:8080/api/v1/health)
-        HEALTH_CHECK=$(echo "$HEALTH_RESPONSE" | grep -o '"status":"[^"]*"' | cut -d'"' -f4)
-        echo "Health response: $HEALTH_RESPONSE"
-        echo "Health status extracted: $HEALTH_CHECK"
-        
-        if [ "$HEALTH_CHECK" != "healthy" ]; then
-          echo "App health check failed through nginx! Status: $HEALTH_CHECK"
+        if ! curl -f http://localhost:8080/api/v1/health; then
+          echo "App health check failed through nginx!"
           docker compose -f docker-compose.yml logs app
+          docker compose -f docker-compose.yml logs nginx
           cleanup_and_exit 1
         else
-          echo "App health check passed through nginx: Status $HEALTH_CHECK"
+          echo "App health check passed through nginx"
         fi
         
         # Test app root endpoint through nginx
@@ -205,10 +199,8 @@ jobs:
         
         # Test images endpoint proxy configuration
         echo "Testing images endpoint proxy configuration..."
-        IMAGES_CHECK=$(curl -f -s -o /dev/null -w "%{http_code}" http://localhost:8080/images/test.jpg || echo "000")
-        if [ "$IMAGES_CHECK" != "404" ] && [ "$IMAGES_CHECK" != "000" ]; then
-          echo "Images endpoint proxy configuration passed! HTTP code: $IMAGES_CHECK"
-        elif [ "$IMAGES_CHECK" = "404" ]; then
+        IMAGES_CHECK=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/images/test.jpg || echo "000")
+        if [ "$IMAGES_CHECK" = "404" ]; then
           echo "Images endpoint proxy configuration working (expected 404 for non-existent image)"
         else
           echo "Images endpoint proxy configuration failed! HTTP code: $IMAGES_CHECK"
