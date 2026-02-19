@@ -165,14 +165,17 @@ jobs:
         
         # Test app health endpoint through nginx
         echo "Testing app health endpoint through nginx..."
-        HEALTH_CHECK=$(curl -s -w "%{http_code}" http://localhost:8080/api/v1/health)
+        HEALTH_RESPONSE=$(curl -s http://localhost:8080/api/v1/health)
+        HEALTH_CHECK=$(echo "$HEALTH_RESPONSE" | grep -o '"status":"[^"]*"' | cut -d'"' -f4)
+        echo "Health response: $HEALTH_RESPONSE"
+        echo "Health status extracted: $HEALTH_CHECK"
         
-        if [ "$HEALTH_CHECK" != "200" ]; then
-          echo "App health check failed through nginx! HTTP code: $HEALTH_CHECK"
+        if [ "$HEALTH_CHECK" != "healthy" ]; then
+          echo "App health check failed through nginx! Status: $HEALTH_CHECK"
           docker compose -f docker-compose.yml logs app
           cleanup_and_exit 1
         else
-          echo "App health check passed through nginx: HTTP code $HEALTH_CHECK"
+          echo "App health check passed through nginx: Status $HEALTH_CHECK"
         fi
         
         # Test app root endpoint through nginx
