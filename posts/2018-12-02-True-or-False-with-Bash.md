@@ -14,14 +14,14 @@ We will use the `**echo $?**` to get the exit status for the previously executed
 The first example is as always to print "Hello World!"  
 
 
-[![](/images/2018-12-02-True-or-False-with-Bash-image2.png)](/images/2018-12-02-True-or-False-with-Bash.png)
+![/images/2018-12-02-True-or-False-with-Bash.png](/images/2018-12-02-True-or-False-with-Bash.png)
 
 There are two ways of printing "Hello World!" as shown above. In both the cases, the exit status is 0 as the printing is successful.  
   
 Let's check the true and false variables.  
 
 
-[![](/images/2018-12-02-True-or-False-with-Bash-image1.png)](/images/2018-12-02-True-or-False-with-Bash.png)
+![/images/2018-12-02-True-or-False-with-Bash.png](/images/2018-12-02-True-or-False-with-Bash.png)
 
   
 As you can see, false returns 1.  
@@ -29,7 +29,7 @@ As you can see, false returns 1.
 Another example using conditionals.  
 
 
-[![](/images/2018-12-02-True-or-False-with-Bash-image3.png)](/images/2018-12-02-True-or-False-with-Bash.png)
+![/images/2018-12-02-True-or-False-with-Bash.png](/images/2018-12-02-True-or-False-with-Bash.png)
 
   
 We know that **true** returns 0. When it is used along with **if condition** , that condition becomes true and it prints the message in the if part.  
@@ -42,7 +42,7 @@ Finally, as we have stated earlier, the non-zero values are considered as failur
 3: Error  
 
 
-[![](/images/2018-12-02-True-or-False-with-Bash.png)](/images/2018-12-02-True-or-False-with-Bash.png)
+![/images/2018-12-02-True-or-False-with-Bash.png](/images/2018-12-02-True-or-False-with-Bash.png)
 
 In the above example, observe that we are initially in bash shell. We spawn a Bourne shell (sh). Exit that shell with a status code of 3 to come back to the original bash shell. We check the status of the previous command and observe that the **sh** command i.e. the last process created by the bash shell has **exited with status code 3** meaning there is **error**.  
   

@@ -4,6 +4,29 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.3.0-dev1
+Object Storage integration and image management improvements.
+
+**New Features:**
+- Object Storage integration for image serving
+- Automated image URL updates in all posts
+- Nginx proxy configuration for Object Storage
+- Validation workflow enhancements for image endpoints
+- Removed local image dependencies from deployment
+
+**Infrastructure:**
+- Object Storage namespace, bucket, and region configuration
+- Dynamic nginx proxy for image endpoints
+- GitHub secrets integration for Object Storage credentials
+- Container registry optimization
+
+**Bug Fixes:**
+- Fixed nested Markdown image formats
+- Corrected image path references
+- Improved validation testing for image endpoints
+
+---
+
 ### v0.2.0
 Major UX overhaul with mobile-first design, enhanced navigation system, dark mode, and API-first architecture.
 

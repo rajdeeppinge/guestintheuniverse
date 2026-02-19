@@ -2,7 +2,7 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [ release/v0.3.0 ]
   pull_request:
     branches: [ master ]
 
@@ -198,6 +198,19 @@ jobs:
           echo "Nginx health endpoint passed!"
         fi
         
+        # Test images endpoint proxy configuration
+        echo "Testing images endpoint proxy configuration..."
+        IMAGES_CHECK=$(curl -f -s -o /dev/null -w "%{http_code}" http://localhost:8080/images/test.jpg || echo "000")
+        if [ "$IMAGES_CHECK" != "404" ] && [ "$IMAGES_CHECK" != "000" ]; then
+          echo "Images endpoint proxy configuration passed! HTTP code: $IMAGES_CHECK"
+        elif [ "$IMAGES_CHECK" = "404" ]; then
+          echo "Images endpoint proxy configuration working (expected 404 for non-existent image)"
+        else
+          echo "Images endpoint proxy configuration failed! HTTP code: $IMAGES_CHECK"
+          docker compose -f docker-compose.yml logs nginx
+          cleanup_and_exit 1
+        fi
+        
         # Cleanup
         echo "Validation completed successfully!"
         cleanup_and_exit 0
@@ -232,7 +245,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: success() && github.ref == 'refs/heads/master'
+    if: success() && (github.ref == 'refs/heads/master' || github.ref == 'refs/heads/release/v0.3.0')
     permissions:
       contents: read
       packages: read
@@ -312,6 +325,11 @@ jobs:
 
         # SSL certificate path on server
         ssl_cert_path: "${{ secrets.SSL_CERT_PATH }}"
+
+        # OCI Object Storage variables
+        oci_namespace: "${{ secrets.OCI_NAMESPACE }}"
+        oci_bucket: "${{ secrets.OCI_BUCKET }}"
+        oci_region: "${{ secrets.OCI_REGION }}"
 
         # GitHub Container Registry variables
         container_registry: "${{ env.REGISTRY }}"

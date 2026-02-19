@@ -12,13 +12,13 @@ We have a setup of 4 VMs on a local network with each having an IP address. The 
   
 
 
-[![](/images/Screen+Shot+2020-04-25+at+6.48.10+PM.png)]
+![/images/Screen+Shot+2020-04-25+at+6.48.10+PM.png](/images/Screen+Shot+2020-04-25+at+6.48.10+PM.png)
 
-[![![]](/images/2020-04-25-Network-scanning-with-nmap-image0.png)]
+![2020-04-25-Network-scanning-with-nmap-image0.png](/images/2020-04-25-Network-scanning-with-nmap-image0.png)
 
-[![](/images/Screen+Shot+2020-04-25+at+7.01.59+PM.png)]
+![/images/Screen+Shot+2020-04-25+at+7.01.59+PM.png](/images/Screen+Shot+2020-04-25+at+7.01.59+PM.png)
 
-[![](/images/Screen+Shot+2020-04-25+at+7.02.11+PM.png)]
+![/images/Screen+Shot+2020-04-25+at+7.02.11+PM.png](/images/Screen+Shot+2020-04-25+at+7.02.11+PM.png)
 
   
 The goal is to verify that nmap is able to detect all the hosts in the local subnet 10.0.1.1/24. Execute the following command to scan the subnet:  
@@ -28,7 +28,7 @@ It returns a list of hosts present on the subnet. nmap also performs a port scan
   
 
 
-[![](/images/Screen+Shot+2020-04-25+at+7.09.30+PM.png)]
+![/images/Screen+Shot+2020-04-25+at+7.09.30+PM.png](/images/Screen+Shot+2020-04-25+at+7.09.30+PM.png)
 
   
 nmap scanned 256 IP addresses i.e. the whole /24 subnet and found 4 hosts. It also scanned for ports on all hosts and found port 22 open which is the standard port running ssh service.  

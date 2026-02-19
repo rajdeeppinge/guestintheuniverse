@@ -6,11 +6,11 @@ date: 2019-06-30
 
 Recently, ICICI Bank offered me a free credit limit increase for my Lifetime Free ICICI Platinum Chip Credit Card. My limit is being increased by ~31%. For last couple of weeks, I was seeing increased available credit limit on my ICICI net-banking page. I also received an SMS stating that they are offering me a free credit limit increase, after the bill for the latest credit cycle was generated. The same limit enhancement offer is visible in iMobile app as well.  
   
-[![![]](/images/2019-06-30-ICICI-Credit-Limit-Increase-Offer-image1.jpg)]  
+![2019-06-30-ICICI-Credit-Limit-Increase-Offer-image1.jpg](/images/2019-06-30-ICICI-Credit-Limit-Increase-Offer-image1.jpg)  
 ---  
 See the last SMS message in the above screenshot  
   
-[![](/images/Screenshot_20190815-161005.jpg)]  
+![/images/Screenshot_20190815-161005.jpg](/images/Screenshot_20190815-161005.jpg)  
 ---  
 In the Latest Bill tab you will see the Manage Limit option just above My Rewards.  
   

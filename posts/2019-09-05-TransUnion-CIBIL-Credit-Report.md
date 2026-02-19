@@ -9,7 +9,7 @@ In today's world, having a good credit score has become very important to get ap
 
 
   1. Visit the official website of cibil. Click on "**Get yours now** "  
-<https://www.cibil.com/freecibilscore>[![](/images/2019-09-05-TransUnion-CIBIL-Credit-Report.png)](/images/2019-09-05-TransUnion-CIBIL-Credit-Report.png)  
+<https://www.cibil.com/freecibilscore>![/images/2019-09-05-TransUnion-CIBIL-Credit-Report.png](/images/2019-09-05-TransUnion-CIBIL-Credit-Report.png)  
  
   2.  You will be redirected to the registration page.   
 [https://myscore.cibil.com/CreditView/enrollShort.page?enterprise=CIBIL&offer=FACRA](https://myscore.cibil.com/CreditView/enrollShort.page?enterprise=CIBIL&offer=FACRA)  

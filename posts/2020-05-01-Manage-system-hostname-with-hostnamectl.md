@@ -10,7 +10,7 @@ Check that hostnamectl is present on the system by typing it in a shell. You wil
   
 
 
-[![](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image0.png)]
+![/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image0.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image0.png)
 
   
 In case hostnamectl is not found, it is a good idea to install it.  
@@ -21,14 +21,14 @@ Verify the static hostname given above using the following command:
   
 
 
-[![](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image1.png)]
+![/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image1.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image1.png)
 
   
 Also verify it by checking /etc/hostname file  
   
 
 
-[![](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image2.png)]
+![/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image2.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image2.png)
 
   
 Change the hostname and set the desired hostname by running the following command and authenticating with the password.  
@@ -37,14 +37,14 @@ Change the hostname and set the desired hostname by running the following comman
   
 
 
-[![![]](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image4.png)]
+![2020-05-01-Manage-system-hostname-with-hostnamectl-image4.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image4.png)
 
   
 Start a new shell session or reconnect to the server to see the change in the hostname  
   
 
 
-[![](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image5.png)]
+![/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image5.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image5.png)
 
   
 Again run above steps to verify that hostname has been changed correctly.  
@@ -71,7 +71,7 @@ Edit the /etc/hosts file and add FQDN in front of hostname as shown below.
   
 
 
-[![](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image6.png)]
+![/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image6.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image6.png)
 
   
 
@@ -80,7 +80,7 @@ Test the FQDN setup as follows:
   
 
 
-[![](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image7.png)]
+![/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image7.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image7.png)
 
   
 

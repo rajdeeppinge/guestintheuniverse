@@ -23,7 +23,7 @@ The above command creates a file named **big_file.txt** of size (**count*bs**) i
   
 
 
-[![](/images/2019-01-19-Generate-Large-Files-in-Linux-using-dd.png)](/images/2019-01-19-Generate-Large-Files-in-Linux-using-dd.png)
+![/images/2019-01-19-Generate-Large-Files-in-Linux-using-dd.png](/images/2019-01-19-Generate-Large-Files-in-Linux-using-dd.png)
 
   
 As you can see above, a file of size 1 GB has been created. The data transfer rate of 1.2 GB/s is visible.  
@@ -34,7 +34,7 @@ Let us check how much time it actually takes to create a 2 GB file.
   
 
 
-[![](/images/2019-01-20-Using-netcat-for-file-transfers-image3.png)](/images/2019-01-19-Generate-Large-Files-in-Linux-using-dd.png)
+![/images/2019-01-19-Generate-Large-Files-in-Linux-using-dd.png](/images/2019-01-19-Generate-Large-Files-in-Linux-using-dd.png)
 
   
 The above execution shows that it barely takes approximately 4 seconds to create a file of size 2 GB.  

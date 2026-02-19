@@ -20,7 +20,7 @@ There are two general steps to be followed:
   
 
 
-[![](/images/2020-01-05-Using-static-IPs-in-Linux-image1.png)](/images/2020-01-05-Using-static-IPs-in-Linux.png)
+![/images/2020-01-05-Using-static-IPs-in-Linux.png](/images/2020-01-05-Using-static-IPs-in-Linux.png)
 
   
 
@@ -32,7 +32,7 @@ Edit the /etc/network/interfaces file and add the following code block. Prefer u
   
 
 
-[![](/images/2020-01-05-Using-static-IPs-in-Linux-image2.png)](/images/2020-01-05-Using-static-IPs-in-Linux.png)
+![/images/2020-01-05-Using-static-IPs-in-Linux.png](/images/2020-01-05-Using-static-IPs-in-Linux.png)
 
   
 Now restart the network interface with the following command:  
@@ -62,7 +62,7 @@ Upon restart the interface should be configured with static IP.
 This is my ifconfig output:  
 
 
-[![](/images/2020-01-05-Using-static-IPs-in-Linux-image3.png)](/images/2020-01-05-Using-static-IPs-in-Linux.png)
+![/images/2020-01-05-Using-static-IPs-in-Linux.png](/images/2020-01-05-Using-static-IPs-in-Linux.png)
 
   
 Let's see how to assign a static IP for Ubuntu 18.04 before testing.  
@@ -77,7 +77,7 @@ From Ubuntu 18.04, Ubuntu shifted to Netplan network configuration. This uses ya
 The current interfaces on the system are as follows:  
 
 
-[![](/images/2020-01-05-Using-static-IPs-in-Linux.png)](/images/2020-01-05-Using-static-IPs-in-Linux.png)
+![/images/2020-01-05-Using-static-IPs-in-Linux.png](/images/2020-01-05-Using-static-IPs-in-Linux.png)
 
   
 Here also, enp0s8 interface does not have any IP.   
@@ -86,7 +86,7 @@ Edit the `/etc/netplan/50-cloud-init.yaml` file (NOTE: the file name may be diff
   
 
 
-[![](/images/2020-01-05-Using-static-IPs-in-Linux-image4.png)](/images/2020-01-05-Using-static-IPs-in-Linux.png)
+![/images/2020-01-05-Using-static-IPs-in-Linux.png](/images/2020-01-05-Using-static-IPs-in-Linux.png)
 
   
 Apply the configuration using the following command:  
@@ -98,14 +98,14 @@ Use --debug flag for debugging purposes
   
 
 
-[![](/images/2020-01-05-Using-static-IPs-in-Linux-image5.png)](/images/2020-01-05-Using-static-IPs-in-Linux.png)
+![/images/2020-01-05-Using-static-IPs-in-Linux.png](/images/2020-01-05-Using-static-IPs-in-Linux.png)
 
   
 It can be seen in the above screenshot that the new config has been merged in the existing config. Let's check our interface with ifconfig,   
   
 
 
-[![](/images/2020-01-05-Using-static-IPs-in-Linux-image6.png)](/images/2020-01-05-Using-static-IPs-in-Linux.png)
+![/images/2020-01-05-Using-static-IPs-in-Linux.png](/images/2020-01-05-Using-static-IPs-in-Linux.png)
 
   
 The IP has been assigned successfully.  
@@ -119,21 +119,21 @@ Make sure you are on the server which is in the same network as the network of s
 
 ####  PING test:
 
-[![](/images/2020-01-05-Using-static-IPs-in-Linux-image7.png)](/images/2020-01-05-Using-static-IPs-in-Linux.png)
+![/images/2020-01-05-Using-static-IPs-in-Linux.png](/images/2020-01-05-Using-static-IPs-in-Linux.png)
 
   
 
 
-[![](/images/2020-01-05-Using-static-IPs-in-Linux-image8.png)](/images/2020-01-05-Using-static-IPs-in-Linux.png)
+![/images/2020-01-05-Using-static-IPs-in-Linux.png](/images/2020-01-05-Using-static-IPs-in-Linux.png)
 
 ####  SSH test
 
-[![](/images/2020-01-05-Using-static-IPs-in-Linux-image9.png)](/images/2020-01-05-Using-static-IPs-in-Linux.png)
+![/images/2020-01-05-Using-static-IPs-in-Linux.png](/images/2020-01-05-Using-static-IPs-in-Linux.png)
 
   
 
 
-[![](/images/2020-01-05-Using-static-IPs-in-Linux-image10.png)](/images/2020-01-05-Using-static-IPs-in-Linux.png)
+![/images/2020-01-05-Using-static-IPs-in-Linux.png](/images/2020-01-05-Using-static-IPs-in-Linux.png)
 
 ####   
 

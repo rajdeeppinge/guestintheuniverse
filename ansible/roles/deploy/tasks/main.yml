@@ -15,26 +15,10 @@
     group: "{{ app_group }}"
     mode: '0755'
 
-- name: Create images directory
-  ansible.builtin.file:
-    path: "{{ app_dir }}/images"
-    state: directory
-    owner: "{{ app_user }}"
-    group: "{{ app_group }}"
-    mode: '0755'
-
 - name: Copy posts to server
   ansible.builtin.copy:
     src: "../../../../posts/"
     dest: "{{ app_dir }}/posts/"
-    owner: "{{ app_user }}"
-    group: "{{ app_group }}"
-    mode: '0644'
-
-- name: Copy images to server
-  ansible.builtin.copy:
-    src: "../../../../images/"
-    dest: "{{ app_dir }}/images/"
     owner: "{{ app_user }}"
     group: "{{ app_group }}"
     mode: '0644'

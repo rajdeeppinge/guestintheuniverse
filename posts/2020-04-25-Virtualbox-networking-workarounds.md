@@ -42,14 +42,14 @@ For example, in the settings shown in the image, the IPv4 address should not be 
 
 
 
-[![](/images/Screen+Shot+2020-04-25+at+5.14.13+PM.png)]
+![/images/Screen+Shot+2020-04-25+at+5.14.13+PM.png](/images/Screen+Shot+2020-04-25+at+5.14.13+PM.png)
 
   
 Now edit the network settings for all the VMs and add a new adapter with host-only network as below.  
   
 
 
-[![![]](/images/2020-04-25-Virtualbox-networking-workarounds-image3.png)]
+![2020-04-25-Virtualbox-networking-workarounds-image3.png](/images/2020-04-25-Virtualbox-networking-workarounds-image3.png)
 
   
    
@@ -65,7 +65,7 @@ In the image, the "Supports DHCP" checkbox is disabled. This is because the inte
 
 
 
-[![](/images/Screen+Shot+2020-04-25+at+5.26.39+PM.png)]
+![/images/Screen+Shot+2020-04-25+at+5.26.39+PM.png](/images/Screen+Shot+2020-04-25+at+5.26.39+PM.png)
 
   
 Again edit the network settings for all the VMs and add a new adapter with NAT network.  
@@ -79,7 +79,7 @@ Again edit the network settings for all the VMs and add a new adapter with NAT n
   
 
 
-[![](/images/Screen+Shot+2020-04-25+at+5.46.38+PM.png)]
+![/images/Screen+Shot+2020-04-25+at+5.46.38+PM.png](/images/Screen+Shot+2020-04-25+at+5.46.38+PM.png)
 
   
 Apart from the loopback address, there are two other interfaces, enp0s3 on 10.0.1.1/24 host-only network and enp0s8 on 10.0.2.0/24 NAT network.  

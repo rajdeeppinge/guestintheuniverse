@@ -13,7 +13,7 @@ I was searching for tools to split my PDF file and came across a lot of online t
   
 
 
-[![](/images/2020-04-19-Split-PDF-files-using-Chrome-image0.png)]
+![/images/2020-04-19-Split-PDF-files-using-Chrome-image0.png](/images/2020-04-19-Split-PDF-files-using-Chrome-image0.png)
 
   
   
@@ -23,7 +23,7 @@ Open Chrome and go to File -> Open File... -> <Navigate to PDF file>
   
 
 
-[![](/images/2020-04-19-Split-PDF-files-using-Chrome-image1.png)]
+![/images/2020-04-19-Split-PDF-files-using-Chrome-image1.png](/images/2020-04-19-Split-PDF-files-using-Chrome-image1.png)
 
   
   
@@ -32,7 +32,7 @@ Open Chrome and go to File -> Open File... -> <Navigate to PDF file>
   
 
 
-[![](/images/2020-04-19-Split-PDF-files-using-Chrome-image2.png)]
+![/images/2020-04-19-Split-PDF-files-using-Chrome-image2.png](/images/2020-04-19-Split-PDF-files-using-Chrome-image2.png)
 
   
 3\. In the print window,  
@@ -42,7 +42,7 @@ Open Chrome and go to File -> Open File... -> <Navigate to PDF file>
   
 
 
-[![](/images/2020-04-19-Split-PDF-files-using-Chrome-image3.png)]
+![/images/2020-04-19-Split-PDF-files-using-Chrome-image3.png](/images/2020-04-19-Split-PDF-files-using-Chrome-image3.png)
 
   
 NOTE: Groups of pages can be entered as comma-separated-values to split the PDF in nonconsecutive manner.  
@@ -53,7 +53,7 @@ NOTE: Groups of pages can be entered as comma-separated-values to split the PDF 
   
 
 
-[![![]](/images/2020-04-19-Split-PDF-files-using-Chrome-image1.png)]
+![2020-04-19-Split-PDF-files-using-Chrome-image1.png](/images/2020-04-19-Split-PDF-files-using-Chrome-image1.png)
 
   
   

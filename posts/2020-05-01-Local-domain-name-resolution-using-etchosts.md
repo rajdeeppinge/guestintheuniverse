@@ -19,7 +19,7 @@ The VMs are reachable via their IP address but not by their hostnames.
   
 
 
-[![](/images/2020-05-01-Local-domain-name-resolution-using-etchosts-image1.png)](/images/2020-05-01-Local-domain-name-resolution-using-etchosts.png)
+![/images/2020-05-01-Local-domain-name-resolution-using-etchosts.png](/images/2020-05-01-Local-domain-name-resolution-using-etchosts.png)
 
   
 This is problematic because we have to remember their IP addresses everytime we want to access these hosts. It is would be much simpler to remember and access the servers by their hostnames. For that we need some sort of mapping between the IP addresses and their corresponding host names. There are 3 common ways of achieving this mapping.  
@@ -35,19 +35,19 @@ Since we have only 4 hosts in the network, we'll go for the third option. Let's 
   
 
 
-[![](/images/2020-05-01-Local-domain-name-resolution-using-etchosts-image2.png)](/images/2020-05-01-Local-domain-name-resolution-using-etchosts.png)
+![/images/2020-05-01-Local-domain-name-resolution-using-etchosts.png](/images/2020-05-01-Local-domain-name-resolution-using-etchosts.png)
 
   
 Test ping and try connecting via the hostname now.  
   
 
 
-[![](/images/2020-05-01-Local-domain-name-resolution-using-etchosts-image3.png)](/images/2020-05-01-Local-domain-name-resolution-using-etchosts.png)
+![/images/2020-05-01-Local-domain-name-resolution-using-etchosts.png](/images/2020-05-01-Local-domain-name-resolution-using-etchosts.png)
 
   
 
 
-[![](/images/2020-05-01-Local-domain-name-resolution-using-etchosts.png)](/images/2020-05-01-Local-domain-name-resolution-using-etchosts.png)
+![/images/2020-05-01-Local-domain-name-resolution-using-etchosts.png](/images/2020-05-01-Local-domain-name-resolution-using-etchosts.png)
 
   
 And there you have it! Connected via the hostname.  

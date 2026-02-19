@@ -8,7 +8,7 @@ This week, while going through Credit Card statement for Amazon Pay ICICI Credit
   
 
 
-[![](/images/2019-08-24-ICICI-Amazon-Pay-Credit-Card-Special-Offer.png) ](/images/2019-08-24-ICICI-Amazon-Pay-Credit-Card-Special-Offer.png)
+![/images/2019-08-24-ICICI-Amazon-Pay-Credit-Card-Special-Offer.png](/images/2019-08-24-ICICI-Amazon-Pay-Credit-Card-Special-Offer.png)
 
   
 
@@ -18,7 +18,7 @@ The given hyperlink takes us to the official page containing the offer details g
   
 
 
-[![](/images/2019-08-24-ICICI-Amazon-Pay-Credit-Card-Special-Offer-image1.png)](/images/2019-08-24-ICICI-Amazon-Pay-Credit-Card-Special-Offer.png)
+![/images/2019-08-24-ICICI-Amazon-Pay-Credit-Card-Special-Offer.png](/images/2019-08-24-ICICI-Amazon-Pay-Credit-Card-Special-Offer.png)
 
   
   

@@ -8,7 +8,7 @@ Have you ever been confused with the indeterminate forms ( 0 / 0, ∞ - ∞ ) in
   
 
 
-[![](/images/2018-06-17-The-Poorna-Mantra.png](/images/2018-06-17-The-Poorna-Mantra.png
+![2018-06-17-The-Poorna-Mantra.png](/images/2018-06-17-The-Poorna-Mantra.png)
 
   
 
