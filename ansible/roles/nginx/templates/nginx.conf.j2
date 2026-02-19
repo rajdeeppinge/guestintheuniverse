@@ -40,7 +40,7 @@ server {
     }
 
     # OCI Object Storage proxy for images
-    location /images/ {
+    location /images {
         rewrite ^/images/(.*)$ /n/{{ oci_namespace }}/b/{{ oci_bucket }}/o/images/$1 break;
         proxy_pass https://{{ oci_namespace }}.objectstorage.{{ oci_region }}.oci.customer-oci.com;
         proxy_set_header Host {{ oci_namespace }}.objectstorage.{{ oci_region }}.oci.customer-oci.com;

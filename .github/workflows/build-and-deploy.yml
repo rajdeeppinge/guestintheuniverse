@@ -129,7 +129,7 @@ jobs:
         
         # Create empty mount directories for validation
         echo "Creating empty mount directories for validation..."
-        mkdir -p posts images
+        mkdir -p posts
         
         # Function to cleanup and exit
         cleanup_and_exit() {
