@@ -1,15 +1,7 @@
-from flask import Blueprint, render_template, current_app, request, send_from_directory
+from flask import Blueprint, render_template, current_app, request
 from datetime import datetime
-import os
-import markdown
 
 main_bp = Blueprint('main', __name__)
-
-@main_bp.route('/images/<path:filename>')
-def serve_image(filename):
-    """Serve static images"""
-    images_dir = "/images"
-    return send_from_directory(images_dir, filename)
 
 @main_bp.route('/')
 @main_bp.route('/page/<int:page>')

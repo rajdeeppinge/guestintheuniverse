@@ -11,14 +11,14 @@ def health():
     return jsonify({
         'status': 'healthy',
         'service': 'guestintheuniverse',
-        'version': 'v0.1.0-dev1'
+        'version': 'v0.3.0-dev1'
     })
 
 @api_bp.route('/stats')
 def api_stats():
     return {
         'app': 'Guest in the Universe',
-        'version': 'v0.1.0-dev1',
+        'version': 'v0.3.0-dev1',
         'status': 'running',
         'tech': ['Flask', 'Docker', 'Nginx', 'Ansible']
     }

@@ -7,7 +7,6 @@ from datetime import datetime
 class PostService:
     def __init__(self):
         self.posts_dir = "/posts"
-        self.images_dir = "/images"
     
     def get_total_posts_count(self):
         """Get total number of posts"""
@@ -51,34 +50,6 @@ class PostService:
         word_count = len(content.split())
         read_time = max(1, round(word_count / words_per_minute))
         return read_time
-    
-    def process_inline_images(self, content):
-        """Process inline images and convert external URLs to local ones"""
-        if not os.path.exists(self.images_dir):
-            return content
-        
-        # Get list of downloaded images
-        local_images = set(os.listdir(self.images_dir))
-        
-        # Pattern for markdown images with external URLs
-        def replace_image(match):
-            alt_text = match.group(1)  # Alt text
-            url = match.group(2)       # Image URL
-            
-            # Extract filename from URL
-            filename = os.path.basename(urllib.parse.urlparse(url).path)
-            
-            # Check if we have this image locally
-            if filename in local_images:
-                return f'![{alt_text}](/images/{filename})'
-            else:
-                # Keep original if not found locally
-                return match.group(0)
-        
-        # Replace markdown images - more specific pattern
-        content = re.sub(r'!\[([^\]]*)\]\((https?://[^\s)]+)\)', replace_image, content)
-        
-        return content
     
     def extract_image_from_content(self, content):
         """Extract image references from content"""
@@ -128,18 +99,15 @@ class PostService:
                 elif line.startswith('author:'):
                     author = line.split(':', 1)[1].strip().strip('"\'')
             
-            # Calculate read time, extract image, and process inline images
+            # Calculate read time and extract image
             read_time = self.calculate_read_time(body)
             image = self.extract_image_from_content(content)
             
             # Format the date
             formatted_date = self.format_date(date)
             
-            # Process inline images BEFORE markdown conversion
-            processed_body = self.process_inline_images(body)
-            
             # Convert markdown to HTML
-            html_content = markdown.markdown(processed_body, extensions=['extra', 'codehilite'])
+            html_content = markdown.markdown(body, extensions=['extra', 'codehilite'])
             
             return {
                 'title': title,
