@@ -162,6 +162,7 @@ jobs:
         # Wait for services to be ready
         echo "Waiting for services to start..."
         sleep 15
+        docker ps
         
         # Test app health endpoint through nginx
         echo "Testing app health endpoint through nginx..."
