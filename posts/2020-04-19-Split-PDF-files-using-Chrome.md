@@ -53,7 +53,7 @@ NOTE: Groups of pages can be entered as comma-separated-values to split the PDF 
   
 
 
-![2020-04-19-Split-PDF-files-using-Chrome-image1.png](/images/2020-04-19-Split-PDF-files-using-Chrome-image1.png)
+![/images/2020-04-19-Split-PDF-files-using-Chrome-image4.png](/images/2020-04-19-Split-PDF-files-using-Chrome-image4.png)
 
   
   

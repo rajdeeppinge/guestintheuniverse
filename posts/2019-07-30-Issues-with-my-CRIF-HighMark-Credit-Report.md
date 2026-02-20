@@ -4,7 +4,7 @@ title: "Issues with my CRIF HighMark Credit Report"
 date: 2019-07-30
 ---
 
-CRIF HighMark provides us with one free credit report every calendar year as per the RBI directive of 2017. The process has been documented [here](https://shodhfortruth.blogspot.com/2019/07/crif-highmark-credit-report-application.html). Using this process, I applied for my credit report on 13th July, 2019. I received a verification email on 14th July and finally received the report on 16th July. It took almost 3 days to receive my credit report.  
+CRIF HighMark provides us with one free credit report every calendar year as per the RBI directive of 2017. The process has been documented [here](/post/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process.md). Using this process, I applied for my credit report on 13th July, 2019. I received a verification email on 14th July and finally received the report on 16th July. It took almost 3 days to receive my credit report.  
   
 I opened the report and to my dismay, the information was not accurate. They had mixed my report with my father's report. Even the mix-up was not correct. Only a partial credit history of my father was present in the report. Although my full credit history was present, the credit score could not be a reliable indicator because of the mistakes.  
   

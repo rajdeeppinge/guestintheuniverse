@@ -4,6 +4,12 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.3.0-dev2
+Production ready content
+- Update links to images in object storage
+- Fix internal links to other posts
+
+
 ### v0.3.0-dev1
 Object Storage integration and image management improvements.
 

@@ -11,7 +11,7 @@ Have you ever wondered how to work with CSV (comma separated values) files if yo
 
 Let us take an example CSV format as below
 
-![/images/2018-12-01-Column-Selection-in-Sublime-Text-image1.png](/images/2018-12-01-Column-Selection-in-Sublime-Text.png)
+![/images/2018-12-01-Column-Selection-in-Sublime-Text-image0.png](/images/2018-12-01-Column-Selection-in-Sublime-Text-image0.png)
 
   
 
@@ -20,31 +20,31 @@ Let us select Column2 and paste it below.
 
   1. Bring the cursor before "Column1"
 
-![/images/2018-12-01-Column-Selection-in-Sublime-Text.png](/images/2018-12-01-Column-Selection-in-Sublime-Text.png)
+![/images/2018-12-01-Column-Selection-in-Sublime-Text-image1.png](/images/2018-12-01-Column-Selection-in-Sublime-Text-image1.png)
 
   2. For MAC users, press and **hold control + shift** and **use down arrow key** to select all the rows.
 
-![/images/2018-12-01-Column-Selection-in-Sublime-Text.png](/images/2018-12-01-Column-Selection-in-Sublime-Text.png)
+![/images/2018-12-01-Column-Selection-in-Sublime-Text-image2.png](/images/2018-12-01-Column-Selection-in-Sublime-Text-image2.png)
 
   3. For MAC users, press and **hold control + shift** and use**right arrow key** to reach end of Column1.
 
-![/images/2018-12-01-Column-Selection-in-Sublime-Text.png](/images/2018-12-01-Column-Selection-in-Sublime-Text.png)
+![/images/2018-12-01-Column-Selection-in-Sublime-Text-image3.png](/images/2018-12-01-Column-Selection-in-Sublime-Text-image3.png)
 
   4. Now use **only right arrow key** to reach the beginning of the next column. 
 
-![/images/2018-12-01-Column-Selection-in-Sublime-Text.png](/images/2018-12-01-Column-Selection-in-Sublime-Text.png)
+![/images/2018-12-01-Column-Selection-in-Sublime-Text-image4.png](/images/2018-12-01-Column-Selection-in-Sublime-Text-image4.png)
 
   5.  Again press and **hold control + shift** and use**right arrow key** to select Column2. 
 
-![/images/2018-12-01-Column-Selection-in-Sublime-Text.png](/images/2018-12-01-Column-Selection-in-Sublime-Text.png)
+![/images/2018-12-01-Column-Selection-in-Sublime-Text-image5.png](/images/2018-12-01-Column-Selection-in-Sublime-Text-image5.png)
 
   6. For MAC users press **command + x** for cut, press **down arrow key** to go to desired location below.
 
-![/images/2018-12-01-Column-Selection-in-Sublime-Text.png](/images/2018-12-01-Column-Selection-in-Sublime-Text.png)
+![/images/2018-12-01-Column-Selection-in-Sublime-Text-image6.png](/images/2018-12-01-Column-Selection-in-Sublime-Text-image6.png)
 
   7. Press **command + v** for paste.
 
-![/images/2018-12-01-Column-Selection-in-Sublime-Text.png](/images/2018-12-01-Column-Selection-in-Sublime-Text.png)
+![/images/2018-12-01-Column-Selection-in-Sublime-Text-image7.png](/images/2018-12-01-Column-Selection-in-Sublime-Text-image7.png)
 
 
 

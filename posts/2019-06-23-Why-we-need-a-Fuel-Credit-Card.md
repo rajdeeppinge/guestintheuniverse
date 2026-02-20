@@ -4,7 +4,7 @@ title: "Why we need a Fuel Credit Card."
 date: 2019-06-23
 ---
 
-If you read my previous [post](https://shodhfortruth.blogspot.com/2019/06/my-entry-into-world-of-credit-cards.html) you would know that I am a miserly person. If a person of the new generation is so thrifty then you can guess how much price-conscious the people of the older generation of that family would be. But when you are price-conscious, you focus on traditional ways of saving money by finding cheaper, durable products or haggle for lesser prices. What you generally lose on is the things which have either fixed prices with less brand and quality alternatives like Fuel or certain services like government transport.  
+If you read my previous [post](/post/2019-06-01-My-Entry-into-the-World-of-Credit-Cards.md) you would know that I am a miserly person. If a person of the new generation is so thrifty then you can guess how much price-conscious the people of the older generation of that family would be. But when you are price-conscious, you focus on traditional ways of saving money by finding cheaper, durable products or haggle for lesser prices. What you generally lose on is the things which have either fixed prices with less brand and quality alternatives like Fuel or certain services like government transport.  
   
 We have a car which is used sparingly as there is heavy emphasis on walking or using other means of transport. But still we need petrol for the car to run whenever we use it. And that's one area where we have failed to take advantage of the benefits offered by certain credit cards.  
   

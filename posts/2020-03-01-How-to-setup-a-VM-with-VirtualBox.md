@@ -47,14 +47,14 @@ Now let's create a VM
   
 
 
-![/images/Screen+Shot+2020-03-01+at+3.54.01+PM.png](/images/Screen+Shot+2020-03-01+at+3.54.01+PM.png)  
+![/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image0.png](/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image0.png)  
   
  
   2. Enter the name of VM, storage and OS details:  
   
 
 
-![/images/Screen+Shot+2020-03-01+at+3.57.32+PM.png](/images/Screen+Shot+2020-03-01+at+3.57.32+PM.png)
+![/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image1.png](/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image1.png)
 
   3. Select Memory to be allocated to VM  
 \- The default is 1024 MB (1 GB). If you are not sure about memory requirements, keep it default.  
@@ -72,7 +72,7 @@ Now you'll see your VM on the left-hand side in the main window:
   
 
 
-![/images/Screen+Shot+2020-03-01+at+4.17.40+PM.png](/images/Screen+Shot+2020-03-01+at+4.17.40+PM.png)
+![/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image2.png](/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image2.png)
 
   
 
@@ -87,13 +87,13 @@ The setup is not complete yet. The VM still needs an OS.
   
 
 
-![/images/Screen+Shot+2020-03-01+at+4.21.35+PM.png](/images/Screen+Shot+2020-03-01+at+4.21.35+PM.png)
+![/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image3.png](/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image3.png)
 
   2. Go to the "Storage" tab. Click on the "Empty" disk option on the left and choose optical disk (OS image) by clicking the disk icon on the right. Click OK to save.  
   
 
 
-![/images/Screen+Shot+2020-03-01+at+4.31.20+PM.png](/images/Screen+Shot+2020-03-01+at+4.31.20+PM.png)
+![/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image4.png](/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image4.png)
 
   3. Setup "Networking" for the VM  
 \- Go to the "Network" tab.  
@@ -103,7 +103,7 @@ The setup is not complete yet. The VM still needs an OS.
   
 
 
-![/images/Screen+Shot+2020-03-01+at+4.37.10+PM.png](/images/Screen+Shot+2020-03-01+at+4.37.10+PM.png)
+![/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image5.png](/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image5.png)
 
   
 \- Again there are multiple interface options available but those would not be covered here.
@@ -115,7 +115,7 @@ The setup is not complete yet. The VM still needs an OS.
 _Grab a cup of tea while your OS is being installed._
   6. Restart the VM after installation.
 
-![/images/Screen+Shot+2020-03-01+at+5.29.52+PM.png](/images/Screen+Shot+2020-03-01+at+5.29.52+PM.png)
+![/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image6.png](/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image6.png)
 
   
 __
@@ -134,7 +134,7 @@ The VM is up but it is tedious to access it via GUI also it takes a lot of memor
 
   1. Navigate to the GUI of the VM and open the Terminal (a shell).
 
-![2020-03-01-How-to-setup-a-VM-with-VirtualBox-image1.png](/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image1.png)
+![2020-03-01-How-to-setup-a-VM-with-VirtualBox-image7.png](/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image7.png)
 
   2. Install OpenSSH-Server on VM  
 For Ubuntu, run: `sudo apt install openssh-server`
@@ -149,7 +149,7 @@ For Ubuntu, run: `sudo apt install openssh-server`
 
 ####  Setup headless and detachable start for VM
 
-![/images/Screen+Shot+2020-04-25+at+2.09.01+PM.png](/images/Screen+Shot+2020-04-25+at+2.09.01+PM.png)
+![/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image8.png](/images/2020-03-01-How-to-setup-a-VM-with-VirtualBox-image8.png)
 
   
   

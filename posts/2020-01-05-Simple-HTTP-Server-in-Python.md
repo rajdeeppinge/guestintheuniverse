@@ -23,7 +23,7 @@ Once all the files and directories to be shared over web-server are in one place
 For the purposes of this post, I have setup httpserver_demo directory in my /root directory which contains following files and subdirectories:  
 
 
-![/images/2020-01-05-Simple-HTTP-Server-in-Python.png](/images/2020-01-05-Simple-HTTP-Server-in-Python.png)
+![/images/2020-01-05-Simple-HTTP-Server-in-Python-image0.png](/images/2020-01-05-Simple-HTTP-Server-in-Python-image0.png)
 
   
   
@@ -39,7 +39,7 @@ python -m SimpleHTTPServer 23456
   
 
 
-![/images/2020-01-05-Simple-HTTP-Server-in-Python.png](/images/2020-01-05-Simple-HTTP-Server-in-Python.png)
+![/images/2020-01-05-Simple-HTTP-Server-in-Python-image1.png](/images/2020-01-05-Simple-HTTP-Server-in-Python-image1.png)
 
   
 Of course you can choose a port of your choice between 0 and 65536 but make sure not to use any of the reserved ports or ports in use.  
@@ -48,7 +48,7 @@ I have setup my server on a virtualbox VM. The following is the output when I hi
   
 
 
-![/images/2020-01-05-Simple-HTTP-Server-in-Python.png](/images/2020-01-05-Simple-HTTP-Server-in-Python.png)
+![/images/2020-01-05-Simple-HTTP-Server-in-Python-image2.png](/images/2020-01-05-Simple-HTTP-Server-in-Python-image2.png)
 
 ###  Python 3
 
@@ -60,14 +60,14 @@ python3 -m http.server 65432
   
 
 
-![/images/2020-01-05-Simple-HTTP-Server-in-Python.png](/images/2020-01-05-Simple-HTTP-Server-in-Python.png)
+![/images/2020-01-05-Simple-HTTP-Server-in-Python-image3.png](/images/2020-01-05-Simple-HTTP-Server-in-Python-image3.png)
 
   
 Following is the browser output for directory python_files:  
   
 
 
-![/images/2020-01-05-Simple-HTTP-Server-in-Python.png](/images/2020-01-05-Simple-HTTP-Server-in-Python.png)
+![/images/2020-01-05-Simple-HTTP-Server-in-Python-image4.png](/images/2020-01-05-Simple-HTTP-Server-in-Python-image4.png)
 
   
 

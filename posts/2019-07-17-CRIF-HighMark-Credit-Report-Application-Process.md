@@ -8,9 +8,9 @@ As per the RBI circular of 2017, you are entitled to get one free credit report 
 
 
   1. Visit the official website of CRIF HighMark [  
-https://www.crifhighmark.com/your-credit-score](https://www.crifhighmark.com/your-credit-score)![/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process.png](/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process.png)
-  2.  In the next screen, click on "Get Your Score Now"![/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process.png](/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process.png)
-  3.  Register![/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process-image4.png](/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process.png)
+https://www.crifhighmark.com/your-credit-score](https://www.crifhighmark.com/your-credit-score)![/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process-image0.png](/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process-image0.png)
+  2.  In the next screen, click on "Get Your Score Now"![/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process-image1.png](/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process-image1.png)
+  3.  Register![/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process-image2.png](/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process-image2.png)
 
   
   
@@ -46,18 +46,18 @@ After registering, follow the below steps:
   * Communication
     * Address
     * CAPTCHA
-    * Review Terms of Use and Click Submit![/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process.png](/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process.png)
+    * Review Terms of Use and Click Submit![/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process-image3.png](/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process-image3.png)
 
 
 
-  * Choose free report![/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process.png](/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process.png)
+  * Choose free report![/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process-image4.png](/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process-image4.png)
 
 
 
   
 
 
-  * Click "**No Thanks, Take me to my FREE report** " below the Upgrade me button.![/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process.png](/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process.png)
+  * Click "**No Thanks, Take me to my FREE report** " below the Upgrade me button.![/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process-image5.png](/images/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process-image5.png)
 
 
 

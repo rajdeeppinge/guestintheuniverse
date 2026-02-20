@@ -9,7 +9,7 @@ Many of us don't like Vim because of it's unconventional and unique command set.
 Let's start with a file which contains a lot of "lorem ipsum".  
 
 
-![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png)
+![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image0.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image0.png)
 
   
 Now let us replace "lorem ipsum" with "hello world".  
@@ -26,7 +26,7 @@ The **g** flag at the end means "global". This means that all the occurrences in
 In the below image, you can see "lorem" has been replace by "hello" in the first line.  
 
 
-![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png)
+![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image1.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image1.png)
 
   
   
@@ -39,7 +39,7 @@ Command:
   
 
 
-![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png)
+![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image2.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image2.png)
 
   
 If you observe closel, the "Lorem" in the second line has not been replaced. This is because, by default, the substitute function is case-sensitive. We need to use **i** flag to make it case-insensitive.  
@@ -51,7 +51,7 @@ Command:
   
 
 
-![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png)
+![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image3.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image3.png)
 
   
 But Find and Replace (F&R) tools also ask for confirmation before actually making changes. Can we do that in vim? Yes of course! Vim can do everything that a normal F&R tool can do. Just use **c** flag at the end. Let us replace all the "ipsum" with "world".  
@@ -63,7 +63,7 @@ Command:
   
 
 
-![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png)
+![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image4.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image4.png)
 
 Here,  
 y: yes, replace this match  
@@ -76,7 +76,7 @@ The last two are just to scroll up or down.
 So, after pressing **a** , we have accomplished our objective of replacing "lorem ipsum" with "hello world".  
 
 
-![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png)
+![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image5.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image5.png)
 
   
 Finally, when we want to replace exactly matching words and not all the matches, for example, in the above file if we want to replace "is" with "was" but do not want to replace the substring "**is** " in "Th**is** ", we can use the following command:  
@@ -87,12 +87,12 @@ Finally, when we want to replace exactly matching words and not all the matches,
   
 
 
-![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png)
+![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image6.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image6.png)
 
   
 
 
-![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim.png)
+![/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image7.png](/images/2019-01-12-Programmers-Guide-Find-and-Replace-with-Vim-image7.png)
 
   
 There are many more uses of Vim ":substitute" command. I hope this post will encourage you to explore more about them. I would recommend using command line and Vim to work with files on remote servers.

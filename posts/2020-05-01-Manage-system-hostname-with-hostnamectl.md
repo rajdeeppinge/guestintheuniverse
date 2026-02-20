@@ -37,14 +37,14 @@ Change the hostname and set the desired hostname by running the following comman
   
 
 
-![2020-05-01-Manage-system-hostname-with-hostnamectl-image4.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image4.png)
+![2020-05-01-Manage-system-hostname-with-hostnamectl-image3.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image3.png)
 
   
 Start a new shell session or reconnect to the server to see the change in the hostname  
   
 
 
-![/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image5.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image5.png)
+![/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image4.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image4.png)
 
   
 Again run above steps to verify that hostname has been changed correctly.  
@@ -71,7 +71,7 @@ Edit the /etc/hosts file and add FQDN in front of hostname as shown below.
   
 
 
-![/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image6.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image6.png)
+![/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image5.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image5.png)
 
   
 
@@ -80,7 +80,7 @@ Test the FQDN setup as follows:
   
 
 
-![/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image7.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image7.png)
+![/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image6.png](/images/2020-05-01-Manage-system-hostname-with-hostnamectl-image6.png)
 
   
 

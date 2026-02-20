@@ -12,7 +12,7 @@ After joining my job in June 2018, my salary account was opened in ICICI Bank. D
   
 
 
-![/images/2019-06-01-My-Entry-into-the-World-of-Credit-Cards.png](/images/2019-06-01-My-Entry-into-the-World-of-Credit-Cards.png)
+![/images/2019-06-01-My-Entry-into-the-World-of-Credit-Cards-image0.png](/images/2019-06-01-My-Entry-into-the-World-of-Credit-Cards-image0.png)
 
 Representative Image (Source: https://jessepollak.github.io/card/)
 

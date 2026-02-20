@@ -9,7 +9,7 @@ In today's world, having a good credit score has become very important to get ap
 
 
   1. Visit the official website of cibil. Click on "**Get yours now** "  
-<https://www.cibil.com/freecibilscore>![/images/2019-09-05-TransUnion-CIBIL-Credit-Report.png](/images/2019-09-05-TransUnion-CIBIL-Credit-Report.png)  
+<https://www.cibil.com/freecibilscore>![/images/2019-09-05-TransUnion-CIBIL-Credit-Report-image0.png](/images/2019-09-05-TransUnion-CIBIL-Credit-Report-image0.png)  
  
   2.  You will be redirected to the registration page.   
 [https://myscore.cibil.com/CreditView/enrollShort.page?enterprise=CIBIL&offer=FACRA](https://myscore.cibil.com/CreditView/enrollShort.page?enterprise=CIBIL&offer=FACRA)  
@@ -17,7 +17,7 @@ In today's world, having a good credit score has become very important to get ap
 In case you already have an account, click on "**Member Login** " in the top right corner. Otherwise, register by filling up your personal details.
   3. After completing the registration process, you will receive an OTP to access your credit score and report. Enter the OTP and you will immediately see your credit score and report.
 
-CIBIL has provided a very quick and convenient process to see your credit report unlike CRIF HighMark which has a lengthy process spanning multiple days. You can read more about CRIF HighMark credit report application process [here](https://shodhfortruth.blogspot.com/2019/07/crif-highmark-credit-report-application.html).  
+CIBIL has provided a very quick and convenient process to see your credit report unlike CRIF HighMark which has a lengthy process spanning multiple days. You can read more about CRIF HighMark credit report application process [here](/post/2019-07-17-CRIF-HighMark-Credit-Report-Application-Process.md).  
   
 Also, my cibil credit report was accurate. I did not find any discrepancies. In CRIF HighMark report I had faced an issue where some of my father's credit history was clubbed with my credit history.  
   
