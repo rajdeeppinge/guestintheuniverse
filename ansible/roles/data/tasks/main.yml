@@ -1,0 +1,63 @@
+---
+- name: Create posts directory
+  ansible.builtin.file:
+    path: "{{ app_dir }}/posts"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0755'
+
+- name: Copy posts to server
+  ansible.builtin.copy:
+    src: "../../../../posts/"
+    dest: "{{ app_dir }}/posts/"
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0644'
+
+- name: Create database directory
+  ansible.builtin.file:
+    path: "{{ app_dir }}/database"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0755'
+
+- name: Check if database file exists
+  ansible.builtin.stat:
+    path: "{{ app_dir }}/data/guestintheuniverse.db"
+  register: db_file
+
+- name: Initialize database schema
+  ansible.builtin.command:
+    cmd: python3 {{ role_path }}/files/init_database.py
+    chdir: "{{ app_dir }}/src"
+  become_user: "{{ app_user }}"
+  when: not db_file.stat.exists
+
+- name: Check if database is already populated
+  ansible.builtin.command:
+    cmd: python3 {{ role_path }}/files/check_posts.py
+    chdir: "{{ app_dir }}/src"
+  become_user: "{{ app_user }}"
+  register: post_count
+
+- name: Run one-time migration of existing posts
+  ansible.builtin.command:
+    cmd: python3 {{ role_path }}/files/migrate_posts.py
+    chdir: "{{ app_dir }}/src"
+  become_user: "{{ app_user }}"
+  when: 
+    - post_count.stdout == "0"
+    - not ansible_check_mode
+
+- name: Verify database setup
+  ansible.builtin.command:
+    cmd: python3 {{ role_path }}/files/verify_database.py
+    chdir: "{{ app_dir }}/src"
+  become_user: "{{ app_user }}"
+  register: db_verification
+
+- name: Display database status
+  ansible.builtin.debug:
+    msg: "{{ db_verification.stdout_lines }}"

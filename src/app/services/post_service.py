@@ -1,8 +1,8 @@
 import os
 import re
-import urllib.parse
 import markdown
 from datetime import datetime
+from data.db_utils import get_post_by_slug, add_post, get_all_posts
 
 class PostService:
     def __init__(self):
@@ -10,16 +10,13 @@ class PostService:
     
     def get_total_posts_count(self):
         """Get total number of posts"""
-        if not os.path.exists(self.posts_dir):
-            return 0
-        
-        return len([f for f in os.listdir(self.posts_dir) if f.endswith('.md')])
+        posts = get_all_posts(published_only=True)
+        return len(posts)
     
     def format_date(self, date_str):
         """Format date string to DD month YYYY format"""
         try:
-            # Try to parse the date string - it could be in various formats
-            # Common formats: YYYY-MM-DD, DD/MM/YYYY, etc.
+            # Try to parse date string
             if '-' in date_str:
                 # Try YYYY-MM-DD format first
                 parts = date_str.split('-')
@@ -72,104 +69,61 @@ class PostService:
         return None
     
     def get_post_by_filename(self, filename):
-        """Get a specific post by filename"""
-        filepath = os.path.join(self.posts_dir, filename)
+        """Get a specific post by filename (slug)"""
+        # Convert filename to slug (remove .md extension)
+        slug = filename.replace('.md', '') if filename.endswith('.md') else filename
+        post_metadata = get_post_by_slug(slug)
         
-        if not os.path.exists(filepath) or not filename.endswith('.md'):
+        if post_metadata is None:
             return None
         
+        # Read content from markdown file
+        filepath = os.path.join(self.posts_dir, filename)
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
-        
-        # Extract frontmatter
-        frontmatter_match = re.match(r'^---\n(.*?)\n---\n(.*)$', content, re.DOTALL)
-        if frontmatter_match:
-            frontmatter, body = frontmatter_match.groups()
-            
-            # Parse title, date, and author from frontmatter
-            title = "Untitled"
-            date = filename[:10]  # Extract date from filename
-            author = "NoviceGuru"  # Default author
-            
-            for line in frontmatter.split('\n'):
-                if line.startswith('title:'):
-                    title = line.split(':', 1)[1].strip().strip('"\'')
-                elif line.startswith('date:'):
-                    date = line.split(':', 1)[1].strip()
-                elif line.startswith('author:'):
-                    author = line.split(':', 1)[1].strip().strip('"\'')
-            
-            # Calculate read time and extract image
-            read_time = self.calculate_read_time(body)
-            image = self.extract_image_from_content(content)
-            
-            # Format the date
-            formatted_date = self.format_date(date)
             
             # Convert markdown to HTML
-            html_content = markdown.markdown(body, extensions=['extra', 'codehilite'])
+        html_content = markdown.markdown(content, extensions=['extra', 'codehilite'])
             
-            return {
-                'title': title,
-                'date': formatted_date,
-                'author': author,
-                'content': html_content,
-                'filename': filename,
-                'read_time': read_time,
-                'image': image
-            }
-        
-        return None
+        return {
+            'title': post_metadata['title'],
+            'date': self.format_date(post_metadata['created_at'][:10]),  # Extract date part
+            'author': post_metadata['author'],
+            'content': html_content,
+            'filename': filename,
+            'read_time': self.calculate_read_time(content),
+            'image': self.extract_image_from_content(content)
+        }
     
     def get_latest_posts(self, limit=10, offset=0):
-        """Get latest posts from with pagination"""
-        posts = []
+        """Get latest posts from database"""
+        posts = get_all_posts(published_only=True)
         
-        if os.path.exists(self.posts_dir):
-            all_files = [f for f in os.listdir(self.posts_dir) if f.endswith('.md')]
-            sorted_files = sorted(all_files, reverse=True)[offset:offset + limit]
+        # Apply pagination
+        paginated_posts = posts[offset:offset + limit]
+        
+        result_posts = []
+        for post in paginated_posts:
+            # Read content from markdown file
+            filename = f"{post['slug']}.md"
+            filepath = os.path.join(self.posts_dir, filename)
             
-            for filename in sorted_files:
-                filepath = os.path.join(self.posts_dir, filename)
+            content = ""
+            if os.path.exists(filepath):
                 with open(filepath, 'r', encoding='utf-8') as f:
                     content = f.read()
-                
-                # Extract frontmatter
-                frontmatter_match = re.match(r'^---\n(.*?)\n---\n(.*)$', content, re.DOTALL)
-                if frontmatter_match:
-                    frontmatter, body = frontmatter_match.groups()
-                    
-                    # Parse title, date, and author from frontmatter
-                    title = "Untitled"
-                    date = filename[:10]  # Extract date from filename
-                    author = "NoviceGuru"  # Default author
-                    
-                    for line in frontmatter.split('\n'):
-                        if line.startswith('title:'):
-                            title = line.split(':', 1)[1].strip().strip('"\'')
-                        elif line.startswith('date:'):
-                            date = line.split(':', 1)[1].strip()
-                        elif line.startswith('author:'):
-                            author = line.split(':', 1)[1].strip().strip('"\'')
                     
                     # Get first 150 characters of content as excerpt
-                    excerpt = body.strip()[:150] + "..." if len(body.strip()) > 150 else body.strip()
-                    
-                    # Calculate read time and extract image
-                    read_time = self.calculate_read_time(body)
-                    image = self.extract_image_from_content(content)
-                    
-                    # Format the date
-                    formatted_date = self.format_date(date)
-                    
-                    posts.append({
-                        'title': title,
-                        'date': formatted_date,
-                        'author': author,
-                        'excerpt': excerpt,
-                        'filename': filename,
-                        'read_time': read_time,
-                        'image': image
-                    })
+            excerpt = content.strip()[:150] + "..." if len(content.strip()) > 150 else content.strip()
+            
+            result_posts.append({
+                'title': post['title'],
+                'date': self.format_date(post['created_at'][:10]),  # Extract date part
+                'author': post['author'],
+                'excerpt': excerpt,
+                'filename': filename,
+                'read_time': self.calculate_read_time(content),
+                'image': self.extract_image_from_content(content)
+            })
         
-        return posts
+        return result_posts

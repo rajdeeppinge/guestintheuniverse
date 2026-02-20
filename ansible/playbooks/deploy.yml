@@ -13,5 +13,6 @@
     - users
     - firewall
     - app
+    - data
     - nginx
     - deploy
