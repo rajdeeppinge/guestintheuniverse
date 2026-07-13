@@ -1,0 +1,66 @@
+---
+- name: Install required dependencies
+  ansible.builtin.apt:
+    name:
+      - curl
+    state: present
+    update_cache: true
+
+- name: Download Grafana Alloy deb package
+  ansible.builtin.get_url:
+    url: "https://github.com/grafana/alloy/releases/download/v{{ alloy_version }}/alloy-{{ alloy_version }}-1.amd64.deb"
+    dest: /tmp/alloy.deb
+    mode: '0644'
+
+- name: Install Grafana Alloy deb package
+  ansible.builtin.apt:
+    deb: /tmp/alloy.deb
+    state: present
+
+- name: Cleanup temporary file
+  ansible.builtin.file:
+    path: /tmp/alloy.deb
+    state: absent
+
+- name: Create Alloy configuration directory
+  ansible.builtin.file:
+    path: "{{ alloy_config_path | dirname }}"
+    state: directory
+    mode: '0755'
+
+- name: Create Alloy data directory
+  ansible.builtin.file:
+    path: "{{ alloy_data_path }}"
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+
+- name: Deploy Alloy configuration
+  ansible.builtin.template:
+    src: alloy-config.alloy
+    dest: "{{ alloy_config_path }}"
+    mode: '0644'
+  notify: restart alloy
+
+- name: Start and enable Alloy service
+  ansible.builtin.systemd:
+    name: alloy
+    state: started
+    enabled: true
+
+- name: Verify Alloy is running
+  ansible.builtin.systemd:
+    name: alloy
+  register: alloy_status
+
+- name: Check Alloy service status
+  ansible.builtin.command:
+    cmd: systemctl status alloy
+  register: service_status
+  changed_when: false
+  ignore_errors: true
+
+- name: Display Alloy status
+  ansible.builtin.debug:
+    msg: "{{ service_status.stdout_lines }}"

@@ -1,0 +1,34 @@
+// Grafana Alloy Configuration
+// This configuration collects system metrics and sends them to Grafana Cloud
+
+// Configure the logging module
+logging {
+  level  = "info"
+  format = "logfmt"
+}
+
+// Prometheus remote write configuration
+// Replace with your Grafana Cloud endpoint
+prometheus.remote_write "grafana_cloud" {
+  endpoint {
+    url = "{{ grafana_remote_write_url | default('http://localhost:9090/api/v1/write') }}"
+    
+    basic_auth {
+      username = "{{ grafana_username | default('') }}"
+      password = "{{ grafana_password | default('') }}"
+    }
+  }
+}
+
+// Collect system metrics using Alloy's built-in node exporter
+prometheus.exporter.unix "node_exporter" {
+  // Collect default system metrics
+  procfs_path = "/proc"
+  sysfs_path  = "/sys"
+}
+
+prometheus.scrape "system" {
+  targets    = prometheus.exporter.unix.node_exporter.targets
+  forward_to = [prometheus.remote_write.grafana_cloud.receiver]
+  job_name   = "integrations/node_exporter"
+}
