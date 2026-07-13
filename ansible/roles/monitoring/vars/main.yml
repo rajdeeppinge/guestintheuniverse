@@ -1,0 +1,4 @@
+---
+alloy_version: "1.17.1"
+alloy_config_path: "/etc/alloy/config.alloy"
+alloy_data_path: "/var/lib/alloy"
