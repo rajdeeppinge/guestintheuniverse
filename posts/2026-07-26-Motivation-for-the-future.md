@@ -7,7 +7,7 @@ tags: [writing]
 ---
 
 
-![Motivation](/images/motivation.jpg)
+![Motivation](/images/motivation.png)
 
 
 ## Background
