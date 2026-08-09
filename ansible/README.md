@@ -4,19 +4,13 @@ Deploy application to server using Ansible.
 
 ## Setup
 
-1. **Configure inventory**:
-   ```bash
-   git clone https://github.com/yourusername/guestintheuniverse_ansible.git
-   cd guestintheuniverse_ansible
-   cp inventory/hosts.yml.example inventory/hosts.yml
-   ```
-
-2. **Configure variables**:
-   - See `../config.example.yml` for complete configuration template
-   - Copy the YAML section from `../config.example.yml` to `./vars.yml`
+1. **Configure inventory and variables**:
+   - See `../config/` directory for configuration templates
+   - Copy `../config/vars.example.yml` to `./vars.yml`
+   - Copy `../config/hosts.example.yml` to `inventory/hosts.yml`
    - Update with your actual server details
 
-3. **Manual TLS/SSL Certificate Setup** (recommended for security):
+2. **Manual TLS/SSL Certificate Setup** (recommended for security):
    ```bash
    # On the server, create SSL directory
    sudo mkdir -p /path/to/certs
@@ -32,7 +26,7 @@ Deploy application to server using Ansible.
    ssl_cert_path: "/path/to/certs"
    ```
 
-4. **Deploy**:
+3. **Deploy**:
    ```bash
    # Infrastructure configuration
    ansible-playbook -i inventory/hosts.yml playbooks/infrastructure.yml
@@ -58,5 +52,5 @@ Deploy application to server using Ansible.
 ## Security
 
 - Never commit `vars.yml` or `inventory/hosts.yml`
-- Use `../config.example.yml` as template
+- Use `../config/` directory templates
 - All secrets should be in GitHub Secrets for CI/CD

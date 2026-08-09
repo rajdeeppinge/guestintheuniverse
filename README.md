@@ -79,10 +79,11 @@ ansible-playbook -i inventory/hosts.yml playbooks/posts-upload.yml
 This project uses both GitHub Secrets and Ansible variables for configuration.
 
 **Setup Instructions:**
-1. See `config.example.yml` for complete configuration template
+1. See `config/` directory for complete configuration templates
 2. Add GitHub Secrets in Repository > Settings > Secrets and variables > Actions
-3. Copy Ansible variables to `ansible/vars.yml`
-4. Ensure values are consistent between GitHub Secrets and Ansible
+3. Copy `config/vars.example.yml` to `ansible/vars.yml`
+4. Copy `config/hosts.example.yml` to `ansible/inventory/hosts.yml`
+5. Ensure values are consistent between GitHub Secrets and Ansible
 
 **Security Note:** Never commit actual secrets to the repository. Use the template for reference only.
 
@@ -94,8 +95,8 @@ This project uses both GitHub Secrets and Ansible variables for configuration.
 
 ##  Configuration
 
-### Ansible Variables
-See `config.example.yml` for complete configuration template and setup instructions.
+### Configuration Templates
+See `config/` directory for complete configuration templates and setup instructions.
 
 ##  Technologies
 

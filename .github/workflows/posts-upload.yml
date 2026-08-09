@@ -6,7 +6,6 @@ on:
     paths:
       - 'posts/**'
       - '_drafts/**'
-      - 'ansible/playbooks/posts-upload.yml'
   workflow_dispatch:
 
 jobs:
