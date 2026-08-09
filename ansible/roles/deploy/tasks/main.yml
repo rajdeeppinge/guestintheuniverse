@@ -1,0 +1,42 @@
+---
+- name: Create posts directory
+  ansible.builtin.file:
+    path: "{{ app_dir }}/posts"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0755'
+
+- name: Copy docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ app_dir }}/docker-compose.yml"
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: '0644'
+
+- name: Login to GitHub Container Registry
+  ansible.builtin.command:
+    cmd: echo "{{ github_token }}" | docker login {{ container_registry }} -u {{ github_username }} --password-stdin
+  no_log: true
+
+- name: Pull app image
+  ansible.builtin.docker_image:
+    name: "{{ app_image_name }}:{{ app_image_tag }}"
+    source: pull
+
+- name: Pull nginx image
+  ansible.builtin.docker_image:
+    name: "{{ nginx_image_name }}:{{ nginx_image_tag }}"
+    source: pull
+
+- name: Deploy application with Docker Compose
+  ansible.builtin.command:
+    cmd: docker compose -f {{ app_dir }}/docker-compose.yml up -d
+  become_user: "{{ app_user }}"
+
+- name: Verify deployment
+  ansible.builtin.command:
+    cmd: docker compose -f {{ app_dir }}/docker-compose.yml ps
+  register: deployment_status
+  changed_when: false

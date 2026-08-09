@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  app:
+    image: {{ app_image_name }}:{{ app_image_tag }}
+    container_name: {{ app_name }}-app
+    restart: unless-stopped
+    networks:
+      - {{ docker_network }}
+    volumes:
+      - {{ app_dir }}/posts:/app/posts
+    environment:
+      - PORT={{ app_port }}
+
+  nginx:
+    image: {{ nginx_image_name }}:{{ nginx_image_tag }}
+    container_name: {{ app_name }}-nginx
+    restart: unless-stopped
+    networks:
+      - {{ docker_network }}
+    ports:
+      - "{{ http_port }}:80"
+      - "{{ https_port }}:443"
+    volumes:
+      - {{ ssl_cert_path }}:/etc/nginx/ssl:ro
+    depends_on:
+      - app
+
+networks:
+  {{ docker_network }}:
+    external: true

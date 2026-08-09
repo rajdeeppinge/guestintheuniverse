@@ -10,7 +10,6 @@ on:
       - 'ansible/roles/nginx/**'
       - 'ansible/roles/deploy/**'
       - 'APP_VERSION'
-      - 'RELEASE_NOTES.md'
   workflow_dispatch:
 
 env:
