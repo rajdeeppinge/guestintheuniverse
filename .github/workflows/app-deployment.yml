@@ -1,10 +1,17 @@
-name: Build and Deploy
+name: App Deployment
 
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    paths:
+      - 'src/**'
+      - 'ansible/playbooks/app-deploy.yml'
+      - 'ansible/roles/app/**'
+      - 'ansible/roles/nginx/**'
+      - 'ansible/roles/deploy/**'
+      - 'APP_VERSION'
+      - 'RELEASE_NOTES.md'
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
@@ -174,7 +181,7 @@ jobs:
           echo "App health check passed through nginx"
         fi
         
-        # Test app root endpoint through nginx
+        # Test app root endpoint通过 nginx
         echo "Testing app root endpoint through nginx..."
         ROOT_CHECK=$(curl -f -s -o /dev/null -w "%{http_code}" http://localhost:8080/ || echo "000")
         
@@ -340,6 +347,6 @@ jobs:
         github_token: "${{ secrets.GITHUB_TOKEN }}"
         EOF
 
-    - name: Run Ansible deployment
+    - name: Run Ansible app deployment
       run: |
-        ansible-playbook -i ansible/inventory/production.yml ansible/playbooks/deploy.yml
+        ansible-playbook -i ansible/inventory/production.yml ansible/playbooks/app-deploy.yml

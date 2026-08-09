@@ -34,8 +34,21 @@ Deploy application to server using Ansible.
 
 4. **Deploy**:
    ```bash
-   ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml
+   # Infrastructure configuration
+   ansible-playbook -i inventory/hosts.yml playbooks/infrastructure.yml
+
+   # Application deployment
+   ansible-playbook -i inventory/hosts.yml playbooks/app-deploy.yml
+
+   # Content upload
+   ansible-playbook -i inventory/hosts.yml playbooks/posts-upload.yml
    ```
+
+## Playbooks
+
+- **infrastructure.yml**: Server infrastructure setup
+- **app-deploy.yml**: Application deployment
+- **posts-upload.yml**: Content upload
 
 ## Test
 

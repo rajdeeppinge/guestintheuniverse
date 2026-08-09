@@ -16,7 +16,15 @@ Access at: http://localhost:80
 cd ansible
 cp vars.yml.example vars.yml
 # Update vars.yml with your server details
-ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml
+
+# Infrastructure configuration (run once or when infrastructure changes)
+ansible-playbook -i inventory/hosts.yml playbooks/infrastructure.yml
+
+# Application deployment (run when app code changes)
+ansible-playbook -i inventory/hosts.yml playbooks/app-deploy.yml
+
+# Posts upload only (run when content changes)
+ansible-playbook -i inventory/hosts.yml playbooks/posts-upload.yml
 ```
 
 ##  Architecture
@@ -50,18 +58,21 @@ ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml
 
 1. **Local Development**: Work in `src/` directory
 2. **Version Management**: Update `APP_VERSION` and `RELEASE_NOTES.md`
-3. **Test Changes**: Push to `feature/github-actions` branch
-4. **Update workflow**: Update `build-and-deploy.yml` workflow with branch name
-5. **Update secrets**: Update GitHub secrets with new version if needed
-6. **Automated Build**: GitHub Actions builds, validates, and pushes images to GHCR
-7. **Automated Deploy**: GitHub Actions automatically deploys to production via Ansible
-8. **Monitor**: Check deployment status in GitHub Actions
+3. **Test Changes**: Push to master branch
+4. **Automated Workflows**: GitHub Actions triggers based on file changes:
+   - Infrastructure changes → infrastructure.yml
+   - Application changes → app-deployment.yml
+   - Content changes → posts-upload.yml
+5. **Manual Triggers**: All workflows support manual dispatch via GitHub Actions UI
+6. **Monitor**: Check deployment status in GitHub Actions
 
 ### Automated CI/CD Pipeline
+- **Infrastructure**: GitHub Actions configures server infrastructure (docker, users, firewall, monitoring)
 - **Build**: GitHub Actions builds app and nginx images
 - **Validate**: Tests containers locally before pushing
 - **Push**: Stores images in GitHub Container Registry (GHCR)
 - **Deploy**: Ansible pulls and deploys images to Oracle VM
+- **Content**: Separate workflow for posts upload without full redeployment
 - **Monitor**: Health checks and deployment verification
 
 ### Configuration Required
