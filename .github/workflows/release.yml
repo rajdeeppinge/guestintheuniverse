@@ -3,49 +3,21 @@ name: Create Release
 on:
   push:
     tags:
-      - 'v*.*.*'
-
-permissions:
-  contents: write
+      - 'v*'
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - uses: actions/checkout@v4
 
-    - name: Get version from tag
-      id: get_version
-      run: |
-        VERSION=${GITHUB_REF#refs/tags/}
-        echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-    - name: Generate release notes
-      id: release_notes
-      run: |
-        if [ -f RELEASE_NOTES.md ]; then
-          # Extract notes for this version from RELEASE_NOTES.md
-          VERSION="${{ steps.get_version.outputs.version }}"
-          sed -n "/^### $VERSION/,/^---/p" RELEASE_NOTES.md | head -n -1 > release_notes.txt
-          if [ -s release_notes.txt ]; then
-            echo "notes=$(cat release_notes.txt)" >> $GITHUB_OUTPUT
-          else
-            echo "notes=Release $VERSION" >> $GITHUB_OUTPUT
-          fi
-        else
-          echo "notes=Release $VERSION" >> $GITHUB_OUTPUT
-        fi
-
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: ${{ github.ref }}
-        name: Release ${{ steps.get_version.outputs.version }}
-        body: ${{ steps.release_notes.outputs.notes }}
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          draft: false
+          prerelease: false
+          generate_release_notes: true
