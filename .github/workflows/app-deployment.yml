@@ -1,10 +1,17 @@
-name: Build and Deploy
+name: App Deployment
 
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    paths:
+      - 'src/**'
+      - 'ansible/playbooks/app-deploy.yml'
+      - 'ansible/roles/app/**'
+      - 'ansible/roles/nginx/**'
+      - 'ansible/roles/deploy/**'
+      - 'APP_VERSION'
+      - 'RELEASE_NOTES.md'
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
@@ -174,7 +181,7 @@ jobs:
           echo "App health check passed through nginx"
         fi
         
-        # Test app root endpoint through nginx
+        # Test app root endpoint通过 nginx
         echo "Testing app root endpoint through nginx..."
         ROOT_CHECK=$(curl -f -s -o /dev/null -w "%{http_code}" http://localhost:8080/ || echo "000")
         
@@ -257,89 +264,48 @@ jobs:
         VERSION=$(cat APP_VERSION)
         echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
+    - name: Setup Ansible
+      uses: ./.github/workflows/ansible-setup.yml
       with:
-        python-version: '3.11'
+        vars_content: |
+          ---
+          # Global connection variables
+          host: "${{ secrets.HOST }}"
+          user: "${{ secrets.USER }}"
+          ssh_key: "/tmp/ssh_key"
 
-    - name: Install Ansible
+          # Global application variables
+          app_name: "${{ secrets.APP_NAME }}"
+          app_dir: "${{ secrets.APP_DIR }}"
+          app_port: ${{ secrets.APP_PORT }}
+          docker_network: "${{ secrets.DOCKER_NETWORK }}"
+          app_user: "${{ secrets.APP_USER }}"
+          app_group: "${{ secrets.APP_GROUP }}"
+
+          # Global network variables
+          domain_name: "${{ secrets.DOMAIN_NAME }}"
+          http_port: ${{ secrets.HTTP_PORT }}
+          https_port: ${{ secrets.HTTPS_PORT }}
+
+          # SSL certificate path on server
+          ssl_cert_path: "${{ secrets.SSL_CERT_PATH }}"
+
+          # OCI Object Storage variables
+          oci_namespace: "${{ secrets.OCI_NAMESPACE }}"
+          oci_bucket: "${{ secrets.OCI_BUCKET }}"
+          oci_region: "${{ secrets.OCI_REGION }}"
+
+          # GitHub Container Registry variables
+          container_registry: "${{ env.REGISTRY }}"
+          app_image_name: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/app"
+          nginx_image_name: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx"
+          app_version: "${{ steps.app_version.outputs.version }}"
+          nginx_version: "${{ steps.app_version.outputs.version }}"
+
+          # GitHub Container Registry authentication
+          github_username: "${{ github.actor }}"
+          github_token: "${{ secrets.GITHUB_TOKEN }}"
+
+    - name: Run Ansible app deployment
       run: |
-        python -m pip install --upgrade pip
-        pip install ansible
-
-    - name: Install Ansible collections
-      run: |
-        ansible-galaxy collection install community.docker
-
-    - name: Create ansible.cfg
-      run: |
-        cat > ansible.cfg << EOF
-        [defaults]
-        host_key_checking = False
-        inventory = ./ansible/inventory
-        retry_files_enabled = False
-        roles_path = ./ansible/roles
-        EOF
-
-    - name: Create inventory file
-      run: |
-        cat > ansible/inventory/production.yml << EOF
-        ---
-        all:
-          children:
-            webservers:
-              hosts:
-                ${{ secrets.HOST }}:
-                  ansible_user: ${{ secrets.USER }}
-                  ansible_ssh_private_key_file: /tmp/ssh_key
-                  ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-        EOF
-
-    - name: Create SSH key file
-      run: |
-        echo '${{ secrets.SSH_KEY }}' > /tmp/ssh_key
-        chmod 600 /tmp/ssh_key
-
-    - name: Create vars file from template
-      run: |
-        cat > ansible/vars.yml << EOF
-        ---
-        # Global connection variables
-        host: "${{ secrets.HOST }}"
-        user: "${{ secrets.USER }}"
-        ssh_key: "/tmp/ssh_key"
-
-        # Global application variables
-        app_name: "${{ secrets.APP_NAME }}"
-        app_dir: "${{ secrets.APP_DIR }}"
-        app_port: ${{ secrets.APP_PORT }}
-        docker_network: "${{ secrets.DOCKER_NETWORK }}"
-
-        # Global network variables
-        domain_name: "${{ secrets.DOMAIN_NAME }}"
-        http_port: ${{ secrets.HTTP_PORT }}
-        https_port: ${{ secrets.HTTPS_PORT }}
-
-        # SSL certificate path on server
-        ssl_cert_path: "${{ secrets.SSL_CERT_PATH }}"
-
-        # OCI Object Storage variables
-        oci_namespace: "${{ secrets.OCI_NAMESPACE }}"
-        oci_bucket: "${{ secrets.OCI_BUCKET }}"
-        oci_region: "${{ secrets.OCI_REGION }}"
-
-        # GitHub Container Registry variables
-        container_registry: "${{ env.REGISTRY }}"
-        app_image_name: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/app"
-        nginx_image_name: "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/nginx"
-        app_version: "${{ steps.app_version.outputs.version }}"
-        nginx_version: "${{ steps.app_version.outputs.version }}"
-
-        # GitHub Container Registry authentication
-        github_username: "${{ github.actor }}"
-        github_token: "${{ secrets.GITHUB_TOKEN }}"
-        EOF
-
-    - name: Run Ansible deployment
-      run: |
-        ansible-playbook -i ansible/inventory/production.yml ansible/playbooks/deploy.yml
+        ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/app-deploy.yml

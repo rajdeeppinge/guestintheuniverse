@@ -1,0 +1,39 @@
+---
+# Global connection variables
+host: "your-server.domain.com"
+user: "your-ssh-username"
+ssh_key: "~/.ssh/your-private-key"
+
+# Global application variables
+app_name: "your-app-name"
+app_dir: "/path/to/your-app-name"
+app_port: <app_port_number>
+docker_network: "your_docker_network"
+app_user: "your-app-user"
+app_group: "your-app-group"
+
+# Global network variables
+domain_name: "your-domain.com"
+http_port: <http_port_number>
+https_port: <https_port_number>
+
+# SSL certificate path on server
+ssl_cert_path: "/path/to/your/certs"
+
+# GitHub Container Registry variables
+container_registry: "ghcr.io"
+repo_owner: "your-username"
+repo_name: "your-repo-name"
+app_image_name: "{{ container_registry }}/{{ repo_owner }}/{{ repo_name }}/app"
+nginx_image_name: "{{ container_registry }}/{{ repo_owner }}/{{ repo_name }}/nginx"
+app_version: "v0.0.0-dev5"  # Optional. default is APP_VERSION file
+nginx_version: "v0.0.0-dev5"  # Optional. default is APP_VERSION file
+
+# GitHub Container Registry authentication
+github_username: "{{ lookup('env', 'GITHUB_USERNAME') }}"
+github_token: "{{ lookup('env', 'GITHUB_TOKEN') }}"
+
+# OCI Object Storage variables
+oci_namespace: "your-oci-namespace"
+oci_bucket: "your-oci-bucket"
+oci_region: "your-oci-region"

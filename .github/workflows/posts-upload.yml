@@ -1,0 +1,37 @@
+name: Posts Upload
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'posts/**'
+      - '_drafts/**'
+  workflow_dispatch:
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    permissions:
+      contents: read
+
+    steps:
+    - name: Setup Ansible
+      uses: ./.github/workflows/ansible-setup.yml
+      with:
+        vars_content: |
+          ---
+          # Global connection variables
+          host: "${{ secrets.HOST }}"
+          user: "${{ secrets.USER }}"
+          ssh_key: "/tmp/ssh_key"
+
+          # Global application variables
+          app_dir: "${{ secrets.APP_DIR }}"
+          app_user: "${{ secrets.APP_USER }}"
+          app_group: "${{ secrets.APP_GROUP }}"
+        install_collections: false
+
+    - name: Run Ansible posts upload
+      run: |
+        ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/posts-upload.yml

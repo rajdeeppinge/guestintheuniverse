@@ -7,19 +7,24 @@ A blog and web application exploring the vastness of our universe through techno
 ### Local Development
 ```bash
 cd src
-docker compose up -d
+docker compose -f docker-compose.local.yml up --build
 ```
-Access at: http://localhost:80
+Access at: http://localhost:5000
+
+See [src/README.md](src/README.md) for detailed local development instructions.
 
 ### Production Deployment
-```bash
-cd ansible
-cp vars.yml.example vars.yml
-# Update vars.yml with your server details
-ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml
-```
 
-##  Architecture
+**Automated Deployment** (recommended):
+- Push changes to master branch
+- GitHub Actions automatically triggers based on file changes
+- See [.github/workflows/README.md](.github/workflows/README.md) for workflow details
+
+**Manual Deployment**:
+- Use GitHub Actions manual dispatch or run Ansible playbooks directly
+- See [ansible/README.md](ansible/README.md) for manual deployment instructions
+
+## Architecture
 
 - **Frontend**: Flask web application with responsive design
 - **Backend**: Python Flask API with health endpoints
@@ -27,66 +32,30 @@ ansible-playbook -i inventory/hosts.yml playbooks/deploy.yml
 - **Infrastructure**: Ansible automation for server setup
 - **CI/CD**: GitHub Actions with GHCR container registry
 
-##  Container Images
+## Documentation
 
-### Production Images
-- Use semantic versioning: `v0.0.0`, `v1.0.0`, etc.
-
-### Development Images
-- Use semantic versioning with `-dev` suffix: `v0.0.0-dev1`, `v0.0.0-dev2`, etc.
-
-
-### Version Files
-- `APP_VERSION`: Tracks current version
-- `RELEASE_NOTES.md`: Contains release history and changes
-
-### Version Guidelines
-- Follow semantic versioning (MAJOR.MINOR.PATCH)
-- Increment PATCH for bug fixes and features
-- Increment MINOR for new features (backward compatible)
-- Increment MAJOR for breaking changes
+- **[src/README.md](src/README.md)** - Application structure and local development guidelines
+- **[ansible/README.md](ansible/README.md)** - Manual production deployment and infrastructure setup
+- **[config/README.md](config/README.md)** - Configuration templates and setup instructions
+- **[.github/workflows/README.md](.github/workflows/README.md)** - Automated CI/CD workflows and automation
+- **[RELEASE_NOTES.md](RELEASE_NOTES.md)** - Version history and changelog
 
 ## Development Workflow
 
-1. **Local Development**: Work in `src/` directory
+1. **Local Development**: Work in `src/` directory (see [src/README.md](src/README.md))
 2. **Version Management**: Update `APP_VERSION` and `RELEASE_NOTES.md`
-3. **Test Changes**: Push to `feature/github-actions` branch
-4. **Update workflow**: Update `build-and-deploy.yml` workflow with branch name
-5. **Update secrets**: Update GitHub secrets with new version if needed
-6. **Automated Build**: GitHub Actions builds, validates, and pushes images to GHCR
-7. **Automated Deploy**: GitHub Actions automatically deploys to production via Ansible
-8. **Monitor**: Check deployment status in GitHub Actions
+3. **Push Changes**: Push to master branch
+4. **Automated Deployment**: GitHub Actions triggers based on file changes:
+   - Infrastructure changes → infrastructure.yml
+   - Application changes → app-deployment.yml
+   - Content changes → posts-upload.yml
+5. **Manual Deployment**: All workflows support manual dispatch via GitHub Actions UI
 
-### Automated CI/CD Pipeline
-- **Build**: GitHub Actions builds app and nginx images
-- **Validate**: Tests containers locally before pushing
-- **Push**: Stores images in GitHub Container Registry (GHCR)
-- **Deploy**: Ansible pulls and deploys images to Oracle VM
-- **Monitor**: Health checks and deployment verification
+## Configuration
 
-### Configuration Required
-This project uses both GitHub Secrets and Ansible variables for configuration.
+See [config/README.md](config/README.md) for complete configuration templates and setup instructions.
 
-**Setup Instructions:**
-1. See `config.example.yml` for complete configuration template
-2. Add GitHub Secrets in Repository > Settings > Secrets and variables > Actions
-3. Copy Ansible variables to `ansible/vars.yml`
-4. Ensure values are consistent between GitHub Secrets and Ansible
-
-**Security Note:** Never commit actual secrets to the repository. Use the template for reference only.
-
-##  Endpoints
-
-- `/` - Main application interface
-- `/health` - Health check endpoint
-- `/test` - Simple test page
-
-##  Configuration
-
-### Ansible Variables
-See `config.example.yml` for complete configuration template and setup instructions.
-
-##  Technologies
+## Technologies
 
 - **Python 3.11** - Application runtime
 - **Flask 2.3.3** - Web framework
@@ -95,19 +64,20 @@ See `config.example.yml` for complete configuration template and setup instructi
 - **Docker Compose** - Multi-container orchestration
 - **Ansible** - Infrastructure automation
 - **GitHub Actions** - CI/CD pipeline
-- **GitHub Container Registry (GHCR)** - Container imagestorage
+- **GitHub Container Registry (GHCR)** - Container image storage
 - **Oracle Cloud** - Production infrastructure
 
-##  Security
+## Security
 
 - HTTPS redirection in production
 - SSL certificate management
 - Container health monitoring
 - Firewall configuration via UFW
 
-##  Monitoring
+## Endpoints
 
-- Container health checks
+- `/` - Main application interface
+- `/health` - Health check endpoint
+- `/test` - Simple test page
 
 ---
-

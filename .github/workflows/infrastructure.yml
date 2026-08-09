@@ -1,0 +1,42 @@
+name: Infrastructure Configuration
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'ansible/roles/docker/**'
+      - 'ansible/roles/users/**'
+      - 'ansible/roles/firewall/**'
+      - 'ansible/roles/monitoring/**'
+      - 'ansible/roles/system-update/**'
+      - 'ansible/playbooks/infrastructure.yml'
+  workflow_dispatch:
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    permissions:
+      contents: read
+
+    steps:
+    - name: Setup Ansible
+      uses: ./.github/workflows/ansible-setup.yml
+      with:
+        vars_content: |
+          ---
+          # Global connection variables
+          host: "${{ secrets.HOST }}"
+          user: "${{ secrets.USER }}"
+          ssh_key: "/tmp/ssh_key"
+
+          # Global application variables
+          app_dir: "${{ secrets.APP_DIR }}"
+
+          # Global network variables
+          http_port: ${{ secrets.HTTP_PORT }}
+          https_port: ${{ secrets.HTTPS_PORT }}
+
+    - name: Run Ansible infrastructure configuration
+      run: |
+        ansible-playbook -i ansible/inventory/hosts.yml ansible/playbooks/infrastructure.yml

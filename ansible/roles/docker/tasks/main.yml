@@ -1,9 +1,4 @@
 ---
-- name: Update system packages
-  ansible.builtin.apt:
-    update_cache: true
-    upgrade: dist
-
 - name: Install Docker dependencies
   ansible.builtin.apt:
     name: "{{ docker_packages }}"

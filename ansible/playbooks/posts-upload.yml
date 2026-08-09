@@ -1,0 +1,23 @@
+---
+- name: Upload posts
+  hosts: webservers
+  become: yes
+  vars_files:
+    - ../vars.yml
+  
+  tasks:
+    - name: Create posts directory
+      ansible.builtin.file:
+        path: "{{ app_dir }}/posts"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: '0755'
+
+    - name: Copy posts to server
+      ansible.builtin.copy:
+        src: "../../../../posts/"
+        dest: "{{ app_dir }}/posts/"
+        owner: "{{ app_user }}"
+        group: "{{ app_group }}"
+        mode: '0644'
