@@ -4,23 +4,29 @@
     name:
       - curl
       - gnupg
-      - software-properties-common
     state: present
 
-- name: Add Grafana GPG key
-  ansible.builtin.apt_key:
-    url: https://packages.grafana.com/gpg.key
-    state: present
+- name: Create keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Download Grafana GPG key
+  ansible.builtin.get_url:
+    url: https://apt.grafana.com/gpg-full.key
+    dest: /etc/apt/keyrings/grafana.asc
+    mode: '0644'
 
 - name: Add Grafana repository
   ansible.builtin.apt_repository:
-    repo: "deb https://packages.grafana.com/enterprise/deb stable main"
+    repo: "deb [signed-by=/etc/apt/keyrings/grafana.asc] https://apt.grafana.com stable main"
     state: present
     filename: grafana
 
 - name: Install Grafana Alloy (latest version)
   ansible.builtin.apt:
-    name: grafana-alloy
+    name: alloy
     state: present
     update_cache: true
 
