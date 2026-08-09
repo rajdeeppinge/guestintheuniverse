@@ -7,13 +7,15 @@ ssh_key: "~/.ssh/your-private-key"
 # Global application variables
 app_name: "your-app-name"
 app_dir: "/path/to/your-app-name"
-app_port: <port_number_without_quotes>
+app_port: <app_port_number>
 docker_network: "your_docker_network"
+app_user: "your-app-user"
+app_group: "your-app-group"
 
 # Global network variables
 domain_name: "your-domain.com"
-http_port: <port_number_without_quotes>
-https_port: <port_number_without_quotes>
+http_port: <http_port_number>
+https_port: <https_port_number>
 
 # SSL certificate path on server
 ssl_cert_path: "/path/to/your/certs"

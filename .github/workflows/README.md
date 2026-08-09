@@ -4,6 +4,11 @@ This directory contains CI/CD workflows for automated deployment.
 
 ## Workflows
 
+### ansible-setup.yml (Reusable)
+- **Purpose**: Shared Ansible setup for all workflows
+- **Features**: Python setup, Ansible installation, configuration generation
+- **Used by**: infrastructure.yml, app-deployment.yml, posts-upload.yml
+
 ### infrastructure.yml
 - **Trigger**: Changes to infrastructure roles (docker, users, firewall, monitoring)
 - **Purpose**: Configure server infrastructure and system updates
@@ -23,7 +28,7 @@ This directory contains CI/CD workflows for automated deployment.
 
 Each workflow uses path filters to run only when relevant files change:
 - Infrastructure changes → infrastructure.yml
-- Application changes → app-deployment.yml  
+- Application changes → app-deployment.yml
 - Content changes → posts-upload.yml
 
 ## Requirements
@@ -31,4 +36,4 @@ Each workflow uses path filters to run only when relevant files change:
 All workflows require:
 - GitHub Secrets configured (HOST, USER, SSH_KEY, etc.)
 - Master branch deployment (manual triggers available)
-- Ansible inventory and variables setup
+- Ansible inventory and variables setup (automated via ansible-setup.yml)
