@@ -49,6 +49,11 @@ runs:
         roles_path = ./ansible/roles
         EOF
 
+    - name: Create inventory directory
+      shell: bash
+      run: |
+        mkdir -p ansible/inventory
+
     - name: Create inventory file
       shell: bash
       run: |
