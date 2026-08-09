@@ -26,23 +26,45 @@ Deploy application to server using Ansible.
    ssl_cert_path: "/path/to/certs"
    ```
 
-3. **Deploy**:
-   ```bash
-   # Infrastructure configuration
-   ansible-playbook -i inventory/hosts.yml playbooks/infrastructure.yml
+## Deployment
 
-   # Application deployment
-   ansible-playbook -i inventory/hosts.yml playbooks/app-deploy.yml
+### Infrastructure Configuration
+Run once or when infrastructure changes:
+```bash
+ansible-playbook -i inventory/hosts.yml playbooks/infrastructure.yml
+```
+Configures: Docker, users, firewall, monitoring
 
-   # Content upload
-   ansible-playbook -i inventory/hosts.yml playbooks/posts-upload.yml
-   ```
+### Application Deployment
+Run when app code changes:
+```bash
+ansible-playbook -i inventory/hosts.yml playbooks/app-deploy.yml
+```
+Deploys: App containers, nginx configuration
+
+### Content Upload
+Run when content changes:
+```bash
+ansible-playbook -i inventory/hosts.yml playbooks/posts-upload.yml
+```
+Uploads: Blog posts and markdown content
 
 ## Playbooks
 
-- **infrastructure.yml**: Server infrastructure setup
-- **app-deploy.yml**: Application deployment
-- **posts-upload.yml**: Content upload
+- **infrastructure.yml**: Server infrastructure setup (docker, users, firewall, monitoring)
+- **app-deploy.yml**: Application deployment (app, nginx, deploy roles)
+- **posts-upload.yml**: Content upload (posts and drafts)
+
+## Roles
+
+- **system-update**: System package updates with cache validation
+- **docker**: Docker installation and configuration
+- **users**: Application user and group management
+- **firewall**: UFW firewall configuration
+- **monitoring**: Grafana Alloy monitoring setup
+- **app**: Application directory setup
+- **nginx**: Nginx configuration and templates
+- **deploy**: Container deployment and management
 
 ## Test
 
