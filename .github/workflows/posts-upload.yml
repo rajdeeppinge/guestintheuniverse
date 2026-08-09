@@ -17,7 +17,7 @@ jobs:
 
     steps:
     - name: Setup Ansible
-      uses: ./.github/workflows/ansible-setup.yml
+      uses: ./.github/actions/ansible-setup
       with:
         vars_content: |
           ---

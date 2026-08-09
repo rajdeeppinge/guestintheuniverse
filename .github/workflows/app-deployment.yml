@@ -265,7 +265,7 @@ jobs:
         echo "version=$VERSION" >> $GITHUB_OUTPUT
 
     - name: Setup Ansible
-      uses: ./.github/workflows/ansible-setup.yml
+      uses: ./.github/actions/ansible-setup
       with:
         vars_content: |
           ---
