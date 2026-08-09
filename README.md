@@ -43,13 +43,21 @@ See [src/README.md](src/README.md) for detailed local development instructions.
 ## Development Workflow
 
 1. **Local Development**: Work in `src/` directory (see [src/README.md](src/README.md))
-2. **Version Management**: Update `APP_VERSION` and `RELEASE_NOTES.md`
+2. **Version Management**: Update `APP_VERSION` and `RELEASE_NOTES.md` when ready for release
 3. **Push Changes**: Push to master branch
 4. **Automated Deployment**: GitHub Actions triggers based on file changes:
    - Infrastructure changes → infrastructure.yml
    - Application changes → app-deployment.yml
    - Content changes → posts-upload.yml
 5. **Manual Deployment**: All workflows support manual dispatch via GitHub Actions UI
+
+## Release Process
+
+1. Update `APP_VERSION` with new version number
+2. Update `RELEASE_NOTES.md` with release notes for the new version
+3. Commit and push changes
+4. Create git tag: `git tag v0.4.0 && git push --tags`
+5. GitHub Actions automatically creates GitHub Release with release notes
 
 ## Configuration
 

@@ -29,6 +29,11 @@ This directory contains CI/CD workflows for automated deployment.
 - **Purpose**: Upload markdown content to server without full redeployment
 - **Manual Trigger**: Available via workflow_dispatch
 
+### release.yml
+- **Trigger**: Git tags matching pattern `v*.*.*`
+- **Purpose**: Create GitHub Releases automatically
+- **Features**: Extracts release notes from RELEASE_NOTES.md
+
 
 ## Path-Based Triggers
 

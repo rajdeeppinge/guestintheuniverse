@@ -4,6 +4,37 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.4.0
+Infrastructure restructuring and CI/CD optimization
+
+**New Features:**
+- Split workflows into infrastructure, app-deployment, and posts-upload
+- Path-based triggers for efficient CI/CD execution
+- Weekly infrastructure maintenance schedule (Sunday 9 AM UTC)
+- Automated GitHub Releases with git tags
+- Centralized configuration templates in config/ directory
+
+**Infrastructure:**
+- Reusable composite action for Ansible setup
+- Optimized workflow configurations with minimal variables per workflow
+- Updated Grafana Alloy installation using official documentation
+- Improved system-update role for weekly security patching
+- Inventory renamed to hosts.yml for consistency
+
+**Documentation:**
+- Restructured READMEs for better documentation flow
+- Added GitHub Actions workflows documentation
+- Enhanced Ansible deployment documentation
+- Configuration templates and setup instructions
+
+**Bug Fixes:**
+- Fixed composite action structure for GitHub Actions compatibility
+- Resolved Grafana Alloy package availability issues
+- Fixed workflow failures with proper checkout steps
+- Improved idempotency across all Ansible roles
+
+---
+
 ### v0.3.0
 Object Storage integration, image management improvements and production ready content
 
