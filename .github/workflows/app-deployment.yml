@@ -305,6 +305,9 @@ jobs:
           # GitHub Container Registry authentication
           github_username: "${{ github.actor }}"
           github_token: "${{ secrets.GITHUB_TOKEN }}"
+        host: "${{ secrets.HOST }}"
+        user: "${{ secrets.USER }}"
+        ssh_key: "${{ secrets.SSH_KEY }}"
 
     - name: Run Ansible app deployment
       run: |

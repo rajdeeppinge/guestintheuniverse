@@ -8,6 +8,15 @@ inputs:
     description: 'Whether to install Ansible collections'
     required: false
     default: 'true'
+  host:
+    description: 'Server hostname'
+    required: true
+  user:
+    description: 'SSH user'
+    required: true
+  ssh_key:
+    description: 'SSH private key'
+    required: true
 
 runs:
   using: 'composite'
@@ -49,8 +58,8 @@ runs:
           children:
             webservers:
               hosts:
-                ${{ secrets.HOST }}:
-                  ansible_user: ${{ secrets.USER }}
+                ${{ inputs.host }}:
+                  ansible_user: ${{ inputs.user }}
                   ansible_ssh_private_key_file: /tmp/ssh_key
                   ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
         EOF
@@ -58,7 +67,7 @@ runs:
     - name: Create SSH key file
       shell: bash
       run: |
-        echo '${{ secrets.SSH_KEY }}' > /tmp/ssh_key
+        echo '${{ inputs.ssh_key }}' > /tmp/ssh_key
         chmod 600 /tmp/ssh_key
 
     - name: Create vars file

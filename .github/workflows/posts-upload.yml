@@ -34,6 +34,9 @@ jobs:
           app_user: "${{ secrets.APP_USER }}"
           app_group: "${{ secrets.APP_GROUP }}"
         install_collections: false
+        host: "${{ secrets.HOST }}"
+        user: "${{ secrets.USER }}"
+        ssh_key: "${{ secrets.SSH_KEY }}"
 
     - name: Run Ansible posts upload
       run: |

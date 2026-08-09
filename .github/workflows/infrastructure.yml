@@ -39,6 +39,9 @@ jobs:
           # Global network variables
           http_port: ${{ secrets.HTTP_PORT }}
           https_port: ${{ secrets.HTTPS_PORT }}
+        host: "${{ secrets.HOST }}"
+        user: "${{ secrets.USER }}"
+        ssh_key: "${{ secrets.SSH_KEY }}"
 
     - name: Run Ansible infrastructure configuration
       run: |
