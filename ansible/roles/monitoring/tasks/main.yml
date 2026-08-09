@@ -3,23 +3,26 @@
   ansible.builtin.apt:
     name:
       - curl
+      - gnupg
+      - software-properties-common
     state: present
 
-- name: Download Grafana Alloy deb package
-  ansible.builtin.get_url:
-    url: "https://github.com/grafana/alloy/releases/download/v{{ alloy_version }}/alloy-{{ alloy_version }}-1.amd64.deb"
-    dest: /tmp/alloy.deb
-    mode: '0644'
+- name: Add Grafana GPG key
+  ansible.builtin.apt_key:
+    url: https://packages.grafana.com/gpg.key
+    state: present
 
-- name: Install Grafana Alloy deb package
+- name: Add Grafana repository
+  ansible.builtin.apt_repository:
+    repo: "deb https://packages.grafana.com/enterprise/deb stable main"
+    state: present
+    filename: grafana
+
+- name: Install Grafana Alloy (latest version)
   ansible.builtin.apt:
-    deb: /tmp/alloy.deb
+    name: grafana-alloy
     state: present
-
-- name: Cleanup temporary file
-  ansible.builtin.file:
-    path: /tmp/alloy.deb
-    state: absent
+    update_cache: true
 
 - name: Create Alloy configuration directory
   ansible.builtin.file:
