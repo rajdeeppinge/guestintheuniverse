@@ -1,0 +1,51 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Get version from tag
+      id: get_version
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/}
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Generate release notes
+      id: release_notes
+      run: |
+        if [ -f RELEASE_NOTES.md ]; then
+          # Extract notes for this version from RELEASE_NOTES.md
+          VERSION="${{ steps.get_version.outputs.version }}"
+          sed -n "/^### $VERSION/,/^---/p" RELEASE_NOTES.md | head -n -1 > release_notes.txt
+          if [ -s release_notes.txt ]; then
+            echo "notes=$(cat release_notes.txt)" >> $GITHUB_OUTPUT
+          else
+            echo "notes=Release $VERSION" >> $GITHUB_OUTPUT
+          fi
+        else
+          echo "notes=Release $VERSION" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ steps.get_version.outputs.version }}
+        body: ${{ steps.release_notes.outputs.notes }}
+        draft: false
+        prerelease: false
