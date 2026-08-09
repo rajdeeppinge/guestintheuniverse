@@ -14,7 +14,8 @@ This directory contains CI/CD workflows for automated deployment.
 ## Workflows
 
 ### infrastructure.yml
-- **Trigger**: Changes to infrastructure roles (docker, users, firewall, monitoring)
+- **Trigger**: Changes to infrastructure roles (docker, users, firewall, monitoring) or weekly schedule
+- **Schedule**: Every Sunday at 9 AM UTC for system updates
 - **Purpose**: Configure server infrastructure and system updates
 - **Manual Trigger**: Available via workflow_dispatch
 

@@ -10,12 +10,13 @@ on:
       - 'ansible/roles/monitoring/**'
       - 'ansible/roles/system-update/**'
       - 'ansible/playbooks/infrastructure.yml'
+  schedule:
+    - cron: '0 9 * * 0'  # Every Sunday at 9 AM UTC
   workflow_dispatch:
 
 jobs:
   configure:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master'
     permissions:
       contents: read
 
