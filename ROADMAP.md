@@ -8,24 +8,24 @@ This document outlines the planned development roadmap for Guest in the Universe
 **Focus:** Free up resources and improve operational efficiency
 
 **Quick Wins:**
-- Protect master branch with required reviews and status checks
-- Make repository public
-- Add limits to how many docker images to retain in GitHub Actions
-- Fix bug: Build workflow doesn't terminate even if the image exists
+- [x] Protect master branch with required reviews and status checks
+- [ ] Make repository public
+- [x] Add limits to how many docker images to retain in GitHub Actions
+- [x] Fix bug: Build workflow doesn't terminate even if the image exists
 
 **Resource Optimization:**
-- Evaluate and implement /var/log/nginx mounting strategy
-- Implement logrotate for container logs
-- Use uv instead of requirements.txt for Python dependency management (smaller footprint)
+- [ ] Evaluate and implement /var/log/nginx mounting strategy
+- [ ] Implement logrotate for container logs
+- [ ] Use uv instead of requirements.txt for Python dependency management (smaller footprint)
 
 **Maintenance:**
-- Cleanup blogger references
-- Shut down blogger setup
-- Restructure and cleanup src directory
+- [ ] Cleanup blogger references
+- [ ] Shut down blogger setup
+- [ ] Restructure and cleanup src directory
 
 **Development Experience:**
-- Implement pre-commit hooks
-- Setup local development database
+- [ ] Implement pre-commit hooks
+- [ ] Setup local development database
 
 ---
 
@@ -108,7 +108,7 @@ This document outlines the planned development roadmap for Guest in the Universe
 
 ---
 
-### v0.10.0 - Security & Testing
+### v0.10.0 - Security & hardening and quality assurance
 **Focus:** Production hardening and quality assurance
 
 **Security:**
