@@ -307,7 +307,9 @@ jobs:
           
           # Extract both tagged and untagged versions
           TAGGED_VERSIONS=$(echo "$ALL_VERSIONS" | jq -r '.[].metadata.container.tags[]?' 2>/dev/null | sort -V || echo "")
-          UNTAGGED_COUNT=$(echo "$ALL_VERSIONS" | jq '[.[] | select(.metadata.container.tags == null)] | length')
+          
+          # Untagged versions have empty tags array
+          UNTAGGED_COUNT=$(echo "$ALL_VERSIONS" | jq '[.[] | select(.metadata.container.tags == null or .metadata.container.tags == [])] | length')
           
           echo "Tagged versions: $TAGGED_VERSIONS"
           echo "Untagged versions count: $UNTAGGED_COUNT"
