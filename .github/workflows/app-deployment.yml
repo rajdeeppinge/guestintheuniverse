@@ -259,78 +259,85 @@ jobs:
         fi
         echo "Current version: $CURRENT_VERSION"
         
-        # Get all versions from the package
-        API_RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/packages/container/guestintheuniverse/versions")
-        
-        echo "API response: $API_RESPONSE"
-        
-        # Check if package exists
-        if echo "$API_RESPONSE" | grep -q "Not Found"; then
-          echo "Package not found yet, skipping cleanup"
-          exit 0
-        fi
-        
-        # Extract tags from API response
-        VERSIONS=$(echo "$API_RESPONSE" | jq -r '.[].metadata.container.tags[]?' 2>/dev/null | sort -V || echo "")
-        
-        if [ -z "$VERSIONS" ]; then
-          echo "No versions found, skipping cleanup"
-          exit 0
-        fi
-        
-        echo "All versions: $VERSIONS"
-        
-        # Separate prod and dev versions (dev versions must have v prefix)
-        PROD_VERSIONS=$(echo "$VERSIONS" | grep -v -- '-dev' || true)
-        DEV_VERSIONS=$(echo "$VERSIONS" | grep '^v.*-dev' || true)
-        
-        echo "Prod versions: $PROD_VERSIONS"
-        echo "Dev versions: $DEV_VERSIONS"
-        
-        # Keep only last 3 prod versions
-        PROD_TO_KEEP=$(echo "$PROD_VERSIONS" | tail -n 3)
-        PROD_TO_DELETE=$(echo "$PROD_VERSIONS" | grep -v -F "$PROD_TO_KEEP" || true)
-        
-        echo "Prod versions to keep: $PROD_TO_KEEP"
-        echo "Prod versions to delete: $PROD_TO_DELETE"
-        
-        # Delete old prod versions
-        for version in $PROD_TO_DELETE; do
-          echo "Deleting prod version: $version"
-          VERSION_ID=$(echo "$API_RESPONSE" | jq -r --arg tag "$version" '.[] | select(.metadata.container.tags[]? == $tag) | .id')
+        # Function to cleanup a specific package
+        cleanup_package() {
+          local PACKAGE_NAME=$1
+          echo "Cleaning up package: $PACKAGE_NAME"
           
-          if [ -n "$VERSION_ID" ]; then
-            curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/repos/${{ github.repository }}/packages/container/guestintheuniverse/versions/$VERSION_ID"
-            echo "Deleted version $version (ID: $VERSION_ID)"
+          # Get all versions from the package
+          ALL_VERSIONS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$PACKAGE_NAME/versions")
+          
+          # Check if package exists
+          if echo "$ALL_VERSIONS" | grep -q "Not Found"; then
+            echo "Package $PACKAGE_NAME not found yet, skipping"
+            return
           fi
-        done
-        
-        # Extract current major.minor from current version (remove 'v' prefix first)
-        CURRENT_VERSION_NO_V=$(echo "$CURRENT_VERSION" | sed 's/^v//')
-        CURRENT_MAJOR_MINOR=$(echo "$CURRENT_VERSION_NO_V" | sed -E 's/^([0-9]+\.[0-9]+).*/\1/')
-        echo "Current major.minor: $CURRENT_MAJOR_MINOR"
-        
-        # Delete dev versions for older prod releases (only handle v*.*.*-dev* format)
-        for dev_version in $DEV_VERSIONS; do
-          # Extract major.minor.patch from dev version (e.g., v0.3.0-dev1 -> 0.3.0)
-          DEV_MAJOR_MINOR=$(echo "$dev_version" | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+)-.*/\1/')
           
-          # Compare versions - delete dev versions for older prod releases
-          if [ "$DEV_MAJOR_MINOR" != "$CURRENT_MAJOR_MINOR" ]; then
-            echo "Deleting dev version for older release: $dev_version"
-            VERSION_ID=$(echo "$API_RESPONSE" | jq -r --arg tag "$dev_version" '.[] | select(.metadata.container.tags[]? == $tag) | .id')
+          VERSIONS=$(echo "$ALL_VERSIONS" | jq -r '.[].metadata.container.tags[]?' 2>/dev/null | sort -V || echo "")
+          
+          if [ -z "$VERSIONS" ]; then
+            echo "No versions found for $PACKAGE_NAME, skipping"
+            return
+          fi
+          
+          echo "All versions for $PACKAGE_NAME: $VERSIONS"
+          
+          # Separate prod and dev versions (dev versions must have v prefix)
+          PROD_VERSIONS=$(echo "$VERSIONS" | grep -v -- '-dev' || true)
+          DEV_VERSIONS=$(echo "$VERSIONS" | grep '^v.*-dev' || true)
+          
+          echo "Prod versions: $PROD_VERSIONS"
+          echo "Dev versions: $DEV_VERSIONS"
+          
+          # Keep only last 3 prod versions
+          PROD_TO_KEEP=$(echo "$PROD_VERSIONS" | tail -n 3)
+          PROD_TO_DELETE=$(echo "$PROD_VERSIONS" | grep -v -F "$PROD_TO_KEEP" || true)
+          
+          echo "Prod versions to keep: $PROD_TO_KEEP"
+          echo "Prod versions to delete: $PROD_TO_DELETE"
+          
+          # Delete old prod versions
+          for version in $PROD_TO_DELETE; do
+            echo "Deleting prod version: $version from $PACKAGE_NAME"
+            VERSION_ID=$(echo "$ALL_VERSIONS" | jq -r --arg tag "$version" '.[] | select(.metadata.container.tags[]? == $tag) | .id')
             
             if [ -n "$VERSION_ID" ]; then
               curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                "https://api.github.com/repos/${{ github.repository }}/packages/container/guestintheuniverse/versions/$VERSION_ID"
-              echo "Deleted dev version $dev_version (ID: $VERSION_ID)"
+                "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$PACKAGE_NAME/versions/$VERSION_ID"
+              echo "Deleted version $version (ID: $VERSION_ID) from $PACKAGE_NAME"
             fi
-          else
-            echo "Keeping dev version for current release: $dev_version"
-          fi
-        done
+          done
+          
+          # Extract current major.minor from current version (remove 'v' prefix first)
+          CURRENT_VERSION_NO_V=$(echo "$CURRENT_VERSION" | sed 's/^v//')
+          CURRENT_MAJOR_MINOR=$(echo "$CURRENT_VERSION_NO_V" | sed -E 's/^([0-9]+\.[0-9]+).*/\1/')
+          echo "Current major.minor: $CURRENT_MAJOR_MINOR"
+          
+          # Delete dev versions for older prod releases (only handle v*.*.*-dev* format)
+          for dev_version in $DEV_VERSIONS; do
+            # Extract major.minor.patch from dev version (e.g., v0.3.0-dev1 -> 0.3.0)
+            DEV_MAJOR_MINOR=$(echo "$dev_version" | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+)-.*/\1/')
+            
+            # Compare versions - delete dev versions for older prod releases
+            if [ "$DEV_MAJOR_MINOR" != "$CURRENT_MAJOR_MINOR" ]; then
+              echo "Deleting dev version for older release: $dev_version from $PACKAGE_NAME"
+              VERSION_ID=$(echo "$ALL_VERSIONS" | jq -r --arg tag "$dev_version" '.[] | select(.metadata.container.tags[]? == $tag) | .id')
+              
+              if [ -n "$VERSION_ID" ]; then
+                curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                  "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$PACKAGE_NAME/versions/$VERSION_ID"
+                echo "Deleted dev version $dev_version (ID: $VERSION_ID) from $PACKAGE_NAME"
+              fi
+            else
+              echo "Keeping dev version for current release: $dev_version in $PACKAGE_NAME"
+            fi
+          done
+        }
+        
+        # Cleanup both app and nginx packages
+        cleanup_package "guestintheuniverse/app"
+        cleanup_package "guestintheuniverse/nginx"
         
         echo "Cleanup completed!"
       shell: bash
