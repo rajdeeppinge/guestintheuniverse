@@ -264,9 +264,12 @@ jobs:
           local PACKAGE_NAME=$1
           echo "Cleaning up package: $PACKAGE_NAME"
           
+          # URL encode the package name for API
+          ENCODED_PACKAGE_NAME=$(echo "$PACKAGE_NAME" | sed 's/\//%2F/g')
+          
           # Get all versions from the package
           ALL_VERSIONS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$PACKAGE_NAME/versions")
+            "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$ENCODED_PACKAGE_NAME/versions")
           
           # Check if package exists
           if echo "$ALL_VERSIONS" | grep -q "Not Found"; then
@@ -304,7 +307,7 @@ jobs:
             
             if [ -n "$VERSION_ID" ]; then
               curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$PACKAGE_NAME/versions/$VERSION_ID"
+                "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$ENCODED_PACKAGE_NAME/versions/$VERSION_ID"
               echo "Deleted version $version (ID: $VERSION_ID) from $PACKAGE_NAME"
             fi
           done
@@ -326,7 +329,7 @@ jobs:
               
               if [ -n "$VERSION_ID" ]; then
                 curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-                  "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$PACKAGE_NAME/versions/$VERSION_ID"
+                  "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$ENCODED_PACKAGE_NAME/versions/$VERSION_ID"
                 echo "Deleted dev version $dev_version (ID: $VERSION_ID) from $PACKAGE_NAME"
               fi
             else
