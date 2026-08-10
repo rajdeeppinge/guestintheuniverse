@@ -260,9 +260,24 @@ jobs:
         echo "Current version: $CURRENT_VERSION"
         
         # Get all versions from the package
-        VERSIONS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-          "https://api.github.com/repos/${{ github.repository }}/packages/container/guestintheuniverse/versions" | \
-          jq -r '.[].metadata.container.tags[]' | sort -V)
+        API_RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          "https://api.github.com/repos/${{ github.repository }}/packages/container/guestintheuniverse/versions")
+        
+        echo "API response: $API_RESPONSE"
+        
+        # Check if package exists
+        if echo "$API_RESPONSE" | grep -q "Not Found"; then
+          echo "Package not found yet, skipping cleanup"
+          exit 0
+        fi
+        
+        # Extract tags from API response
+        VERSIONS=$(echo "$API_RESPONSE" | jq -r '.[].metadata.container.tags[]?' 2>/dev/null | sort -V || echo "")
+        
+        if [ -z "$VERSIONS" ]; then
+          echo "No versions found, skipping cleanup"
+          exit 0
+        fi
         
         echo "All versions: $VERSIONS"
         
@@ -283,9 +298,7 @@ jobs:
         # Delete old prod versions
         for version in $PROD_TO_DELETE; do
           echo "Deleting prod version: $version"
-          VERSION_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/packages/container/guestintheuniverse/versions" | \
-            jq -r --arg tag "$version" '.[] | select(.metadata.container.tags[] == $tag) | .id')
+          VERSION_ID=$(echo "$API_RESPONSE" | jq -r --arg tag "$version" '.[] | select(.metadata.container.tags[]? == $tag) | .id')
           
           if [ -n "$VERSION_ID" ]; then
             curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -307,9 +320,7 @@ jobs:
           # Compare versions - delete dev versions for older prod releases
           if [ "$DEV_MAJOR_MINOR" != "$CURRENT_MAJOR_MINOR" ]; then
             echo "Deleting dev version for older release: $dev_version"
-            VERSION_ID=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              "https://api.github.com/repos/${{ github.repository }}/packages/container/guestintheuniverse/versions" | \
-              jq -r --arg tag "$dev_version" '.[] | select(.metadata.container.tags[] == $tag) | .id')
+            VERSION_ID=$(echo "$API_RESPONSE" | jq -r --arg tag "$dev_version" '.[] | select(.metadata.container.tags[]? == $tag) | .id')
             
             if [ -n "$VERSION_ID" ]; then
               curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
