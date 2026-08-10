@@ -12,6 +12,7 @@ This document outlines the planned development roadmap for Guest in the Universe
 - [x] Make repository public
 - [x] Add limits to how many docker images to retain in GitHub Actions
 - [x] Fix bug: Build workflow doesn't terminate even if the image exists
+- [x] Cleanup old branches
 
 **Resource Optimization:**
 - [ ] Evaluate and implement /var/log/nginx mounting strategy
@@ -19,8 +20,8 @@ This document outlines the planned development roadmap for Guest in the Universe
 - [ ] Use uv instead of requirements.txt for Python dependency management (smaller footprint)
 
 **Maintenance:**
-- [ ] Cleanup blogger references
-- [ ] Shut down blogger setup
+- [x] Cleanup blogger references
+- [x] Shut down blogger setup
 - [ ] Restructure and cleanup src directory
 
 **Development Experience:**
