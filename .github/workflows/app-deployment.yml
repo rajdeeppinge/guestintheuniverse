@@ -331,7 +331,7 @@ jobs:
           # Delete all untagged versions (they take up space without being useful)
           if [ "$UNTAGGED_COUNT" -gt 0 ]; then
             echo "Deleting $UNTAGGED_COUNT untagged versions"
-            UNTAGGED_IDS=$(echo "$ALL_VERSIONS" | jq -r '.[] | select(.metadata.container.tags == null) | .id')
+            UNTAGGED_IDS=$(echo "$ALL_VERSIONS" | jq -r '.[] | select(.metadata.container.tags == null or .metadata.container.tags == []) | .id')
             for untagged_id in $UNTAGGED_IDS; do
               echo "Deleting untagged version ID: $untagged_id"
               curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
