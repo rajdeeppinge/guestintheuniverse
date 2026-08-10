@@ -3,13 +3,7 @@ name: Create Release
 on:
   push:
     tags:
-      - 'v*'
-  workflow_dispatch:
-    inputs:
-      tag_name:
-        description: 'Tag name to create release for'
-        required: true
-        default: 'v0.0.0'
+      - 'v*.*.*'
 
 jobs:
   release:
@@ -22,7 +16,7 @@ jobs:
       - name: Extract release notes
         id: release_notes
         run: |
-          TAG="${{ inputs.tag_name || github.ref_name }}"
+          TAG="${{ github.ref_name }}"
           if [ -f RELEASE_NOTES.md ]; then
             # Extract notes for this version from RELEASE_NOTES.md
             sed -n "/^### $TAG/,/^---/p" RELEASE_NOTES.md | head -n -1 > release_notes.txt
@@ -40,8 +34,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ inputs.tag_name || github.ref_name }}
-          name: Release ${{ inputs.tag_name || github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           body: ${{ steps.release_notes.outputs.notes }}
           draft: false
           prerelease: false

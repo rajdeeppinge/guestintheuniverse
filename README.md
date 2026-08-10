@@ -38,6 +38,7 @@ See [src/README.md](src/README.md) for detailed local development instructions.
 - **[ansible/README.md](ansible/README.md)** - Manual production deployment and infrastructure setup
 - **[config/README.md](config/README.md)** - Configuration templates and setup instructions
 - **[.github/workflows/README.md](.github/workflows/README.md)** - Automated CI/CD workflows and automation
+- **[DEVELOPMENT.md](DEVELOPMENT.md)** - Development process and workflow conventions
 - **[RELEASE_NOTES.md](RELEASE_NOTES.md)** - Version history and changelog
 - **[ROADMAP.md](ROADMAP.md)** - Planned development roadmap and future features
 
