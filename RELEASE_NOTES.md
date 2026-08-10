@@ -14,6 +14,12 @@ Infrastructure & Resource Optimization (Development)
 - Removed manual trigger from release workflow
 - Modified app-deployment workflow to only deploy on tagged releases
 - Dev versions now build and push images but don't deploy to production
+- Fixed build workflow to properly terminate when image already exists
+- Added conditional image building based on code changes
+
+**Security:**
+- Protected master branch with required reviews and status checks
+- Configured repository ruleset to require pull requests for master changes
 
 **Documentation:**
 - Created DEVELOPMENT.md with step-by-step development process
