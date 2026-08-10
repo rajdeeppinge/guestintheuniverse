@@ -97,8 +97,20 @@ jobs:
         fi
       shell: bash
 
+    - name: Check if app code changed
+      id: app_code_changed
+      run: |
+        if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^src/'; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "App code changed, will build images"
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+          echo "App code not changed, will skip build but run cleanup"
+        fi
+      shell: bash
+
     - name: Build app image
-      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
+      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false' && steps.app_code_changed.outputs.changed == 'true'
       uses: docker/build-push-action@v5
       with:
         context: ./src/app
@@ -113,7 +125,7 @@ jobs:
           org.opencontainers.image.revision=${{ github.sha }}
 
     - name: Build nginx image
-      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
+      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false' && steps.app_code_changed.outputs.changed == 'true'
       uses: docker/build-push-action@v5
       with:
         context: ./src/nginx
@@ -128,7 +140,7 @@ jobs:
           org.opencontainers.image.revision=${{ github.sha }}
 
     - name: Validate images
-      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
+      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false' && steps.app_code_changed.outputs.changed == 'true'
       run: |
         echo "Starting validation using docker-compose..."
         
@@ -232,7 +244,7 @@ jobs:
         SSL_CERT_PATH: "/tmp/ssl-certs"
 
     - name: Push images
-      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
+      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false' && steps.app_code_changed.outputs.changed == 'true'
       run: |
         echo "Pushing images to registry..."
         
@@ -267,24 +279,45 @@ jobs:
           # URL encode the package name for API
           ENCODED_PACKAGE_NAME=$(echo "$PACKAGE_NAME" | sed 's/\//%2F/g')
           
-          # Get all versions from the package
-          ALL_VERSIONS=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$ENCODED_PACKAGE_NAME/versions")
+          # Get all versions from the package with pagination
+          ALL_VERSIONS="[]"
+          PAGE=1
+          while true; do
+            PAGE_RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$ENCODED_PACKAGE_NAME/versions?per_page=100&page=$PAGE")
           
           # Check if package exists
-          if echo "$ALL_VERSIONS" | grep -q "Not Found"; then
+            if echo "$PAGE_RESPONSE" | grep -q "Not Found"; then
             echo "Package $PACKAGE_NAME not found yet, skipping"
             return
           fi
           
-          VERSIONS=$(echo "$ALL_VERSIONS" | jq -r '.[].metadata.container.tags[]?' 2>/dev/null | sort -V || echo "")
+            # Check if we got an empty array (no more pages)
+            if [ "$(echo "$PAGE_RESPONSE" | jq 'length')" = "0" ]; then
+              break
+            fi
+            
+            # Merge this page with all versions
+            ALL_VERSIONS=$(echo "$ALL_VERSIONS" "$PAGE_RESPONSE" | jq -s '.[0] + .[1]')
+            
+            PAGE=$((PAGE + 1))
+          done
           
-          if [ -z "$VERSIONS" ]; then
+          echo "Total versions retrieved: $(echo "$ALL_VERSIONS" | jq 'length')"
+          
+          # Extract both tagged and untagged versions
+          TAGGED_VERSIONS=$(echo "$ALL_VERSIONS" | jq -r '.[].metadata.container.tags[]?' 2>/dev/null | sort -V || echo "")
+          UNTAGGED_COUNT=$(echo "$ALL_VERSIONS" | jq '[.[] | select(.metadata.container.tags == null)] | length')
+          
+          echo "Tagged versions: $TAGGED_VERSIONS"
+          echo "Untagged versions count: $UNTAGGED_COUNT"
+          
+          VERSIONS="$TAGGED_VERSIONS"
+          
+          if [ -z "$VERSIONS" ] && [ "$UNTAGGED_COUNT" = "0" ]; then
             echo "No versions found for $PACKAGE_NAME, skipping"
             return
           fi
-          
-          echo "All versions for $PACKAGE_NAME: $VERSIONS"
           
           # Separate prod and dev versions (dev versions must have v prefix)
           PROD_VERSIONS=$(echo "$VERSIONS" | grep -v -- '-dev' || true)
@@ -292,6 +325,18 @@ jobs:
           
           echo "Prod versions: $PROD_VERSIONS"
           echo "Dev versions: $DEV_VERSIONS"
+          
+          # Delete all untagged versions (they take up space without being useful)
+          if [ "$UNTAGGED_COUNT" -gt 0 ]; then
+            echo "Deleting $UNTAGGED_COUNT untagged versions"
+            UNTAGGED_IDS=$(echo "$ALL_VERSIONS" | jq -r '.[] | select(.metadata.container.tags == null) | .id')
+            for untagged_id in $UNTAGGED_IDS; do
+              echo "Deleting untagged version ID: $untagged_id"
+              curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$ENCODED_PACKAGE_NAME/versions/$untagged_id"
+              echo "Deleted untagged version ID: $untagged_id"
+            done
+          fi
           
           # Keep only last 3 prod versions
           PROD_TO_KEEP=$(echo "$PROD_VERSIONS" | tail -n 3)
