@@ -3,6 +3,8 @@ name: App Deployment
 on:
   push:
     branches: [ master ]
+    tags:
+      - 'v*.*.*'
     paths:
       - 'src/**'
       - 'ansible/playbooks/app-deploy.yml'
@@ -95,8 +97,20 @@ jobs:
         fi
       shell: bash
 
+    - name: Check if app code changed
+      id: app_code_changed
+      run: |
+        if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^src/'; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "App code changed, will build images"
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+          echo "App code not changed, will skip build but run cleanup"
+        fi
+      shell: bash
+
     - name: Build app image
-      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
+      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false' && steps.app_code_changed.outputs.changed == 'true'
       uses: docker/build-push-action@v5
       with:
         context: ./src/app
@@ -111,7 +125,7 @@ jobs:
           org.opencontainers.image.revision=${{ github.sha }}
 
     - name: Build nginx image
-      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
+      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false' && steps.app_code_changed.outputs.changed == 'true'
       uses: docker/build-push-action@v5
       with:
         context: ./src/nginx
@@ -126,7 +140,7 @@ jobs:
           org.opencontainers.image.revision=${{ github.sha }}
 
     - name: Validate images
-      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
+      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false' && steps.app_code_changed.outputs.changed == 'true'
       run: |
         echo "Starting validation using docker-compose..."
         
@@ -230,7 +244,7 @@ jobs:
         SSL_CERT_PATH: "/tmp/ssl-certs"
 
     - name: Push images
-      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
+      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false' && steps.app_code_changed.outputs.changed == 'true'
       run: |
         echo "Pushing images to registry..."
         
@@ -245,10 +259,148 @@ jobs:
         echo "Images pushed successfully!"
       shell: bash
 
+    - name: Delete old image versions
+      if: steps.version_check.outputs.consistent == 'true' && steps.check_tag.outputs.exists == 'false'
+      run: |
+        echo "Cleaning up old image versions..."
+        
+        # Get current version (ensure it has 'v' prefix)
+        CURRENT_VERSION="${{ steps.app_version.outputs.version }}"
+        if [[ ! "$CURRENT_VERSION" =~ ^v ]]; then
+          CURRENT_VERSION="v$CURRENT_VERSION"
+        fi
+        echo "Current version: $CURRENT_VERSION"
+        
+        # Function to cleanup a specific package
+        cleanup_package() {
+          local PACKAGE_NAME=$1
+          echo "Cleaning up package: $PACKAGE_NAME"
+          
+          # URL encode the package name for API
+          ENCODED_PACKAGE_NAME=$(echo "$PACKAGE_NAME" | sed 's/\//%2F/g')
+          
+          # Get all versions from the package with pagination
+          ALL_VERSIONS="[]"
+          PAGE=1
+          while true; do
+            PAGE_RESPONSE=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$ENCODED_PACKAGE_NAME/versions?per_page=100&page=$PAGE")
+          
+          # Check if package exists
+            if echo "$PAGE_RESPONSE" | grep -q "Not Found"; then
+            echo "Package $PACKAGE_NAME not found yet, skipping"
+            return
+          fi
+          
+            # Check if we got an empty array (no more pages)
+            if [ "$(echo "$PAGE_RESPONSE" | jq 'length')" = "0" ]; then
+              break
+            fi
+            
+            # Merge this page with all versions
+            ALL_VERSIONS=$(echo "$ALL_VERSIONS" "$PAGE_RESPONSE" | jq -s '.[0] + .[1]')
+            
+            PAGE=$((PAGE + 1))
+          done
+          
+          echo "Total versions retrieved: $(echo "$ALL_VERSIONS" | jq 'length')"
+          
+          # Extract both tagged and untagged versions
+          TAGGED_VERSIONS=$(echo "$ALL_VERSIONS" | jq -r '.[].metadata.container.tags[]?' 2>/dev/null | sort -V || echo "")
+          
+          # Untagged versions have empty tags array
+          UNTAGGED_COUNT=$(echo "$ALL_VERSIONS" | jq '[.[] | select(.metadata.container.tags == null or .metadata.container.tags == [])] | length')
+          
+          echo "Tagged versions: $TAGGED_VERSIONS"
+          echo "Untagged versions count: $UNTAGGED_COUNT"
+          
+          VERSIONS="$TAGGED_VERSIONS"
+          
+          if [ -z "$VERSIONS" ] && [ "$UNTAGGED_COUNT" = "0" ]; then
+            echo "No versions found for $PACKAGE_NAME, skipping"
+            return
+          fi
+          
+          # Separate prod and dev versions (dev versions must have v prefix)
+          PROD_VERSIONS=$(echo "$VERSIONS" | grep -v -- '-dev' || true)
+          DEV_VERSIONS=$(echo "$VERSIONS" | grep '^v.*-dev' || true)
+          
+          echo "Prod versions: $PROD_VERSIONS"
+          echo "Dev versions: $DEV_VERSIONS"
+          
+          # Delete all untagged versions (they take up space without being useful)
+          if [ "$UNTAGGED_COUNT" -gt 0 ]; then
+            echo "Deleting $UNTAGGED_COUNT untagged versions"
+            UNTAGGED_IDS=$(echo "$ALL_VERSIONS" | jq -r '.[] | select(.metadata.container.tags == null or .metadata.container.tags == []) | .id')
+            for untagged_id in $UNTAGGED_IDS; do
+              echo "Deleting untagged version ID: $untagged_id"
+              curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$ENCODED_PACKAGE_NAME/versions/$untagged_id"
+              echo "Deleted untagged version ID: $untagged_id"
+            done
+          fi
+          
+          # Keep only last 3 prod versions
+          PROD_TO_KEEP=$(echo "$PROD_VERSIONS" | tail -n 3)
+          PROD_TO_DELETE=$(echo "$PROD_VERSIONS" | grep -v -F "$PROD_TO_KEEP" || true)
+          
+          echo "Prod versions to keep: $PROD_TO_KEEP"
+          echo "Prod versions to delete: $PROD_TO_DELETE"
+          
+          # Delete old prod versions
+          for version in $PROD_TO_DELETE; do
+            echo "Deleting prod version: $version from $PACKAGE_NAME"
+            VERSION_ID=$(echo "$ALL_VERSIONS" | jq -r --arg tag "$version" '.[] | select(.metadata.container.tags[]? == $tag) | .id')
+            
+            if [ -n "$VERSION_ID" ]; then
+              curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$ENCODED_PACKAGE_NAME/versions/$VERSION_ID"
+              echo "Deleted version $version (ID: $VERSION_ID) from $PACKAGE_NAME"
+            fi
+          done
+          
+          # Extract current major.minor from current version (remove 'v' prefix and dev suffix)
+          CURRENT_VERSION_NO_V=$(echo "$CURRENT_VERSION" | sed 's/^v//')
+          CURRENT_BASE=$(echo "$CURRENT_VERSION_NO_V" | sed -E 's/^([0-9]+\.[0-9]+\.[0-9]+).*/\1/')
+          CURRENT_MAJOR_MINOR=$(echo "$CURRENT_BASE" | sed -E 's/^([0-9]+\.[0-9]+).*/\1/')
+          echo "Current base version: $CURRENT_BASE"
+          echo "Current major.minor: $CURRENT_MAJOR_MINOR"
+          
+          # Delete dev versions for older prod releases (only handle v*.*.*-dev* format)
+          for dev_version in $DEV_VERSIONS; do
+            # Extract base version from dev version (e.g., v0.3.0-dev1 -> 0.3.0)
+            DEV_BASE=$(echo "$dev_version" | sed -E 's/^v([0-9]+\.[0-9]+\.[0-9]+)-.*/\1/')
+            DEV_MAJOR_MINOR=$(echo "$DEV_BASE" | sed -E 's/^([0-9]+\.[0-9]+).*/\1/')
+            
+            echo "Dev version: $dev_version, Base: $DEV_BASE, Major.minor: $DEV_MAJOR_MINOR"
+            
+            # Compare versions - delete dev versions for older prod releases
+            if [ "$DEV_MAJOR_MINOR" != "$CURRENT_MAJOR_MINOR" ]; then
+              echo "Deleting dev version for older release: $dev_version from $PACKAGE_NAME"
+              VERSION_ID=$(echo "$ALL_VERSIONS" | jq -r --arg tag "$dev_version" '.[] | select(.metadata.container.tags[]? == $tag) | .id')
+              
+              if [ -n "$VERSION_ID" ]; then
+                curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                  "https://api.github.com/users/${{ github.repository_owner }}/packages/container/$ENCODED_PACKAGE_NAME/versions/$VERSION_ID"
+                echo "Deleted dev version $dev_version (ID: $VERSION_ID) from $PACKAGE_NAME"
+              fi
+            else
+              echo "Keeping dev version for current release: $dev_version in $PACKAGE_NAME"
+            fi
+          done
+        }
+        
+        # Cleanup both app and nginx packages
+        cleanup_package "guestintheuniverse/app"
+        cleanup_package "guestintheuniverse/nginx"
+        
+        echo "Cleanup completed!"
+      shell: bash
+
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: success() && github.ref == 'refs/heads/master'
+    if: success() && startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents: read
       packages: read

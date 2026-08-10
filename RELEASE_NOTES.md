@@ -4,6 +4,24 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.5.0-dev1
+Infrastructure & Resource Optimization (Development)
+
+**Image and version management:**
+- Added Docker image retention limits in GitHub Container Registry
+- Keep last 3 production versions and delete dev versions for older releases
+- Updated release workflow to enforce strict v*.*.* versioning
+- Removed manual trigger from release workflow
+- Modified app-deployment workflow to only deploy on tagged releases
+- Dev versions now build and push images but don't deploy to production
+
+**Documentation:**
+- Created DEVELOPMENT.md with step-by-step development process
+- Added development workflow conventions and versioning guidelines
+- Updated README.md and ROADMAP.md to reference DEVELOPMENT.md
+
+---
+
 ### v0.4.0
 Infrastructure restructuring and CI/CD optimization
 
