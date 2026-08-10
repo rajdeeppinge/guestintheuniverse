@@ -1,15 +1,7 @@
 ---
-- name: Create posts directory
-  ansible.builtin.file:
-    path: "{{ app_dir }}/posts"
-    state: directory
-    owner: "{{ app_user }}"
-    group: "{{ app_group }}"
-    mode: '0755'
-
-- name: Copy docker-compose file
-  ansible.builtin.template:
-    src: docker-compose.yml.j2
+- name: Create production docker-compose file
+  ansible.builtin.copy:
+    src: "../../../../src/docker-compose.yml"
     dest: "{{ app_dir }}/docker-compose.yml"
     owner: "{{ app_user }}"
     group: "{{ app_group }}"
@@ -17,26 +9,61 @@
 
 - name: Login to GitHub Container Registry
   ansible.builtin.command:
-    cmd: echo "{{ github_token }}" | docker login {{ container_registry }} -u {{ github_username }} --password-stdin
+    cmd: docker login ghcr.io -u {{ github_username }} -p {{ github_token }}
   no_log: true
 
 - name: Pull app image
-  ansible.builtin.docker_image:
-    name: "{{ app_image_name }}:{{ app_image_tag }}"
-    source: pull
+  ansible.builtin.command:
+    cmd: docker pull {{ app_image_name }}:{{ app_image_tag }}
+  register: app_pull_result
 
 - name: Pull nginx image
-  ansible.builtin.docker_image:
-    name: "{{ nginx_image_name }}:{{ nginx_image_tag }}"
-    source: pull
+  ansible.builtin.command:
+    cmd: docker pull {{ nginx_image_name }}:{{ nginx_image_tag }}
+  register: nginx_pull_result
+
+- name: Show pull results
+  ansible.builtin.debug:
+    msg: |
+      App image pull: {{ app_pull_result.stdout }}
+      Nginx image pull: {{ nginx_pull_result.stdout }}
 
 - name: Deploy application with Docker Compose
   ansible.builtin.command:
-    cmd: docker compose -f {{ app_dir }}/docker-compose.yml up -d
-  become_user: "{{ app_user }}"
+    cmd: docker compose up -d
+    chdir: "{{ app_dir }}"
+  environment:
+    APP_IMAGE_NAME: "{{ app_image_name }}"
+    APP_IMAGE_TAG: "{{ app_image_tag }}"
+    NGINX_IMAGE_NAME: "{{ nginx_image_name }}"
+    NGINX_IMAGE_TAG: "{{ nginx_image_tag }}"
+    APP_NAME: "{{ app_name }}"
+    APP_PORT: "{{ app_port }}"
+    HTTP_PORT: "{{ http_port }}"
+    HTTPS_PORT: "{{ https_port }}"
+    SSL_CERT_PATH: "{{ ssl_cert_path }}"
+  register: deployment_result
+
+- name: Wait for containers to be ready
+  ansible.builtin.pause:
+    seconds: '{{ deployment_wait_time | default(30) }}'
 
 - name: Verify deployment
   ansible.builtin.command:
-    cmd: docker compose -f {{ app_dir }}/docker-compose.yml ps
+    cmd: docker compose ps
+    chdir: "{{ app_dir }}"
+  environment:
+    APP_IMAGE_NAME: "{{ app_image_name }}"
+    APP_IMAGE_TAG: "{{ app_image_tag }}"
+    NGINX_IMAGE_NAME: "{{ nginx_image_name }}"
+    NGINX_IMAGE_TAG: "{{ nginx_image_tag }}"
+    APP_NAME: "{{ app_name }}"
+    APP_PORT: "{{ app_port }}"
+    HTTP_PORT: "{{ http_port }}"
+    HTTPS_PORT: "{{ https_port }}"
+    SSL_CERT_PATH: "{{ ssl_cert_path }}"
   register: deployment_status
-  changed_when: false
+
+- name: Show deployment status
+  ansible.builtin.debug:
+    msg: "Deployment status: {{ deployment_status.stdout_lines }}"
