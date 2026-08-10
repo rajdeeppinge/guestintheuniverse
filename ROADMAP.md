@@ -9,7 +9,7 @@ This document outlines the planned development roadmap for Guest in the Universe
 
 **Quick Wins:**
 - [x] Protect master branch with required reviews and status checks
-- [ ] Make repository public
+- [x] Make repository public
 - [x] Add limits to how many docker images to retain in GitHub Actions
 - [x] Fix bug: Build workflow doesn't terminate even if the image exists
 
