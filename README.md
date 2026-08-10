@@ -39,6 +39,7 @@ See [src/README.md](src/README.md) for detailed local development instructions.
 - **[config/README.md](config/README.md)** - Configuration templates and setup instructions
 - **[.github/workflows/README.md](.github/workflows/README.md)** - Automated CI/CD workflows and automation
 - **[RELEASE_NOTES.md](RELEASE_NOTES.md)** - Version history and changelog
+- **[ROADMAP.md](ROADMAP.md)** - Planned development roadmap and future features
 
 ## Development Workflow
 
