@@ -6,6 +6,10 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/index.css') }}">
 {% endblock %}
 
+{% block extra_js %}
+<script src="{{ url_for('static', filename='scripts/posts-height.js') }}"></script>
+{% endblock %}
+
 {% block content %}
 <div class="posts-container">
 {% for post in posts %}
@@ -69,6 +73,4 @@
     {% endif %}
 </div>
 {% endif %}
-
-<script src="{{ url_for('static', filename='js/posts-height.js') }}"></script>
 {% endblock %}

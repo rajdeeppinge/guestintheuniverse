@@ -9,7 +9,7 @@ This document outlines the planned development roadmap for Guest in the Universe
 
 **Quick Features:**
 - [ ] Add thumbnails for posts
-- [ ] Add share functionality (client-side, no DB needed)
+- [x] Add share functionality (client-side, no DB needed)
 - [x] Add RSS feed
 - [x] Add sitemap.xml
 - [x] Implement SEO optimization
