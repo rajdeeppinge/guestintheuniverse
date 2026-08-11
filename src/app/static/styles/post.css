@@ -91,6 +91,103 @@
     color: var(--link-hover);
 }
 
+/* Share section */
+.share-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.share-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    background-color: var(--link-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.share-toggle:hover {
+    background-color: var(--link-hover);
+}
+
+.share-drawer {
+    display: none;
+    align-items: center;
+    gap: 1rem;
+    animation: slideDown 0.2s ease-out;
+}
+
+.share-drawer.active {
+    display: flex;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--text-color);
+    color: var(--bg-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.toast.show {
+    opacity: 1;
+}
+
+.share-links {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.share-links a,
+.share-links button.share-link-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    color: var(--text-color);
+    background-color: var(--border-color);
+    border-radius: 6px;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.share-links a:hover,
+.share-links button.share-link-button:hover {
+    background-color: var(--link-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
     .post-meta {
@@ -101,5 +198,25 @@
     .post-meta-right {
         margin-left: 0;
         margin-top: 0.5rem;
+    }
+    
+    .share-section {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .share-toggle {
+        width: fit-content;
+    }
+    
+    .share-drawer {
+        flex-direction: column;
+        align-items: flex-start;
+        width: fit-content;
+    }
+    
+    .share-links {
+        flex-wrap: wrap;
+        max-width: 300px;
     }
 }

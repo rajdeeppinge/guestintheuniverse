@@ -4,6 +4,18 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.6.0-dev2
+Content & Language Features (Development)
+
+**Quick Features:**
+- Added share functionality with collapsible drawer
+- Added social media share buttons (Twitter, Instagram, WhatsApp, LinkedIn, Facebook, Email)
+- Added copy link with toast notification
+- Consolidated JS files to scripts directory
+- Fixed mobile responsiveness for share section
+
+---
+
 ### v0.6.0-dev1
 Content & Language Features (Development)
 
