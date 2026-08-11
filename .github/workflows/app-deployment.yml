@@ -100,8 +100,8 @@ jobs:
     - name: Check if app code changed
       id: app_code_changed
       run: |
-        # Handle first commit on branch
-        if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+        # Handle first commit on branch (before is empty or all zeros)
+        if [ -z "${{ github.event.before }}" ] || [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
           echo "changed=true" >> $GITHUB_OUTPUT
           echo "First commit on branch, will build images"
         elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^src/'; then
