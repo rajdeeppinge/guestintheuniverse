@@ -17,6 +17,7 @@ on:
 jobs:
   configure:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
     permissions:
       contents: read
 

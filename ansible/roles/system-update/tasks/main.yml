@@ -1,4 +1,14 @@
 ---
+- name: Ensure common utilities are installed
+  ansible.builtin.apt:
+    name:
+      - rsync
+      - curl
+      - wget
+      - git
+    state: present
+    update_cache: yes
+
 - name: Update system packages
   ansible.builtin.apt:
     update_cache: true
