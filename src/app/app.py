@@ -1,6 +1,7 @@
 from flask import Flask
 from routes.api_routes import api_bp
 from routes.main_routes import main_bp
+from routes.seo_routes import seo_bp
 
 def create_app():
     app = Flask(__name__)
@@ -8,6 +9,7 @@ def create_app():
     # Register blueprints
     app.register_blueprint(main_bp)
     app.register_blueprint(api_bp)
+    app.register_blueprint(seo_bp)
     
     return app
 
