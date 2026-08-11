@@ -4,6 +4,17 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.5.0-dev2
+Infrastructure & Resource Optimization (Development)
+
+**Python Dependency Management:**
+- Migrated from requirements.txt to uv for Python dependency management
+- Added pyproject.toml for modern Python project configuration
+- Updated Docker build process to use uv for faster dependency resolution
+- Smaller footprint with optimized dependency management
+
+---
+
 ### v0.5.0-dev1
 Infrastructure & Resource Optimization (Development)
 
