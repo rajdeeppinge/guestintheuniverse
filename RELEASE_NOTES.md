@@ -4,6 +4,17 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.6.0-dev1
+Content & Language Features (Development)
+
+**SEO and LICENSE:**
+- Added RSS feed endpoint for content syndication
+- Added sitemap.xml for SEO optimization
+- Implemented SEO meta tags and Open Graph support
+- Added MIT LICENSE file
+
+---
+
 ### v0.5.0
 Infrastructure & Resource Optimization
 

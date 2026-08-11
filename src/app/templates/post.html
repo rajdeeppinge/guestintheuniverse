@@ -2,6 +2,12 @@
 
 {% block title %}{{ post.title }} - Guest in the Universe{% endblock %}
 
+{% block description %}{{ post.content | striptags | truncate(150) }}{% endblock %}
+{% block og_title %}{{ post.title }} - Guest in the Universe{% endblock %}
+{% block og_description %}{{ post.content | striptags | truncate(150) }}{% endblock %}
+{% block twitter_title %}{{ post.title }} - Guest in the Universe{% endblock %}
+{% block twitter_description %}{{ post.content | striptags | truncate(150) }}{% endblock %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/post.css') }}">
 {% endblock %}

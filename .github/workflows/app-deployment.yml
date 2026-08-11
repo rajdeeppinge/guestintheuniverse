@@ -12,6 +12,7 @@ on:
       - 'ansible/roles/nginx/**'
       - 'ansible/roles/deploy/**'
       - 'APP_VERSION'
+      - 'LICENSE'
   workflow_dispatch:
 
 env:
