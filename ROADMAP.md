@@ -17,7 +17,7 @@ This document outlines the planned development roadmap for Guest in the Universe
 **Resource Optimization:**
 - [ ] Evaluate and implement /var/log/nginx mounting strategy
 - [ ] Implement logrotate for container logs
-- [ ] Use uv instead of requirements.txt for Python dependency management (smaller footprint)
+- [x] Use uv instead of requirements.txt for Python dependency management (smaller footprint)
 
 **Maintenance:**
 - [x] Cleanup blogger references
