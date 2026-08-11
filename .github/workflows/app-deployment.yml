@@ -101,8 +101,12 @@ jobs:
     - name: Check if app code changed
       id: app_code_changed
       run: |
+        # For tagged releases, always build images regardless of code changes
+        if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "Tagged release, will build images"
         # Check if current commit has any src/ changes
-        if git diff-tree --no-commit-id --name-only -r HEAD | grep -q '^src/'; then
+        elif git diff-tree --no-commit-id --name-only -r HEAD | grep -q '^src/'; then
           echo "changed=true" >> $GITHUB_OUTPUT
           echo "App code changed, will build images"
         else
