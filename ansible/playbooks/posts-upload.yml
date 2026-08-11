@@ -14,10 +14,12 @@
         group: "{{ app_group }}"
         mode: '0755'
 
-    - name: Copy posts to server
-      ansible.builtin.copy:
-        src: "../../../../posts/"
+    - name: Sync posts to server
+      ansible.builtin.synchronize:
+        src: "../../posts/"
         dest: "{{ app_dir }}/posts/"
-        owner: "{{ app_user }}"
-        group: "{{ app_group }}"
-        mode: '0644'
+        delete: no
+        recursive: yes
+        owner: no
+        group: no
+        perms: no
