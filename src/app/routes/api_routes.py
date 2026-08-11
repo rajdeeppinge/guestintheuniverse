@@ -1,12 +1,10 @@
 from flask import Blueprint, jsonify, request
 from services.post_service import PostService
-from services.unit_conversion_service import UnitConversionService
 import os
 import markdown
 
 api_bp = Blueprint('api', __name__, url_prefix='/api/v1')
 post_service = PostService()
-unit_conversion_service = UnitConversionService()
 
 @api_bp.route('/health')
 def health():
@@ -66,36 +64,3 @@ def api_about():
     return jsonify({
         'content': about_html
     })
-
-@api_bp.route('/convert', methods=['POST'])
-def api_convert():
-    """Unit conversion API endpoint"""
-    data = request.get_json()
-    
-    if not data:
-        return jsonify({'error': 'No data provided'}), 400
-    
-    value = data.get('value')
-    from_unit = data.get('from_unit')
-    to_unit = data.get('to_unit')
-    category = data.get('category')
-    
-    if value is None or not from_unit or not to_unit or not category:
-        return jsonify({'error': 'Missing required parameters'}), 400
-    
-    try:
-        value = float(value)
-    except ValueError:
-        return jsonify({'error': 'Invalid value'}), 400
-    
-    result = unit_conversion_service.convert(value, from_unit, to_unit, category)
-    
-    if 'error' in result:
-        return jsonify(result), 400
-    
-    return jsonify(result)
-
-@api_bp.route('/units')
-def api_units():
-    """Get available unit categories and units"""
-    return jsonify(unit_conversion_service.get_available_units())
