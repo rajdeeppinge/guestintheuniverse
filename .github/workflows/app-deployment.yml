@@ -2,7 +2,7 @@ name: App Deployment
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, feature/uv-migration ]
     tags:
       - 'v*.*.*'
     paths:
@@ -100,7 +100,11 @@ jobs:
     - name: Check if app code changed
       id: app_code_changed
       run: |
-        if git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^src/'; then
+        # Handle first commit on branch
+        if [ "${{ github.event.before }}" = "0000000000000000000000000000000000000000" ]; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "First commit on branch, will build images"
+        elif git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -q '^src/'; then
           echo "changed=true" >> $GITHUB_OUTPUT
           echo "App code changed, will build images"
         else
