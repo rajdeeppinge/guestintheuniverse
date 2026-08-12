@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Tools - Guest in the Universe{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/unit-converter.css') }}">
+{% endblock %}
+
+{% block content %}
+<article class="post-full">
+    <header class="post-header">
+        <h1>Unit Converter</h1>
+    </header>
+    
+    <div class="post-content">
+        <p>A quick and easy-to-use unit converter for common measurements. Select a category, enter your value, and get instant conversions between different units.</p>
+        
+        <div id="unit-converter" class="unit-converter">
+          <div class="converter-controls">
+            <div class="control-group">
+              <label for="category">Category:</label>
+              <select id="category" onchange="updateUnits()">
+                <option value="length">Length</option>
+                <option value="weight">Weight</option>
+                <option value="temperature">Temperature</option>
+                <option value="volume">Volume</option>
+                <option value="area">Area</option>
+                <option value="speed">Speed</option>
+              </select>
+            </div>
+            
+            <div class="control-group">
+              <label for="value">Value:</label>
+              <input type="number" id="value" step="any" placeholder="Enter value" oninput="convert()">
+            </div>
+            
+            <div class="control-group">
+              <label for="from-unit">From:</label>
+              <select id="from-unit" onchange="convert()">
+                <option value="meters">Meters</option>
+                <option value="kilometers">Kilometers</option>
+                <option value="centimeters">Centimeters</option>
+                <option value="millimeters">Millimeters</option>
+                <option value="miles">Miles</option>
+                <option value="yards">Yards</option>
+                <option value="feet">Feet</option>
+                <option value="inches">Inches</option>
+              </select>
+            </div>
+            
+            <div class="control-group">
+              <label for="to-unit">To:</label>
+              <select id="to-unit" onchange="convert()">
+                <option value="kilometers">Kilometers</option>
+                <option value="meters">Meters</option>
+                <option value="centimeters">Centimeters</option>
+                <option value="millimeters">Millimeters</option>
+                <option value="miles">Miles</option>
+                <option value="yards">Yards</option>
+                <option value="feet">Feet</option>
+                <option value="inches">Inches</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="result-display">
+            <div id="result" class="result-value">Enter a value to see the conversion</div>
+            <div id="formula" class="formula"></div>
+          </div>
+        </div>
+        
+        <h3>Supported Categories</h3>
+        <ul>
+            <li><strong>Length</strong>: Convert between meters, kilometers, centimeters, millimeters, miles, yards, feet, and inches</li>
+            <li><strong>Weight</strong>: Convert between kilograms, grams, milligrams, pounds, ounces, and tons</li>
+            <li><strong>Temperature</strong>: Convert between Celsius, Fahrenheit, and Kelvin</li>
+            <li><strong>Volume</strong>: Convert between liters, milliliters, gallons, quarts, cups, tablespoons, and teaspoons</li>
+            <li><strong>Area</strong>: Convert between square meters, square kilometers, square feet, square yards, acres, and hectares</li>
+            <li><strong>Speed</strong>: Convert between meters/second, kilometers/hour, miles/hour, feet/second, and knots</li>
+        </ul>
+        
+        <h3>How to Use</h3>
+        <ol>
+            <li>Select the category of measurement you want to convert</li>
+            <li>Enter the value you want to convert</li>
+            <li>Choose the unit you're converting from</li>
+            <li>Choose the unit you want to convert to</li>
+            <li>The result will appear instantly below</li>
+        </ol>
+        
+        <p>The converter updates in real-time as you type or change selections, making it quick and easy to get accurate conversions for any unit type.</p>
+    </div>
+</article>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='scripts/unit-converter.js') }}"></script>
+{% endblock %}

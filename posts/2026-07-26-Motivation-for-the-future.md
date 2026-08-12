@@ -1,13 +1,9 @@
 ---
-layout: post
 title:  "Motivation for Writing"
 date:   2026-07-26
-categories: [motivation]
-tags: [writing]
+author: NoviceGuru
+image: motivation.png
 ---
-
-
-![Motivation](/images/motivation.png)
 
 
 ## Background

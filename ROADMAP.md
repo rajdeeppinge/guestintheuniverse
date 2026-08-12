@@ -17,15 +17,16 @@ This document outlines the planned development roadmap for Guest in the Universe
 
 **Language Features:**
 - [ ] Add Devanagari script support and development flow
-- [ ] Implement multilingual content support
 
-**Documentation:**
-- [ ] Complete documentation
+**Tools Section:**
+- [ ] Add dedicated Tools section with unit converter
+- [ ] Create reusable unit calculator component (embeddable in posts)
+- [ ] Update existing unit converter post to use embedded calculator
 
 ---
 
-### v0.7.0 - Infrastructure Scaling
-**Focus:** Upgrade resources to support data-heavy features
+### v0.7.0 - Infrastructure Scaling & Multilingual Support
+**Focus:** Upgrade resources to support data-heavy features and multilingual content
 
 **Infrastructure:**
 - [ ] Add 2nd and 3rd instance for full dev and prod setup
@@ -44,6 +45,14 @@ This document outlines the planned development roadmap for Guest in the Universe
 - [ ] Design database schema for future features
 - [ ] Implement database migration strategy
 - [ ] Add backup strategy for posts/data
+
+**Multilingual Support:**
+- [ ] Implement multilingual content support (requires database)
+- [ ] Add language switching UI
+- [ ] Implement URL routing for multiple languages
+
+**Documentation:**
+- [ ] Complete documentation
 
 ---
 

@@ -6,6 +6,12 @@
         <div class="desktop-nav">
             <nav>
                 <a href="{{ url_for('main.index') }}">Home</a>
+                <div class="dropdown">
+                    <a href="{{ url_for('main.tools') }}" class="dropdown-toggle">Tools</a>
+                    <div class="dropdown-menu">
+                        <a href="{{ url_for('main.unit_converter') }}">Unit Converter</a>
+                    </div>
+                </div>
                 <a href="{{ url_for('main.about') }}">About</a>
             </nav>
             <div class="theme-toggle">
@@ -39,6 +45,15 @@
     </div>
     <nav class="drawer-nav">
         <a href="{{ url_for('main.index') }}">Home</a>
+        <div class="dropdown">
+            <div class="dropdown-header">
+                <a href="{{ url_for('main.tools') }}">Tools</a>
+                <button class="dropdown-toggle" onclick="toggleMobileDropdown(this)" aria-label="Toggle tools menu">▼</button>
+            </div>
+            <div class="dropdown-menu">
+                <a href="{{ url_for('main.unit_converter') }}">Unit Converter</a>
+            </div>
+        </div>
         <a href="{{ url_for('main.about') }}">About</a>
         <div class="drawer-theme-toggle">
             <div class="theme-switch">

@@ -79,6 +79,58 @@ header h1 a {
     text-decoration: underline;
 }
 
+/* Dropdown styles */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+    margin-right: 1rem;
+}
+
+.dropdown-arrow {
+    font-size: 0.7em;
+    margin-left: 4px;
+    transition: transform 0.2s ease;
+}
+
+.dropdown:hover .dropdown-arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--bg-color);
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 1001;
+    border-radius: 4px;
+    padding: 8px 0;
+    border: 1px solid var(--border-color);
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 8px 16px;
+    color: var(--text-color);
+    text-decoration: none;
+    margin: 0;
+}
+
+.dropdown-menu a:hover {
+    background-color: var(--border-color);
+    color: var(--link-color);
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
 /* Theme Toggle */
 .theme-toggle {
     display: flex;
