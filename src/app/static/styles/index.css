@@ -100,11 +100,11 @@
     .post-with-image {
         flex-direction: column;
     }
-    
+
     .post-image {
-        width: 100%;
+        display: none;
     }
-    
+
     .post-image img {
         height: 200px;
     }

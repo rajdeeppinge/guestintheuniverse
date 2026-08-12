@@ -4,10 +4,43 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
-### v0.6.0-dev2
+### v0.6.0-dev3
 Content & Language Features (Development)
 
-**Quick Features:**
+**Tools Section:**
+- Added dedicated Tools section with unit converter
+- Created parent Tools index page at /tools
+- Moved unit converter to /tools/unit-converter
+- Extracted unit converter JavaScript and CSS to separate files
+- Added mobile dropdown navigation for Tools menu
+- Implemented click-to-toggle functionality for mobile drawer dropdown
+
+**Thumbnail System:**
+- Added thumbnail support for posts with featured images
+- Implemented image frontmatter for post thumbnails
+- Added local image serving for development testing
+- Created separate nginx.local.conf for local development
+- Configured nginx.local.conf to serve images from /images directory
+- Added images directory to .gitignore (stored in OCI for production)
+- Updated docker-compose files for local image mounting
+- Stripped markdown formatting from post excerpts for clean preview text
+- Reduced excerpt length to 110 characters for better thumbnail alignment
+- Hidden thumbnails on mobile index page for better UX
+- Maintained title images on mobile post pages
+
+**Bug Fixes:**
+- Fixed mobile drawer Tools dropdown functionality
+- Removed duplicate image display (title image only, no markdown images)
+- Fixed thumbnail height alignment with content
+- Removed visible dropdown symbols from mobile navigation
+
+---
+
+### v0.6.0-dev2
+
+Content & Language Features (Development)
+
+**Share Feature:**
 - Added share functionality with collapsible drawer
 - Added social media share buttons (Twitter, Instagram, WhatsApp, LinkedIn, Facebook, Email)
 - Added copy link with toast notification

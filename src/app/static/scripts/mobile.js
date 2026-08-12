@@ -10,6 +10,13 @@ function toggleDrawer() {
     document.body.style.overflow = drawer.classList.contains('open') ? 'hidden' : '';
 }
 
+// Mobile dropdown toggle
+function toggleMobileDropdown(element) {
+    const dropdown = element.closest('.dropdown');
+    dropdown.classList.toggle('open');
+    event.stopPropagation();
+}
+
 // Close drawer on escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {

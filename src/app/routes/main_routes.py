@@ -37,3 +37,11 @@ def about():
         about_content = about_data.get('content', '')
     
     return render_template('about.html', about_content=about_content, current_year=datetime.now().year)
+
+@main_bp.route('/tools')
+def tools():
+    return render_template('tools_index.html', current_year=datetime.now().year)
+
+@main_bp.route('/tools/unit-converter')
+def unit_converter():
+    return render_template('tools.html', current_year=datetime.now().year)

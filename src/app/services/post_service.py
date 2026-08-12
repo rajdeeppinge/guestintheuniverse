@@ -59,7 +59,7 @@ class PostService:
             r'!\[.*?\]\(([^h][^t][^t][^p][^s]?:.+)\)',  # Local images (not http/https)
             r'<img[^>]+src=["\']([^"\']+)["\']'
         ]
-        
+
         for pattern in image_patterns:
             match = re.search(pattern, content, re.IGNORECASE)
             if match:
@@ -68,8 +68,32 @@ class PostService:
                 if image_path.startswith('/images/'):
                     image_path = image_path[8:]  # Remove '/images/' prefix
                 return image_path
-        
+
         return None
+
+    def strip_markdown(self, text):
+        """Remove markdown syntax from text to get clean excerpt"""
+        # Remove images
+        text = re.sub(r'!\[.*?\]\(.*?\)', '', text)
+        # Remove links but keep text
+        text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)
+        # Remove headers
+        text = re.sub(r'^#{1,6}\s+', '', text, flags=re.MULTILINE)
+        # Remove bold/italic
+        text = re.sub(r'\*\*([^*]+)\*\*', r'\1', text)
+        text = re.sub(r'\*([^*]+)\*', r'\1', text)
+        text = re.sub(r'__([^_]+)__', r'\1', text)
+        text = re.sub(r'_([^_]+)_', r'\1', text)
+        # Remove code blocks
+        text = re.sub(r'```.*?```', '', text, flags=re.DOTALL)
+        text = re.sub(r'`([^`]+)`', r'\1', text)
+        # Remove blockquotes
+        text = re.sub(r'^>\s+', '', text, flags=re.MULTILINE)
+        # Remove horizontal rules
+        text = re.sub(r'^[-*_]{3,}\s*$', '', text, flags=re.MULTILINE)
+        # Remove extra whitespace
+        text = re.sub(r'\s+', ' ', text).strip()
+        return text
     
     def get_post_by_filename(self, filename):
         """Get a specific post by filename"""
@@ -152,8 +176,9 @@ class PostService:
                         elif line.startswith('author:'):
                             author = line.split(':', 1)[1].strip().strip('"\'')
                     
-                    # Get first 150 characters of content as excerpt
-                    excerpt = body.strip()[:150] + "..." if len(body.strip()) > 150 else body.strip()
+                    # Get first few characters of content as excerpt (stripped of markdown)
+                    clean_body = self.strip_markdown(body.strip())
+                    excerpt = clean_body[:110] + "..." if len(clean_body) > 110 else clean_body
                     
                     # Calculate read time and extract image
                     read_time = self.calculate_read_time(body)
