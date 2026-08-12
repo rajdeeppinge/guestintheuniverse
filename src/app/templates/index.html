@@ -37,39 +37,40 @@
 
 {% if pagination and pagination.pages > 1 %}
 <div class="pagination">
+    {% set route = pagination_route or 'main.index' %}
     {% if pagination.page > 1 %}
-        <a href="{{ url_for('main.index', page=1) }}" class="pagination-btn">« First</a>
-        <a href="{{ url_for('main.index', page=pagination.page - 1) }}" class="pagination-btn">‹ Previous</a>
+        <a href="{{ url_for(route, page=1) }}" class="pagination-btn">« First</a>
+        <a href="{{ url_for(route, page=pagination.page - 1) }}" class="pagination-btn">‹ Previous</a>
     {% endif %}
-    
+
     {% set start_page = [1, pagination.page - 1]|max %}
     {% set end_page = [pagination.pages, pagination.page + 1]|min %}
-    
+
     {% if start_page > 1 %}
-        <a href="{{ url_for('main.index', page=1) }}" class="pagination-btn">1</a>
+        <a href="{{ url_for(route, page=1) }}" class="pagination-btn">1</a>
         {% if start_page > 2 %}
             <span class="pagination-ellipsis">...</span>
         {% endif %}
     {% endif %}
-    
+
     {% for page in range(start_page, end_page + 1) %}
         {% if page == pagination.page %}
             <span class="pagination-btn current">{{ page }}</span>
         {% else %}
-            <a href="{{ url_for('main.index', page=page) }}" class="pagination-btn">{{ page }}</a>
+            <a href="{{ url_for(route, page=page) }}" class="pagination-btn">{{ page }}</a>
         {% endif %}
     {% endfor %}
-    
+
     {% if end_page < pagination.pages %}
         {% if end_page < pagination.pages - 1 %}
             <span class="pagination-ellipsis">...</span>
         {% endif %}
-        <a href="{{ url_for('main.index', page=pagination.pages) }}" class="pagination-btn">{{ pagination.pages }}</a>
+        <a href="{{ url_for(route, page=pagination.pages) }}" class="pagination-btn">{{ pagination.pages }}</a>
     {% endif %}
-    
+
     {% if pagination.page < pagination.pages %}
-        <a href="{{ url_for('main.index', page=pagination.page + 1) }}" class="pagination-btn">Next ›</a>
-        <a href="{{ url_for('main.index', page=pagination.pages) }}" class="pagination-btn">Last »</a>
+        <a href="{{ url_for(route, page=pagination.page + 1) }}" class="pagination-btn">Next ›</a>
+        <a href="{{ url_for(route, page=pagination.pages) }}" class="pagination-btn">Last »</a>
     {% endif %}
 </div>
 {% endif %}

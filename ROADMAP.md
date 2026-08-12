@@ -16,7 +16,7 @@ This document outlines the planned development roadmap for Guest in the Universe
 - [x] Add LICENSE file
 
 **Language Features:**
-- [ ] Add Devanagari script support and development flow
+- [x] Add Devanagari script support and development flow
 
 **Tools Section:**
 - [x] Add dedicated Tools section with unit converter

@@ -6,14 +6,14 @@ main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
 @main_bp.route('/page/<int:page>')
 def index(page=1):
-    # Use API endpoint instead of directly accessing service
+    # Use API endpoint instead of directly accessing service, defaults to English (no language tag)
     with current_app.test_client() as client:
-        posts_response = client.get(f'/api/v1/posts?page={page}&per_page=5')
+        posts_response = client.get(f'/api/v1/posts?page={page}&per_page=6')
         posts_data = posts_response.get_json()
         posts = posts_data.get('posts', [])
         pagination = posts_data.get('pagination', {})
-    
-    return render_template('index.html', posts=posts, pagination=pagination, current_year=datetime.now().year)
+
+    return render_template('index.html', posts=posts, pagination=pagination, current_year=datetime.now().year, pagination_route='main.index')
 
 @main_bp.route('/post/<filename>')
 def post(filename):
@@ -45,3 +45,15 @@ def tools():
 @main_bp.route('/tools/unit-converter')
 def unit_converter():
     return render_template('tools.html', current_year=datetime.now().year)
+
+@main_bp.route('/marathi')
+@main_bp.route('/marathi/page/<int:page>')
+def marathi(page=1):
+    # Use API endpoint with language filter
+    with current_app.test_client() as client:
+        posts_response = client.get(f'/api/v1/posts?page={page}&per_page=6&language=marathi')
+        posts_data = posts_response.get_json()
+        posts = posts_data.get('posts', [])
+        pagination = posts_data.get('pagination', {})
+
+    return render_template('index.html', posts=posts, pagination=pagination, current_year=datetime.now().year, title='Marathi Posts', pagination_route='main.marathi')

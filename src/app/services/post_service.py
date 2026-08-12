@@ -8,12 +8,41 @@ class PostService:
     def __init__(self):
         self.posts_dir = "/posts"
     
-    def get_total_posts_count(self):
-        """Get total number of posts"""
+    def get_total_posts_count(self, language=None):
+        """Get total number of posts, optionally filtered by language"""
         if not os.path.exists(self.posts_dir):
             return 0
-        
-        return len([f for f in os.listdir(self.posts_dir) if f.endswith('.md')])
+
+        all_files = [f for f in os.listdir(self.posts_dir) if f.endswith('.md')]
+
+        if language:
+            # Count only posts with the specified language
+            count = 0
+            for filename in all_files:
+                filepath = os.path.join(self.posts_dir, filename)
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    content = f.read()
+
+                frontmatter_match = re.match(r'^---\n(.*?)\n---\n(.*)$', content, re.DOTALL)
+                if frontmatter_match:
+                    frontmatter = frontmatter_match.group(1)
+                    post_language = None
+                    for line in frontmatter.split('\n'):
+                        if line.startswith('language:'):
+                            post_language = line.split(':', 1)[1].strip().strip('"\'')
+                            break
+
+                    # If language is 'marathi', only count posts with language: marathi
+                    # If language is 'english' or not specified, count posts without language tag (default English)
+                    if language == 'marathi':
+                        if post_language == 'marathi':
+                            count += 1
+                    elif language == 'english' or language is None:
+                        if post_language is None:
+                            count += 1
+            return count
+
+        return len(all_files)
     
     def format_date(self, date_str):
         """Format date string to DD month YYYY format"""
@@ -145,10 +174,10 @@ class PostService:
         
         return None
     
-    def get_latest_posts(self, limit=10, offset=0):
-        """Get latest posts from with pagination"""
+    def get_latest_posts(self, limit=10, offset=0, language=None):
+        """Get latest posts from with pagination, optionally filtered by language"""
         posts = []
-        
+
         if os.path.exists(self.posts_dir):
             all_files = [f for f in os.listdir(self.posts_dir) if f.endswith('.md')]
             sorted_files = sorted(all_files, reverse=True)[offset:offset + limit]
@@ -163,11 +192,12 @@ class PostService:
                 if frontmatter_match:
                     frontmatter, body = frontmatter_match.groups()
                     
-                    # Parse title, date, and author from frontmatter
+                    # Parse title, date, author, and language from frontmatter
                     title = "Untitled"
                     date = filename[:10]  # Extract date from filename
                     author = "NoviceGuru"  # Default author
-                    
+                    post_language = None  # Default language (None means all languages)
+
                     for line in frontmatter.split('\n'):
                         if line.startswith('title:'):
                             title = line.split(':', 1)[1].strip().strip('"\'')
@@ -175,6 +205,18 @@ class PostService:
                             date = line.split(':', 1)[1].strip()
                         elif line.startswith('author:'):
                             author = line.split(':', 1)[1].strip().strip('"\'')
+                        elif line.startswith('language:'):
+                            post_language = line.split(':', 1)[1].strip().strip('"\'')
+
+                    # Filter by language if specified
+                    # If language is 'marathi', only show posts with language: marathi
+                    # If language is 'english' or not specified, show posts without language tag (default English)
+                    if language == 'marathi':
+                        if post_language != 'marathi':
+                            continue
+                    elif language == 'english' or language is None:
+                        if post_language is not None:
+                            continue
                     
                     # Get first few characters of content as excerpt (stripped of markdown)
                     clean_body = self.strip_markdown(body.strip())
