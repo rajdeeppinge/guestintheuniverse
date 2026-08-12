@@ -23,7 +23,12 @@
     
     <!-- Canonical URL -->
     <link rel="canonical" href="{{ request.url }}">
-    
+
+    <!-- Google Fonts for Devanagari support -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <!-- CSS Files -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/base.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/header.css') }}">

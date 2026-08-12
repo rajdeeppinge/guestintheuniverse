@@ -4,6 +4,27 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
+### v0.6.0-dev4
+Content & Language Features (Development)
+
+**Devanagari Support & Marathi Section:**
+- Added dedicated Marathi section with navigation link (मराठी)
+- Implemented language-based post filtering system
+- Added `language` frontmatter field for post classification
+- Default behavior: posts without language tag show on home (English)
+- Posts with `language: marathi` show in Marathi section
+- Added Google Fonts for Noto Sans Devanagari
+- Updated font stack with comprehensive Devanagari font support across platforms
+- Fixed pagination to work correctly for language-specific sections
+- Dynamic pagination routes based on current section (home vs Marathi)
+
+**Image Display Improvements:**
+- Changed featured images from `object-fit: cover` to `object-fit: contain` to prevent cropping
+- Increased border-radius from 8px to 16px for all images (featured images and content images)
+- Increased posts per page from 5 to 6 to account for image layout
+
+---
+
 ### v0.6.0-dev3
 Content & Language Features (Development)
 

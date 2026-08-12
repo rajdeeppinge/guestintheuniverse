@@ -25,10 +25,17 @@ def api_stats():
 def api_posts():
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
-    
-    posts = post_service.get_latest_posts(per_page, (page - 1) * per_page)
-    total_posts = post_service.get_total_posts_count()
-    
+    language = request.args.get('language', None)
+
+    posts = post_service.get_latest_posts(per_page, (page - 1) * per_page, language)
+
+    # Get total count for the specific language if specified
+    # If language is None, default to English (posts without language tag)
+    if language:
+        total_posts = post_service.get_total_posts_count(language)
+    else:
+        total_posts = post_service.get_total_posts_count('english')
+
     return jsonify({
         'posts': posts,
         'pagination': {
