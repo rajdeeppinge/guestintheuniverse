@@ -4,8 +4,17 @@ This file contains release history and changes for Guest in the Universe.
 
 ## Version History
 
-### v0.6.0-dev4
-Content & Language Features (Development)
+### v0.6.0
+Content Discovery & Language Features
+
+**SEO and Content Features:**
+- Added RSS feed endpoint for content syndication
+- Added sitemap.xml for SEO optimization
+- Implemented SEO meta tags and Open Graph support
+- Added MIT LICENSE file
+- Added share functionality with collapsible drawer
+- Added social media share buttons (Twitter, Instagram, WhatsApp, LinkedIn, Facebook, Email)
+- Added copy link with toast notification
 
 **Devanagari Support & Marathi Section:**
 - Added dedicated Marathi section with navigation link (मराठी)
@@ -23,19 +32,6 @@ Content & Language Features (Development)
 - Increased border-radius from 8px to 16px for all images (featured images and content images)
 - Increased posts per page from 5 to 6 to account for image layout
 
----
-
-### v0.6.0-dev3
-Content & Language Features (Development)
-
-**Tools Section:**
-- Added dedicated Tools section with unit converter
-- Created parent Tools index page at /tools
-- Moved unit converter to /tools/unit-converter
-- Extracted unit converter JavaScript and CSS to separate files
-- Added mobile dropdown navigation for Tools menu
-- Implemented click-to-toggle functionality for mobile drawer dropdown
-
 **Thumbnail System:**
 - Added thumbnail support for posts with featured images
 - Implemented image frontmatter for post thumbnails
@@ -49,35 +45,23 @@ Content & Language Features (Development)
 - Hidden thumbnails on mobile index page for better UX
 - Maintained title images on mobile post pages
 
+**Tools Section:**
+- Added dedicated Tools section with unit converter
+- Created parent Tools index page at /tools
+- Moved unit converter to /tools/unit-converter
+- Extracted unit converter JavaScript and CSS to separate files
+- Added mobile dropdown navigation for Tools menu
+- Implemented click-to-toggle functionality for mobile drawer dropdown
+
+**Code Improvements:**
+- Consolidated JS files to scripts directory
+- Fixed mobile responsiveness for share section
+
 **Bug Fixes:**
 - Fixed mobile drawer Tools dropdown functionality
 - Removed duplicate image display (title image only, no markdown images)
 - Fixed thumbnail height alignment with content
 - Removed visible dropdown symbols from mobile navigation
-
----
-
-### v0.6.0-dev2
-
-Content & Language Features (Development)
-
-**Share Feature:**
-- Added share functionality with collapsible drawer
-- Added social media share buttons (Twitter, Instagram, WhatsApp, LinkedIn, Facebook, Email)
-- Added copy link with toast notification
-- Consolidated JS files to scripts directory
-- Fixed mobile responsiveness for share section
-
----
-
-### v0.6.0-dev1
-Content & Language Features (Development)
-
-**SEO and LICENSE:**
-- Added RSS feed endpoint for content syndication
-- Added sitemap.xml for SEO optimization
-- Implemented SEO meta tags and Open Graph support
-- Added MIT LICENSE file
 
 ---
 

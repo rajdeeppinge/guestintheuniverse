@@ -4,27 +4,6 @@ This document outlines the planned development roadmap for Guest in the Universe
 
 ## Version Planning
 
-### v0.6.0 - Content & Language Features
-**Focus:** High-impact features that work with current resources
-
-**SEO and Content Features:**
-- [x] Add thumbnails for posts
-- [x] Add share functionality (client-side, no DB needed)
-- [x] Add RSS feed
-- [x] Add sitemap.xml
-- [x] Implement SEO optimization
-- [x] Add LICENSE file
-
-**Language Features:**
-- [x] Add Devanagari script support and development flow
-
-**Tools Section:**
-- [x] Add dedicated Tools section with unit converter
-- [x] Create reusable unit calculator component (embeddable in posts)
-- [x] Update existing unit converter post to use embedded calculator
-
----
-
 ### v0.7.0 - Infrastructure Scaling & Multilingual Support
 **Focus:** Upgrade resources to support data-heavy features and multilingual content
 
