@@ -63,5 +63,7 @@ Thumbs.db
 *.tmp
 *.retry
 
-# Local images directory
+# Local media directories
 images/
+audio/
+video/

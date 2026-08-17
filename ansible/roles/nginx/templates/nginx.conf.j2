@@ -45,4 +45,18 @@ server {
         proxy_pass https://{{ oci_namespace }}.objectstorage.{{ oci_region }}.oci.customer-oci.com;
         proxy_set_header Host {{ oci_namespace }}.objectstorage.{{ oci_region }}.oci.customer-oci.com;
     }
+
+    # OCI Object Storage proxy for audio
+    location /audio {
+        rewrite ^/audio/(.*)$ /n/{{ oci_namespace }}/b/{{ oci_bucket }}/o/audio/$1 break;
+        proxy_pass https://{{ oci_namespace }}.objectstorage.{{ oci_region }}.oci.customer-oci.com;
+        proxy_set_header Host {{ oci_namespace }}.objectstorage.{{ oci_region }}.oci.customer-oci.com;
+    }
+
+    # OCI Object Storage proxy for video
+    location /video {
+        rewrite ^/video/(.*)$ /n/{{ oci_namespace }}/b/{{ oci_bucket }}/o/video/$1 break;
+        proxy_pass https://{{ oci_namespace }}.objectstorage.{{ oci_region }}.oci.customer-oci.com;
+        proxy_set_header Host {{ oci_namespace }}.objectstorage.{{ oci_region }}.oci.customer-oci.com;
+    }
 }
